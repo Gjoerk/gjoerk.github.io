@@ -26,7 +26,7 @@ body {
   height: auto; /* Maintain the aspect ratio */
   opacity: 0;
   animation: fadeIn 2s forwards; /* Adjust the duration as needed */
-  margin-bottom: 20px; /* Adjust the margin as needed for spacing */
+  margin-bottom: 30px; /* Adjust the margin as needed for spacing */
 }
 
 .instagram-button {
