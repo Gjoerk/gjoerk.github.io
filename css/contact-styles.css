@@ -1,0 +1,69 @@
+/* contact-styles.css */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0000ff; /* Set to the same blue color as in the main site */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  flex-direction: column; /* Arrange items vertically */
+}
+
+.email {
+  font-family: 'Bebas Neue', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
+  font-size: 30px; /* Adjust the font size as needed */
+  font-stretch: expanded;
+  color: #ffffff; /* Set to white for the text color */
+  text-align: center;
+  margin: 0;
+  opacity: 0;
+  animation: typing 2s forwards;
+  text-transform: lowercase; /* Convert text to lowercase */
+}
+
+button {
+  background-color: #0000ff; /* Set to the same blue color as in the main site */
+  color: #ffffff; /* Set to white for the button text color */
+  padding: 8px 18px; /* Adjust padding as needed for a smaller button */
+  font-size: 16px; /* Adjust font size as needed */
+  font-family: 'Bebas Neue', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
+  font-stretch: expanded;
+  margin-top: 25px; /* Adjust margin as needed */
+  cursor: pointer;
+  border: none;
+  border-radius: 7px;
+  opacity: 0;
+  animation: fadeIn 5s forwards; /* Adjust the duration as needed */
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out; /* Smoother transition */
+}
+
+button:hover {
+  background-color: #00008b; /* Slighter dark blue for the hover effect */
+  color: #ffffff; /* Set to white for the hover effect */
+}
+
+.copyright {
+  font-family: 'Bebas Neue', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
+  font-size: 16px; /* Adjust the font size as needed */
+  color: #ffffff; /* Set to white for the text color */
+  opacity: 0;
+  animation: fadeIn 2s forwards; /* Adjust the duration as needed */
+  text-transform: lowercase; /* Convert text to lowercase */
+  position: absolute;
+  bottom: 20px; /* Adjust the distance from the bottom */
+  left: 50%; /* Move to the horizontal center */
+  transform: translateX(-50%); /* Adjust for horizontal centering */
+}
+
+@keyframes typing {
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+      opacity: 1;
+  }
+}
