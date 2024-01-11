@@ -11,7 +11,7 @@ body {
 }
 
 .email {
-  font-family: 'Roboto', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
+  font-family: 'Bebas Neue', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
   font-size: 30px; /* Adjust the font size as needed */
   color: #ffffff; /* Set to white for the text color */
   text-align: center;
@@ -26,7 +26,7 @@ button {
   color: #ffffff; /* Set to white for the button text color */
   padding: 8px 18px; /* Adjust padding as needed for a smaller button */
   font-size: 16px; /* Adjust font size as needed */
-  font-family: 'Roboto', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
+  font-family: 'Bebas Neue', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
   font-stretch: expanded;
   margin-top: 25px; /* Adjust margin as needed */
   cursor: pointer;
