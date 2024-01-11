@@ -13,7 +13,6 @@ body {
 .email {
   font-family: 'Roboto', sans-serif; /* Replace 'Bebas Neue' with the actual font name */
   font-size: 30px; /* Adjust the font size as needed */
-  font-stretch: expanded;
   color: #ffffff; /* Set to white for the text color */
   text-align: center;
   margin: 0;
