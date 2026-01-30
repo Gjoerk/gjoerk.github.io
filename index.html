@@ -7,137 +7,57 @@
     
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --accent-color: #6c5ce7;
-            --accent-hover: #5649c0;
-            --success-color: #00b894; /* Grün */
-            --jackpot-color: #fd79a8; /* Pink */
-            --loss-color: #b2bec3;    /* Grau */
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        /* Header Styling */
-        .navbar {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid #333;
-            padding: 1rem 0;
+        .container {
+            max-width: 900px;
         }
-        .brand-logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--text-main);
-            text-decoration: none;
-        }
-        .brand-logo span { color: var(--accent-color); }
-
-        /* Controls / Inputs */
-        .controls-container {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
+        .card {
+            background-color: #1e1e1e;
             border: 1px solid #333;
-        }
-        .form-label {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 20px;
         }
         .form-control {
-            background-color: #2d3436;
+            background-color: #2d2d2d;
             border: 1px solid #444;
             color: #fff;
-            font-weight: 500;
         }
         .form-control:focus {
-            background-color: #2d3436;
-            border-color: var(--accent-color);
+            background-color: #333;
             color: #fff;
-            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.25);
+            border-color: #666;
+            box-shadow: none;
         }
-
-        /* Buttons */
         .btn-primary {
-            background-color: var(--accent-color);
+            background-color: #0d6efd;
             border: none;
-            font-weight: 600;
-            padding: 0.6rem 1.5rem;
         }
-        .btn-primary:hover { background-color: var(--accent-hover); }
-
-        /* Result Cards */
-        .tradeup-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #333;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .tradeup-card:hover {
-            transform: translateY(-2px);
-            border-color: #555;
-        }
-
-        /* Status Colors & Badges */
-        .status-jackpot { border-left: 4px solid var(--jackpot-color); }
-        .status-profit  { border-left: 4px solid var(--success-color); }
-        .status-loss    { border-left: 4px solid var(--loss-color); }
-
-        .text-pink  { color: var(--jackpot-color); }
-        .text-green { color: var(--success-color); }
-        .text-grey  { color: var(--loss-color); }
-
-        .badge-jackpot {
-            background-color: var(--jackpot-color);
-            color: #2d3436;
-            font-weight: 800;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        .stat-label { color: var(--text-muted); font-size: 0.8rem; }
-        .stat-value { font-weight: 700; font-size: 1.1rem; }
         
+        /* Status Farben für die neue Logik */
+        .text-jackpot { color: #ff00de; font-weight: bold; } /* Pink */
+        .text-profit { color: #00ff00; font-weight: bold; }  /* Grün */
+        .text-loss { color: #888888; }                       /* Grau */
+
         .outcome-row {
-            font-size: 0.9rem;
-            padding: 4px 0;
+            padding: 5px 0;
             border-bottom: 1px solid #333;
+            font-size: 0.9em;
         }
         .outcome-row:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="container">
-            <a href="#" class="brand-logo">TradeUp<span>Engine</span></a>
-            <div class="text-end">
-                <span id="status-indicator" class="badge bg-secondary">Loading Data...</span>
-            </div>
-        </div>
-    </nav>
+    <div class="container py-5">
+        <h1 class="text-center mb-4">CS2 TradeUp Engine</h1>
 
-    <div class="container pb-5">
-        <div class="controls-container">
+        <div class="card p-4">
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Max Budget (€)</label>
@@ -145,7 +65,8 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Min Yield (%)</label>
-                    <input type="number" id="min-roi" class="form-control" value="105" step="1">
+                    <input type="number" id="min-roi" class="form-control" value="10">
+                    <div style="font-size: 0.7em; color: #888;">(10 = 10% Profit)</div>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Float Buffer</label>
@@ -155,42 +76,34 @@
                     <label class="form-label">Price Factor</label>
                     <input type="number" id="price-factor" class="form-control" value="0.95" step="0.01">
                 </div>
-                <div class="col-12 text-end mt-4">
-                    <button class="btn btn-primary" onclick="startCalculation()">Run Simulation</button>
+                <div class="col-12 text-end">
+                    <button class="btn btn-primary px-4" onclick="startCalculation()">Run Simulation</button>
                 </div>
             </div>
+            <div id="status-msg" class="text-end mt-2" style="font-size: 0.8em; color: #888;">Loading data...</div>
         </div>
 
-        <h4 class="mt-5 mb-3">Opportunities</h4>
-        <div id="results-container">
-            <div class="text-center text-muted mt-5">Drücke auf "Run Simulation" um Ergebnisse zu sehen.</div>
-        </div>
+        <div id="results-container"></div>
     </div>
 
     <script>
         let database = [];
         let prices = {};
 
-        // 2. AUTO-LOAD & SETTINGS LOGIC (LocalStorage)
+        // --- 1. AUTO LOAD & SAVE (LocalStorage) ---
         window.onload = async function() {
-            initSettings(); // Erst alte Eingaben wiederherstellen
-            await loadFiles(); // Dann Datenbank laden
+            initSettings(); // Erst Inputs wiederherstellen
+            await loadFiles(); // Dann Daten laden
         };
 
-        // Funktion zum Speichern und Laden der Inputs
         function initSettings() {
             const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor'];
-
             fields.forEach(id => {
                 const element = document.getElementById(id);
-                
                 // Laden
                 const savedValue = localStorage.getItem(id);
-                if (savedValue !== null) {
-                    element.value = savedValue;
-                }
-
-                // Speichern bei Änderung
+                if (savedValue !== null) element.value = savedValue;
+                // Speichern
                 element.addEventListener('input', function() {
                     localStorage.setItem(id, this.value);
                 });
@@ -205,16 +118,12 @@
                 const priceReq = await fetch('prices_cache.json');
                 prices = await priceReq.json();
 
-                document.getElementById('status-indicator').className = 'badge bg-success';
-                document.getElementById('status-indicator').innerText = 'Data Ready';
-                
-                // Optional: Automatisch starten nach dem Laden
-                // startCalculation(); 
-
+                document.getElementById('status-msg').innerText = 'Data Ready';
+                document.getElementById('status-msg').style.color = '#00ff00';
             } catch (error) {
                 console.error(error);
-                document.getElementById('status-indicator').className = 'badge bg-danger';
-                document.getElementById('status-indicator').innerText = 'Error Loading Data';
+                document.getElementById('status-msg').innerText = 'Error loading files';
+                document.getElementById('status-msg').style.color = 'red';
             }
         }
 
@@ -225,27 +134,18 @@
             }
             
             const MAX_COST = parseFloat(document.getElementById('max-budget').value);
-            // 4. FILTER LOGIK: +100 rechnen (10% Profit eingabe = 110% Filter)
-            const MIN_ROI = parseFloat(document.getElementById('min-roi').value); 
-            const FILTER_THRESHOLD = MIN_ROI; // User gibt jetzt z.B. 110 ein, also nehmen wir das direkt oder rechnen +100 wenn er Profit meint.
-            // WARNUNG: Wenn du willst, dass User "10" eingibt für 10% Profit, dann nutze:
-            // const MIN_ROI = parseFloat(document.getElementById('min-roi').value) + 100;
-            // Da wir vorhin +100 besprochen haben, nutze ich hier die Logik:
             
-            // LOGIK ENTSCHEIDUNG: Wir nehmen an, der User gibt "10" ein und meint 10% Gewinn.
-            // Dann muss der Filter auf 110 prüfen.
-            // Falls der User "110" eingibt, wäre das hier doppelt.
-            // Ich bleibe bei der Absprache: Eingabe "10" -> Filter prüft auf "110".
-            const CALC_MIN_ROI = (MIN_ROI < 50) ? MIN_ROI + 100 : MIN_ROI; 
-            // Kleiner Fix: Falls User schon 110 eingibt, rechnen wir nicht noch mal 100 drauf.
+            // --- 2. FILTER LOGIK (+100) ---
+            // Wenn User "10" eingibt, meint er 10% Profit -> Filter auf 110% Yield
+            let inputRoi = parseFloat(document.getElementById('min-roi').value);
+            const MIN_ROI = inputRoi + 100;
 
             const BUFFER = parseFloat(document.getElementById('float-buffer').value);
             const FACTOR = parseFloat(document.getElementById('price-factor').value);
 
             const container = document.getElementById('results-container');
-            container.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary" role="status"></div><div class="mt-2">Simuliere...</div></div>';
+            container.innerHTML = '<div class="text-center mt-5 text-muted">Calculating...</div>';
 
-            // Kurze Verzögerung für UI-Update
             setTimeout(() => {
                 let results = [];
 
@@ -254,77 +154,49 @@
                         let inputPrice = prices[inputSkin.name];
                         if(!inputPrice) return;
 
-                        // Faktor anwenden (z.B. User kauft günstiger ein)
                         let realInputPrice = inputPrice * FACTOR; 
-
-                        // 10 Inputs Simulation
                         let totalCost = realInputPrice * 10;
+                        
                         if(totalCost > MAX_COST) return;
 
-                        // Outcomes berechnen
                         let simulation = runSimulation(collection, inputSkin, realInputPrice, BUFFER);
                         
-                        // Filter anwenden
-                        if(simulation && simulation.roi >= CALC_MIN_ROI) {
+                        if(simulation && simulation.roi >= MIN_ROI) {
                             results.push(simulation);
                         }
                     });
                 });
 
                 renderResults(results);
-            }, 100);
+            }, 50);
         }
 
         function runSimulation(collection, inputSkin, singleInputPrice, buffer) {
             let outcomes = [];
             let totalEv = 0;
-            let totalProb = 0;
-
-            // Target Floats berechnen
-            let avgFloat = (inputSkin.min_float + buffer); 
-            // (Vereinfacht: Wir nehmen an alle 10 Inputs haben diesen Float)
             
-            // Output Skins checken
+            let avgFloat = (inputSkin.min_float + buffer); 
             let possibleOutputs = collection.outputs.filter(o => o.rarity === nextRarity(inputSkin.rarity));
             
             if(possibleOutputs.length === 0) return null;
 
             possibleOutputs.forEach(outSkin => {
-                // Float Range Berechnung
                 let outFloat = (avgFloat * (outSkin.max_float - outSkin.min_float)) + outSkin.min_float;
-                
-                // Condition bestimmen
                 let condition = getCondition(outFloat);
                 let priceName = condition ? `${outSkin.name} (${condition})` : outSkin.name;
                 
-                let outPrice = prices[priceName];
-                if(!outPrice) outPrice = 0; // Fallback
-
-                // Wahrscheinlichkeit (Vereinfacht: Gleiche Chance pro Outcome Slot)
-                // In Realität: Anzahl der Outcomes pro Collection beachten. 
-                // Hier stark vereinfacht: 1 / Anzahl Outputs
+                let outPrice = prices[priceName] || 0;
                 let prob = 1 / possibleOutputs.length; 
 
-                outcomes.push({
-                    name: priceName,
-                    price: outPrice,
-                    prob: prob,
-                    float: outFloat
-                });
-
+                outcomes.push({ name: priceName, price: outPrice, float: outFloat });
                 totalEv += (outPrice * prob);
-                totalProb += prob;
             });
 
-            // Sicherheitscheck
             if(totalEv === 0) return null;
-
             let cost = singleInputPrice * 10;
             
-            // 3. ROI BERECHNUNG (YIELD)
-            // (Erwartungswert / Kosten) * 100
-            // Ergebnis 110 = 10% Profit. Ergebnis 90 = 10% Verlust.
-            let roi = (totalEv / cost) * 100;
+            // --- 3. NEUE ROI FORMEL (YIELD) ---
+            let roi = (totalEv / cost) * 100; // Ergebnis z.B. 110.5
 
             return {
                 inputName: inputSkin.name,
@@ -340,49 +212,41 @@
             container.innerHTML = '';
 
             if(results.length === 0) {
-                container.innerHTML = '<div class="alert alert-warning">Keine profitablen TradeUps mit diesen Einstellungen gefunden.</div>';
+                container.innerHTML = '<div class="alert alert-warning">Keine Ergebnisse gefunden.</div>';
                 return;
             }
 
-            // Sortieren: Höchster ROI zuerst
             results.sort((a, b) => b.roi - a.roi);
 
-            // Top 50 anzeigen (Performance)
             results.slice(0, 50).forEach(res => {
                 
-                // 5. FARB LOGIK & FILTER
-                let isJackpot = res.roi > 130;  // Mehr als 30% Profit (Gesamt > 130%)
-                let isProfit = res.roi >= 100;  // Positiver Bereich
+                // --- 4. NEUE FARB LOGIK ---
+                let isJackpot = res.roi > 130;  // Über 30% Profit
+                let isProfit = res.roi >= 100;  // Über 0% Profit
 
-                let statusClass = isJackpot ? 'status-jackpot' : (isProfit ? 'status-profit' : 'status-loss');
-                let roiColorClass = isJackpot ? 'text-pink' : (isProfit ? 'text-green' : 'text-grey');
-                let jackpotBadge = isJackpot ? '<span class="badge-jackpot">JACKPOT</span>' : '';
+                let colorClass = isJackpot ? 'text-jackpot' : (isProfit ? 'text-profit' : 'text-loss');
+                let jackpotBadge = isJackpot ? '<span class="badge bg-danger ms-2">JACKPOT</span>' : '';
 
+                // HTML Struktur (Klassisch / Original)
                 let html = `
-                <div class="tradeup-card ${statusClass}">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="m-0 text-truncate" style="max-width: 60%;">${res.inputName} ${jackpotBadge}</h5>
+                <div class="card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="m-0">${res.inputName} ${jackpotBadge}</h5>
                         <div class="text-end">
-                            <div class="stat-label">Yield (ROI)</div>
-                            <div class="stat-value ${roiColorClass}">${res.roi.toFixed(2)}%</div>
+                            <div style="font-size: 0.8em; color:#888;">Yield</div>
+                            <div class="${colorClass}" style="font-size: 1.2em;">${res.roi.toFixed(2)}%</div>
                         </div>
                     </div>
                     
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <div class="stat-label">Total Cost</div>
-                            <div class="fw-bold">${res.cost.toFixed(2)}€</div>
-                        </div>
-                        <div class="col-6 text-end">
-                            <div class="stat-label">Expected Value</div>
-                            <div class="fw-bold">${res.ev.toFixed(2)}€</div>
-                        </div>
+                    <div class="row mb-2" style="font-size: 0.9em;">
+                        <div class="col-6">Cost: <b>${res.cost.toFixed(2)}€</b></div>
+                        <div class="col-6 text-end">EV: <b>${res.ev.toFixed(2)}€</b></div>
                     </div>
 
-                    <div class="p-2" style="background: #252525; border-radius: 8px;">
+                    <div style="background: #252525; padding: 10px; border-radius: 5px;">
                         ${res.outcomes.map(o => `
                             <div class="d-flex justify-content-between outcome-row">
-                                <span class="text-truncate" style="max-width: 70%;">${o.name}</span>
+                                <span>${o.name}</span>
                                 <span class="${o.price > res.cost ? 'text-success' : 'text-muted'}">${o.price.toFixed(2)}€</span>
                             </div>
                         `).join('')}
@@ -393,7 +257,6 @@
             });
         }
 
-        // Hilfsfunktionen
         function nextRarity(rarity) {
             const rarities = ["Consumer Grade", "Industrial Grade", "Mil-Spec Grade", "Restricted", "Classified", "Covert"];
             let idx = rarities.indexOf(rarity);
