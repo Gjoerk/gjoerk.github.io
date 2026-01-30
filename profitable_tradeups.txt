@@ -1,0 +1,1534 @@
+TRADE UP REPORT - 2026-01-29 21:17:25
+Formula: New CS2 Method (Trade Floats) | ROI > 10.0%
+======================================================================
+
+#1 [ROI: 464.54%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Sawed-Off | Snake Camo ((Minimal Wear))
+      👉 Max REAL Float: < 0.11173 (Puffer: 0.0417)
+   Kosten: 1.12€ -> Erwartet: 6.32€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Brass (Factory New) (F:0.06990): 11.88€
+   ✅ [MAIN] M4A1-S | VariCamo (Factory New) (F:0.04194): 4.15€
+   ✅ [MAIN] SG 553 | Damascus Steel (Factory New) (F:0.06990): 2.94€
+----------------------------------------------------------------------
+#2 [ROI: 338.49%] 🔥 | 10x | Restricted
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Negev | Loudmouth ((Field-Tested))
+      👉 Max REAL Float: < 0.17565 (Puffer: 0.0256)
+   Kosten: 11.20€ -> Erwartet: 49.11€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Yellow Jacket (Factory New) (F:0.06990): 61.13€
+   ✅ [MAIN] MP7 | Nemesis (Factory New) (F:0.02237): 41.65€
+   ✅ [MAIN] SG 553 | Cyrex (Factory New) (F:0.06990): 44.55€
+----------------------------------------------------------------------
+#3 [ROI: 310.58%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Five-SeveN | Orange Peel ((Minimal Wear))
+      👉 Max REAL Float: < 0.11173 (Puffer: 0.0417)
+   Kosten: 1.54€ -> Erwartet: 6.32€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Brass (Factory New) (F:0.06990): 11.88€
+   ✅ [MAIN] M4A1-S | VariCamo (Factory New) (F:0.04194): 4.15€
+   ✅ [MAIN] SG 553 | Damascus Steel (Factory New) (F:0.06990): 2.94€
+----------------------------------------------------------------------
+#4 [ROI: 185.44%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x CZ75-Auto | Copper Fiber ((Factory New))
+      👉 Max REAL Float: < 0.03937 (Puffer: 0.0394)
+   Kosten: 4.76€ -> Erwartet: 13.59€
+   Outcomes:
+   ✅ [MAIN] FAMAS | 2A2F (Factory New) (F:0.06011): 10.47€
+   ✅ [MAIN] Glock-18 | Green Line (Factory New) (F:0.06990): 18.69€
+   ✅ [MAIN] UMP-45 | Late Night Transit (Factory New) (F:0.06990): 19.69€
+   ✅ [MAIN] XM1014 | Run Run Run (Factory New) (F:0.05219): 5.49€
+----------------------------------------------------------------------
+#5 [ROI: 185.44%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Nova | Rain Station ((Factory New))
+      👉 Max REAL Float: < 0.02447 (Puffer: 0.0245)
+   Kosten: 4.76€ -> Erwartet: 13.59€
+   Outcomes:
+   ✅ [MAIN] FAMAS | 2A2F (Factory New) (F:0.06011): 10.47€
+   ✅ [MAIN] Glock-18 | Green Line (Factory New) (F:0.06990): 18.69€
+   ✅ [MAIN] UMP-45 | Late Night Transit (Factory New) (F:0.06990): 19.69€
+   ✅ [MAIN] XM1014 | Run Run Run (Factory New) (F:0.05219): 5.49€
+----------------------------------------------------------------------
+#6 [ROI: 177.28%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x P250 | Constructivist ((Factory New))
+      👉 Max REAL Float: < 0.02447 (Puffer: 0.0245)
+   Kosten: 4.90€ -> Erwartet: 13.59€
+   Outcomes:
+   ✅ [MAIN] FAMAS | 2A2F (Factory New) (F:0.06011): 10.47€
+   ✅ [MAIN] Glock-18 | Green Line (Factory New) (F:0.06990): 18.69€
+   ✅ [MAIN] UMP-45 | Late Night Transit (Factory New) (F:0.06990): 19.69€
+   ✅ [MAIN] XM1014 | Run Run Run (Factory New) (F:0.05219): 5.49€
+----------------------------------------------------------------------
+#7 [ROI: 138.71%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x SG 553 | Damascus Steel ((Field-Tested))
+      👉 Max REAL Float: < 0.17475 (Puffer: 0.0247)
+   Kosten: 1.68€ -> Erwartet: 4.01€
+   Outcomes:
+   ✅ [MAIN] P2000 | Amber Fade (Factory New) (F:0.06990): 4.01€
+----------------------------------------------------------------------
+#8 [ROI: 136.98%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x CZ75-Auto | Crimson Web ((Field-Tested))
+      👉 Max REAL Float: < 0.18919 (Puffer: 0.0392)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.77€ -> Erwartet: 18.41€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tread Plate (Factory New) (F:0.01747): 23.79€
+   ✅ [MAIN] Desert Eagle | Heirloom (Factory New) (F:0.06990): 160.65€
+   ✅ [MAIN] Five-SeveN | Copper Galaxy (Factory New) (F:0.01747): 34.81€
+   ✅ [MAIN] Tec-9 | Titanium Bit (Factory New) (F:0.01747): 13.85€
+----------------------------------------------------------------------
+#9 [ROI: 135.71%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x R8 Revolver | Nitro ((Minimal Wear))
+      👉 Max REAL Float: < 0.11173 (Puffer: 0.0417)
+   Kosten: 1.82€ -> Erwartet: 4.29€
+   Outcomes:
+   ✅ [MAIN] M4A4 | Converter (Factory New) (F:0.02796): 2.61€
+   ✅ [MAIN] Sawed-Off | Brake Light (Factory New) (F:0.00559): 2.42€
+   ✅ [MAIN] SSG 08 | Hand Brake (Factory New) (F:0.06990): 9.50€
+   ✅ [MAIN] USP-S | Check Engine (Factory New) (F:0.04194): 2.64€
+----------------------------------------------------------------------
+#10 [ROI: 131.43%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x MP5-SD | Savannah Halftone ((Field-Tested))
+      👉 Max REAL Float: < 0.28495 (Puffer: 0.0349)
+   Kosten: 1.54€ -> Erwartet: 3.56€
+   Outcomes:
+   ✅ [MAIN] Nova | Yorkshire (Factory New) (F:0.06990): 3.22€
+   ✅ [MAIN] P250 | Small Game (Factory New) (F:0.04893): 2.95€
+   ✅ [MAIN] SSG 08 | Zeno (Factory New) (F:0.04893): 3.01€
+   ✅ [MAIN] USP-S | Alpine Camo (Factory New) (F:0.04753): 5.07€
+----------------------------------------------------------------------
+#11 [ROI: 114.60%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x G3SG1 | Black Sand ((Minimal Wear))
+      👉 Max REAL Float: < 0.09307 (Puffer: 0.0231)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 9.74€ -> Erwartet: 20.91€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ❌ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#12 [ROI: 111.57%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x AUG | Amber Slipstream ((Factory New))
+      👉 Max REAL Float: < 0.03845 (Puffer: 0.0384)
+   Kosten: 9.24€ -> Erwartet: 19.55€
+   Outcomes:
+   ❌ [MAIN] AWP | PAW (Factory New) (F:0.03495): 7.43€
+   ✅ [MAIN] CZ75-Auto | Eco (Factory New) (F:0.06990): 28.30€
+   ❌ [MAIN] G3SG1 | High Seas (Factory New) (F:0.04893): 9.22€
+   ✅ [MAIN] MP7 | Powercore (Factory New) (F:0.05592): 21.88€
+   ✅ [MAIN] Nova | Toy Soldier (Factory New) (F:0.06990): 30.92€
+----------------------------------------------------------------------
+#13 [ROI: 106.69%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x MP5-SD | Neon Squeezer ((Field-Tested))
+      👉 Max REAL Float: < 0.24893 (Puffer: 0.0489)
+   Kosten: 2.10€ -> Erwartet: 4.34€
+   Outcomes:
+   ✅ [MAIN] Galil AR | Metallic Squeezer (Factory New) (F:0.04194): 2.69€
+   ✅ [MAIN] Glock-18 | Teal Graf (Factory New) (F:0.03495): 2.52€
+   ✅ [MAIN] MAC-10 | Pipsqueak (Factory New) (F:0.06291): 6.95€
+   ✅ [MAIN] Nova | Wurst Hölle (Factory New) (F:0.06990): 5.20€
+----------------------------------------------------------------------
+#14 [ROI: 102.37%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Dual Berettas | Shred ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 9.66€ -> Erwartet: 19.55€
+   Outcomes:
+   ❌ [MAIN] AWP | PAW (Factory New) (F:0.03495): 7.43€
+   ✅ [MAIN] CZ75-Auto | Eco (Factory New) (F:0.06990): 28.30€
+   ❌ [MAIN] G3SG1 | High Seas (Factory New) (F:0.04893): 9.22€
+   ✅ [MAIN] MP7 | Powercore (Factory New) (F:0.05592): 21.88€
+   ✅ [MAIN] Nova | Toy Soldier (Factory New) (F:0.06990): 30.92€
+----------------------------------------------------------------------
+#15 [ROI: 97.57%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Nova | Plume ((Minimal Wear))
+      👉 Max REAL Float: < 0.09307 (Puffer: 0.0231)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 10.58€ -> Erwartet: 20.91€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ❌ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#16 [ROI: 84.85%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x M249 | Spectre ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 6.86€ -> Erwartet: 12.68€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Red Astor (Factory New) (F:0.06990): 13.61€
+   ✅ [MAIN] Galil AR | Firefight (Factory New) (F:0.06990): 17.79€
+   ✅ [MAIN] SSG 08 | Ghost Crusader (Factory New) (F:0.06990): 21.37€
+   ❌ [MAIN] Tec-9 | Re-Entry (Factory New) (F:0.03006): 5.59€
+   ❌ [MAIN] XM1014 | Black Tie (Factory New) (F:0.05242): 5.03€
+----------------------------------------------------------------------
+#17 [ROI: 80.62%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x G3SG1 | Digital Mesh ((Minimal Wear))
+      👉 Max REAL Float: < 0.09307 (Puffer: 0.0231)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.81€ -> Erwartet: 14.11€
+   Outcomes:
+   ✅ [MAIN] AWP | Exoskeleton (Factory New) (F:0.06990): 85.67€
+   ✅ [MAIN] Dual Berettas | Dezastre (Factory New) (F:0.06990): 22.05€
+   ✅ [MAIN] Nova | Clear Polymer (Factory New) (F:0.06990): 69.97€
+   ✅ [MAIN] SSG 08 | Parallax (Factory New) (F:0.06990): 23.32€
+   ✅ [MAIN] UMP-45 | Gold Bismuth (Factory New) (F:0.04893): 18.64€
+----------------------------------------------------------------------
+#18 [ROI: 78.45%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x M249 | Warbird ((Minimal Wear))
+      👉 Max REAL Float: < 0.11980 (Puffer: 0.0498)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 11.72€ -> Erwartet: 20.91€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ❌ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#19 [ROI: 75.31%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x R8 Revolver | Memento ((Minimal Wear))
+      👉 Max REAL Float: < 0.09307 (Puffer: 0.0231)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 11.93€ -> Erwartet: 20.91€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ❌ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#20 [ROI: 70.90%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Dual Berettas | Ventilators ((Factory New))
+      👉 Max REAL Float: < 0.03146 (Puffer: 0.0315)
+   Kosten: 7.42€ -> Erwartet: 12.68€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Red Astor (Factory New) (F:0.06990): 13.61€
+   ✅ [MAIN] Galil AR | Firefight (Factory New) (F:0.06990): 17.79€
+   ✅ [MAIN] SSG 08 | Ghost Crusader (Factory New) (F:0.06990): 21.37€
+   ❌ [MAIN] Tec-9 | Re-Entry (Factory New) (F:0.03006): 5.59€
+   ❌ [MAIN] XM1014 | Black Tie (Factory New) (F:0.05242): 5.03€
+----------------------------------------------------------------------
+#21 [ROI: 69.43%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Sawed-Off | Morris ((Minimal Wear))
+      👉 Max REAL Float: < 0.09708 (Puffer: 0.0271)
+   Kosten: 2.52€ -> Erwartet: 4.27€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tacticat (Factory New) (F:0.06796): 3.93€
+   ✅ [MAIN] MP9 | Goo (Factory New) (F:0.05825): 5.58€
+   ✅ [MAIN] SG 553 | Phantom (Factory New) (F:0.05825): 4.78€
+   ✅ [MAIN] UMP-45 | Exposure (Factory New) (F:0.05340): 3.52€
+   ✅ [MAIN] XM1014 | Ziggy (Factory New) (F:0.06990): 3.53€
+----------------------------------------------------------------------
+#22 [ROI: 68.87%] 🔥 | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x MAG-7 | Copper Coated ((Field-Tested))
+      👉 Max REAL Float: < 0.24900 (Puffer: 0.0990)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.27€ -> Erwartet: 12.27€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Ramese's Reach (Factory New) (F:0.06990): 178.50€
+   ✅ [MAIN] Nova | Sobek's Bite (Factory New) (F:0.06990): 95.19€
+   ✅ [MAIN] P90 | ScaraB Rush (Factory New) (F:0.06990): 58.49€
+----------------------------------------------------------------------
+#23 [ROI: 67.90%] 🔥 | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x Tec-9 | Mummy's Rot ((Field-Tested))
+      👉 Max REAL Float: < 0.24900 (Puffer: 0.0990)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.31€ -> Erwartet: 12.27€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Ramese's Reach (Factory New) (F:0.06990): 178.50€
+   ✅ [MAIN] Nova | Sobek's Bite (Factory New) (F:0.06990): 95.19€
+   ✅ [MAIN] P90 | ScaraB Rush (Factory New) (F:0.06990): 58.49€
+----------------------------------------------------------------------
+#24 [ROI: 67.62%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x AUG | Snake Pit ((Factory New))
+      👉 Max REAL Float: < 0.03362 (Puffer: 0.0336)
+   Kosten: 3.50€ -> Erwartet: 5.87€
+   Outcomes:
+   ✅ [MAIN] M4A1-S | Mud-Spec (Factory New) (F:0.04462): 4.59€
+   ✅ [MAIN] MAC-10 | Echoing Sands (Factory New) (F:0.06768): 4.86€
+   ✅ [MAIN] SSG 08 | Azure Glyph (Factory New) (F:0.06990): 3.57€
+   ✅ [MAIN] USP-S | Desert Tactical (Factory New) (F:0.06112): 10.45€
+----------------------------------------------------------------------
+#25 [ROI: 66.86%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x MAC-10 | Rangeen ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 9.94€ -> Erwartet: 16.59€
+   Outcomes:
+   ✅ [MAIN] Galil AR | Stone Cold (Factory New) (F:0.06291): 30.56€
+   ✅ [MAIN] M249 | Nebula Crusader (Factory New) (F:0.06990): 12.35€
+   ❌ [MAIN] MP7 | Special Delivery (Factory New) (F:0.04334): 9.28€
+   ✅ [MAIN] P250 | Wingshot (Factory New) (F:0.06291): 14.15€
+----------------------------------------------------------------------
+#26 [ROI: 64.49%] 🔥 | 10x | Restricted
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x MAC-10 | Sakkaku ((Field-Tested))
+      👉 Max REAL Float: < 0.25054 (Puffer: 0.0405)
+   Kosten: 15.68€ -> Erwartet: 25.79€
+   Outcomes:
+   ✅ [MAIN] AWP | Duality (Factory New) (F:0.05592): 17.85€
+   ✅ [MAIN] P2000 | Wicked Sick (Factory New) (F:0.06990): 33.40€
+   ✅ [MAIN] UMP-45 | Wild Child (Factory New) (F:0.06990): 26.12€
+----------------------------------------------------------------------
+#27 [ROI: 61.30%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x AK-47 | Safari Mesh ((Minimal Wear))
+      👉 Max REAL Float: < 0.11173 (Puffer: 0.0417)
+   Kosten: 3.92€ -> Erwartet: 6.32€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Brass (Factory New) (F:0.06990): 11.88€
+   ✅ [MAIN] M4A1-S | VariCamo (Factory New) (F:0.04194): 4.15€
+   ❌ [MAIN] SG 553 | Damascus Steel (Factory New) (F:0.06990): 2.94€
+----------------------------------------------------------------------
+#28 [ROI: 60.85%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Nova | Caged Steel ((Factory New))
+      👉 Max REAL Float: < 0.01748 (Puffer: 0.0175)
+   Kosten: 1.82€ -> Erwartet: 2.93€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tuxedo (Factory New) (F:0.06990): 2.18€
+   ✅ [MAIN] Desert Eagle | Meteorite (Factory New) (F:0.01573): 2.11€
+   ✅ [MAIN] Galil AR | Tuxedo (Factory New) (F:0.06990): 4.50€
+----------------------------------------------------------------------
+#29 [ROI: 60.75%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x CZ75-Auto | Vendetta ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 8.78€ -> Erwartet: 14.11€
+   Outcomes:
+   ✅ [MAIN] AWP | Exoskeleton (Factory New) (F:0.06990): 85.67€
+   ✅ [MAIN] Dual Berettas | Dezastre (Factory New) (F:0.06990): 22.05€
+   ✅ [MAIN] Nova | Clear Polymer (Factory New) (F:0.06990): 69.97€
+   ✅ [MAIN] SSG 08 | Parallax (Factory New) (F:0.06990): 23.32€
+   ✅ [MAIN] UMP-45 | Gold Bismuth (Factory New) (F:0.04893): 18.64€
+----------------------------------------------------------------------
+#30 [ROI: 57.81%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x XM1014 | Quicksilver ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 11.20€ -> Erwartet: 17.67€
+   Outcomes:
+   ✅ [MAIN] Desert Eagle | Naga (Factory New) (F:0.06990): 45.30€
+   ❌ [MAIN] Dual Berettas | Urban Shock (Factory New) (F:0.03285): 6.84€
+   ✅ [MAIN] MAC-10 | Malachite (Factory New) (F:0.03495): 11.95€
+   ❌ [MAIN] Sawed-Off | Serenity (Factory New) (F:0.03495): 6.60€
+----------------------------------------------------------------------
+#31 [ROI: 56.26%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Galil AR | Vandal ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 9.03€ -> Erwartet: 14.11€
+   Outcomes:
+   ✅ [MAIN] AWP | Exoskeleton (Factory New) (F:0.06990): 85.67€
+   ✅ [MAIN] Dual Berettas | Dezastre (Factory New) (F:0.06990): 22.05€
+   ✅ [MAIN] Nova | Clear Polymer (Factory New) (F:0.06990): 69.97€
+   ✅ [MAIN] SSG 08 | Parallax (Factory New) (F:0.06990): 23.32€
+   ✅ [MAIN] UMP-45 | Gold Bismuth (Factory New) (F:0.04893): 18.64€
+----------------------------------------------------------------------
+#32 [ROI: 53.41%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x MP5-SD | Condition Zero ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 9.20€ -> Erwartet: 14.11€
+   Outcomes:
+   ✅ [MAIN] AWP | Exoskeleton (Factory New) (F:0.06990): 85.67€
+   ✅ [MAIN] Dual Berettas | Dezastre (Factory New) (F:0.06990): 22.05€
+   ✅ [MAIN] Nova | Clear Polymer (Factory New) (F:0.06990): 69.97€
+   ✅ [MAIN] SSG 08 | Parallax (Factory New) (F:0.06990): 23.32€
+   ✅ [MAIN] UMP-45 | Gold Bismuth (Factory New) (F:0.04893): 18.64€
+----------------------------------------------------------------------
+#33 [ROI: 51.17%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x SCAR-20 | Outbreak ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 8.68€ -> Erwartet: 13.12€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Fuel Rod (Factory New) (F:0.06990): 14.72€
+   ✅ [MAIN] Five-SeveN | Retrobution (Factory New) (F:0.06990): 19.03€
+   ✅ [MAIN] Negev | Power Loader (Factory New) (F:0.06990): 9.70€
+   ✅ [MAIN] SG 553 | Tiger Moth (Factory New) (F:0.06990): 9.19€
+   ✅ [MAIN] Tec-9 | Avalanche (Factory New) (F:0.06990): 20.13€
+   ❌ [MAIN] XM1014 | Teclu Burner (Factory New) (F:0.04543): 5.96€
+----------------------------------------------------------------------
+#34 [ROI: 50.54%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x MAC-10 | Palm ((Minimal Wear))
+      👉 Max REAL Float: < 0.11173 (Puffer: 0.0417)
+   Kosten: 4.20€ -> Erwartet: 6.32€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Brass (Factory New) (F:0.06990): 11.88€
+   ❌ [MAIN] M4A1-S | VariCamo (Factory New) (F:0.04194): 4.15€
+   ❌ [MAIN] SG 553 | Damascus Steel (Factory New) (F:0.06990): 2.94€
+----------------------------------------------------------------------
+#35 [ROI: 46.80%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x SCAR-20 | Grotto ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 12.04€ -> Erwartet: 17.67€
+   Outcomes:
+   ✅ [MAIN] Desert Eagle | Naga (Factory New) (F:0.06990): 45.30€
+   ❌ [MAIN] Dual Berettas | Urban Shock (Factory New) (F:0.03285): 6.84€
+   ❌ [MAIN] MAC-10 | Malachite (Factory New) (F:0.03495): 11.95€
+   ❌ [MAIN] Sawed-Off | Serenity (Factory New) (F:0.03495): 6.60€
+----------------------------------------------------------------------
+#36 [ROI: 46.38%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x PP-Bizon | Photic Zone ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.98€ -> Erwartet: 11.68€
+   Outcomes:
+   ✅ [MAIN] FAMAS | Valence (Factory New) (F:0.05592): 35.70€
+   ✅ [MAIN] Five-SeveN | Triumvirate (Factory New) (F:0.04264): 30.20€
+   ✅ [MAIN] Glock-18 | Royal Legion (Factory New) (F:0.06990): 72.03€
+   ✅ [MAIN] MAG-7 | Praetorian (Factory New) (F:0.03145): 13.89€
+   ✅ [MAIN] MP7 | Impire (Factory New) (F:0.02796): 27.35€
+----------------------------------------------------------------------
+#37 [ROI: 45.52%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x MAG-7 | Firestarter ((Minimal Wear))
+      👉 Max REAL Float: < 0.09006 (Puffer: 0.0201)
+   Kosten: 19.46€ -> Erwartet: 28.32€
+   Outcomes:
+   ❌ [MAIN] Glock-18 | Grinder (Factory New) (F:0.03608): 10.57€
+   ✅ [MAIN] M4A4 | Griffin (Factory New) (F:0.05592): 52.35€
+   ✅ [MAIN] M4A1-S | Basilisk (Factory New) (F:0.04753): 40.20€
+   ❌ [MAIN] Sawed-Off | Highwayman (Factory New) (F:0.06990): 10.16€
+----------------------------------------------------------------------
+#38 [ROI: 45.41%] 🔥 | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x R8 Revolver | Night ((Field-Tested))
+      👉 Max REAL Float: < 0.16600 (Puffer: 0.0160)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 2.31€ -> Erwartet: 3.36€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ✅ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ✅ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#39 [ROI: 45.41%] 🔥 | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x SSG 08 | Jungle Dashed ((Field-Tested))
+      👉 Max REAL Float: < 0.16600 (Puffer: 0.0160)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 2.31€ -> Erwartet: 3.36€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ✅ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ✅ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#40 [ROI: 43.23%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x PP-Bizon | Brass ((Field-Tested))
+      👉 Max REAL Float: < 0.17475 (Puffer: 0.0247)
+   Kosten: 2.80€ -> Erwartet: 4.01€
+   Outcomes:
+   ✅ [MAIN] P2000 | Amber Fade (Factory New) (F:0.06990): 4.01€
+----------------------------------------------------------------------
+#41 [ROI: 43.10%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Tec-9 | Fubar ((Field-Tested))
+      👉 Max REAL Float: < 0.20679 (Puffer: 0.0568)
+   Kosten: 3.22€ -> Erwartet: 4.61€
+   Outcomes:
+   ❌ [MAIN] G3SG1 | Scavenger (Factory New) (F:0.05048): 2.65€
+   ✅ [MAIN] Galil AR | Signal (Factory New) (F:0.03883): 3.33€
+   ✅ [MAIN] MAC-10 | Pipe Down (Factory New) (F:0.06990): 10.83€
+   ✅ [MAIN] P250 | Nevermore (Factory New) (F:0.03107): 3.40€
+   ❌ [MAIN] USP-S | Flashback (Factory New) (F:0.03883): 2.82€
+----------------------------------------------------------------------
+#42 [ROI: 43.08%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x AUG | Condemned ((Minimal Wear))
+      👉 Max REAL Float: < 0.14621 (Puffer: 0.0762)
+   Kosten: 1.12€ -> Erwartet: 1.60€
+   Outcomes:
+   ✅ [MAIN] FAMAS | Teardown (Factory New) (F:0.06990): 1.70€
+   ✅ [MAIN] Five-SeveN | Silver Quartz (Factory New) (F:0.04660): 1.52€
+   ✅ [MAIN] SSG 08 | Acid Fade (Factory New) (F:0.00349): 1.58€
+----------------------------------------------------------------------
+#43 [ROI: 42.05%] 🔥 | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x AK-47 | Steel Delta ((Field-Tested))
+      👉 Max REAL Float: < 0.18177 (Puffer: 0.0318)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 8.64€ -> Erwartet: 12.27€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Ramese's Reach (Factory New) (F:0.06990): 178.50€
+   ✅ [MAIN] Nova | Sobek's Bite (Factory New) (F:0.06990): 95.19€
+   ✅ [MAIN] P90 | ScaraB Rush (Factory New) (F:0.06990): 58.49€
+----------------------------------------------------------------------
+#44 [ROI: 41.17%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x UMP-45 | Delusion ((Minimal Wear))
+      👉 Max REAL Float: < 0.09374 (Puffer: 0.0237)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.68€ -> Erwartet: 9.43€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Grinder (Factory New) (F:0.03608): 10.57€
+   ✅ [MAIN] M4A4 | Griffin (Factory New) (F:0.05592): 52.35€
+   ✅ [MAIN] M4A1-S | Basilisk (Factory New) (F:0.04753): 40.20€
+   ✅ [MAIN] Sawed-Off | Highwayman (Factory New) (F:0.06990): 10.16€
+----------------------------------------------------------------------
+#45 [ROI: 40.65%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Galil AR | Green Apple ((Factory New))
+      👉 Max REAL Float: < 0.02097 (Puffer: 0.0210)
+   Kosten: 9.66€ -> Erwartet: 13.59€
+   Outcomes:
+   ✅ [MAIN] FAMAS | 2A2F (Factory New) (F:0.06011): 10.47€
+   ✅ [MAIN] Glock-18 | Green Line (Factory New) (F:0.06990): 18.69€
+   ✅ [MAIN] UMP-45 | Late Night Transit (Factory New) (F:0.06990): 19.69€
+   ❌ [MAIN] XM1014 | Run Run Run (Factory New) (F:0.05219): 5.49€
+----------------------------------------------------------------------
+#46 [ROI: 39.96%] 🔥 | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x G3SG1 | Black Sand ((Field-Tested))
+      👉 Max REAL Float: < 0.19920 (Puffer: 0.0492)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.61€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#47 [ROI: 39.78%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x MAC-10 | Storm Camo ((Factory New))
+      👉 Max REAL Float: < 0.05568 (Puffer: 0.0557)
+   Kosten: 0.70€ -> Erwartet: 0.98€
+   Outcomes:
+   ❌ [MAIN] Dual Berettas | Rose Nacre (Factory New) (F:0.06116): 0.55€
+   ✅ [MAIN] Five-SeveN | Sky Blue (Factory New) (F:0.05243): 0.89€
+   ✅ [MAIN] Galil AR | Robin's Egg (Factory New) (F:0.05243): 1.19€
+   ✅ [MAIN] Glock-18 | Ocean Topo (Factory New) (F:0.05243): 1.02€
+   ✅ [MAIN] M4A4 | Naval Shred Camo (Factory New) (F:0.05243): 1.38€
+   ✅ [MAIN] Negev | Sour Grapes (Factory New) (F:0.06990): 1.29€
+   ✅ [MAIN] Nova | Turquoise Pour (Factory New) (F:0.05928): 0.90€
+   ✅ [MAIN] Zeus x27 | Electric Blue (Factory New) (F:0.06553): 1.02€
+   ❌ [MAIN] XM1014 | Gum Wall Camo (Factory New) (F:0.05243): 0.56€
+----------------------------------------------------------------------
+#48 [ROI: 39.78%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x MP5-SD | Lime Hex ((Factory New))
+      👉 Max REAL Float: < 0.05576 (Puffer: 0.0558)
+   Kosten: 0.70€ -> Erwartet: 0.98€
+   Outcomes:
+   ❌ [MAIN] Dual Berettas | Rose Nacre (Factory New) (F:0.06116): 0.55€
+   ✅ [MAIN] Five-SeveN | Sky Blue (Factory New) (F:0.05243): 0.89€
+   ✅ [MAIN] Galil AR | Robin's Egg (Factory New) (F:0.05243): 1.19€
+   ✅ [MAIN] Glock-18 | Ocean Topo (Factory New) (F:0.05243): 1.02€
+   ✅ [MAIN] M4A4 | Naval Shred Camo (Factory New) (F:0.05243): 1.38€
+   ✅ [MAIN] Negev | Sour Grapes (Factory New) (F:0.06990): 1.29€
+   ✅ [MAIN] Nova | Turquoise Pour (Factory New) (F:0.05928): 0.90€
+   ✅ [MAIN] Zeus x27 | Electric Blue (Factory New) (F:0.06553): 1.02€
+   ❌ [MAIN] XM1014 | Gum Wall Camo (Factory New) (F:0.05243): 0.56€
+----------------------------------------------------------------------
+#49 [ROI: 39.78%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x P250 | Plum Netting ((Factory New))
+      👉 Max REAL Float: < 0.05242 (Puffer: 0.0524)
+   Kosten: 0.70€ -> Erwartet: 0.98€
+   Outcomes:
+   ❌ [MAIN] Dual Berettas | Rose Nacre (Factory New) (F:0.06116): 0.55€
+   ✅ [MAIN] Five-SeveN | Sky Blue (Factory New) (F:0.05243): 0.89€
+   ✅ [MAIN] Galil AR | Robin's Egg (Factory New) (F:0.05243): 1.19€
+   ✅ [MAIN] Glock-18 | Ocean Topo (Factory New) (F:0.05243): 1.02€
+   ✅ [MAIN] M4A4 | Naval Shred Camo (Factory New) (F:0.05243): 1.38€
+   ✅ [MAIN] Negev | Sour Grapes (Factory New) (F:0.06990): 1.29€
+   ✅ [MAIN] Nova | Turquoise Pour (Factory New) (F:0.05928): 0.90€
+   ✅ [MAIN] Zeus x27 | Electric Blue (Factory New) (F:0.06553): 1.02€
+   ❌ [MAIN] XM1014 | Gum Wall Camo (Factory New) (F:0.05243): 0.56€
+----------------------------------------------------------------------
+#50 [ROI: 39.40%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x G3SG1 | Green Apple ((Factory New))
+      👉 Max REAL Float: < 0.02621 (Puffer: 0.0262)
+   Kosten: 2.10€ -> Erwartet: 2.93€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tuxedo (Factory New) (F:0.06990): 2.18€
+   ✅ [MAIN] Desert Eagle | Meteorite (Factory New) (F:0.01573): 2.11€
+   ✅ [MAIN] Galil AR | Tuxedo (Factory New) (F:0.06990): 4.50€
+----------------------------------------------------------------------
+#51 [ROI: 39.28%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x PP-Bizon | Candy Apple ((Factory New))
+      👉 Max REAL Float: < 0.02097 (Puffer: 0.0210)
+   Kosten: 3.08€ -> Erwartet: 4.29€
+   Outcomes:
+   ❌ [MAIN] M4A4 | Converter (Factory New) (F:0.02796): 2.61€
+   ❌ [MAIN] Sawed-Off | Brake Light (Factory New) (F:0.00559): 2.42€
+   ✅ [MAIN] SSG 08 | Hand Brake (Factory New) (F:0.06990): 9.50€
+   ❌ [MAIN] USP-S | Check Engine (Factory New) (F:0.04194): 2.64€
+----------------------------------------------------------------------
+#52 [ROI: 38.68%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x SCAR-20 | Torn ((Factory New))
+      👉 Max REAL Float: < 0.05235 (Puffer: 0.0524)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 15.08€ -> Erwartet: 20.91€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ❌ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#53 [ROI: 37.77%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x M4A1-S | Rose Hex ((Minimal Wear))
+      👉 Max REAL Float: < 0.09700 (Puffer: 0.0270)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.52€ -> Erwartet: 10.36€
+   Outcomes:
+   ✅ [MAIN] Desert Eagle | Mulberry (Factory New) (F:0.06990): 42.02€
+   ✅ [MAIN] M4A1-S | Glitched Paint (Factory New) (F:0.06244): 27.08€
+   ✅ [MAIN] USP-S | Bleeding Edge (Factory New) (F:0.05592): 25.16€
+----------------------------------------------------------------------
+#54 [ROI: 35.76%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x G3SG1 | Murky ((Factory New))
+      👉 Max REAL Float: < 0.01748 (Puffer: 0.0175)
+   Kosten: 20.86€ -> Erwartet: 28.32€
+   Outcomes:
+   ❌ [MAIN] Glock-18 | Grinder (Factory New) (F:0.03608): 10.57€
+   ✅ [MAIN] M4A4 | Griffin (Factory New) (F:0.05592): 52.35€
+   ✅ [MAIN] M4A1-S | Basilisk (Factory New) (F:0.04753): 40.20€
+   ❌ [MAIN] Sawed-Off | Highwayman (Factory New) (F:0.06990): 10.16€
+----------------------------------------------------------------------
+#55 [ROI: 34.84%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Tec-9 | Snek-9 ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.04€ -> Erwartet: 6.80€
+   Outcomes:
+   ✅ [MAIN] AWP | PAW (Factory New) (F:0.03495): 7.43€
+   ✅ [MAIN] CZ75-Auto | Eco (Factory New) (F:0.06990): 28.30€
+   ✅ [MAIN] G3SG1 | High Seas (Factory New) (F:0.04893): 9.22€
+   ✅ [MAIN] MP7 | Powercore (Factory New) (F:0.05592): 21.88€
+   ✅ [MAIN] Nova | Toy Soldier (Factory New) (F:0.06990): 30.92€
+----------------------------------------------------------------------
+#56 [ROI: 34.52%] 🔥 | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x AUG | Snake Pit ((Factory New))
+      👉 Max REAL Float: < 0.02222 (Puffer: 0.0222)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.34€ -> Erwartet: 1.81€
+   Outcomes:
+   ✅ [MAIN] M4A1-S | Mud-Spec (Factory New) (F:0.04462): 4.59€
+   ✅ [MAIN] MAC-10 | Echoing Sands (Factory New) (F:0.06768): 4.86€
+   ✅ [MAIN] SSG 08 | Azure Glyph (Factory New) (F:0.06990): 3.57€
+   ✅ [MAIN] USP-S | Desert Tactical (Factory New) (F:0.06112): 10.45€
+----------------------------------------------------------------------
+#57 [ROI: 34.04%] 🔥 | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x CZ75-Auto | Framework ((Field-Tested))
+      👉 Max REAL Float: < 0.20824 (Puffer: 0.0582)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 3.07€ -> Erwartet: 4.11€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Breaker Box (Factory New) (F:0.05592): 7.08€
+   ✅ [MAIN] Glock-18 | Red Tire (Factory New) (F:0.06990): 35.69€
+   ✅ [MAIN] SSG 08 | Carbon Fiber (Factory New) (F:0.01525): 6.77€
+   ✅ [MAIN] UMP-45 | Mechanism (Factory New) (F:0.06227): 4.62€
+----------------------------------------------------------------------
+#58 [ROI: 33.89%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x P90 | Off World ((Factory New))
+      👉 Max REAL Float: < 0.05242 (Puffer: 0.0524)
+   Kosten: 10.36€ -> Erwartet: 13.87€
+   Outcomes:
+   ✅ [MAIN] AWP | Atheris (Factory New) (F:0.06990): 20.78€
+   ❌ [MAIN] Desert Eagle | Light Rail (Factory New) (F:0.06291): 9.45€
+   ✅ [MAIN] MP5-SD | Gauss (Factory New) (F:0.06990): 24.50€
+   ✅ [MAIN] Tec-9 | Bamboozle (Factory New) (F:0.05592): 11.89€
+   ❌ [MAIN] UMP-45 | Moonrise (Factory New) (F:0.02796): 2.74€
+----------------------------------------------------------------------
+#59 [ROI: 33.54%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x G3SG1 | Green Cell ((Factory New))
+      👉 Max REAL Float: < 0.05679 (Puffer: 0.0568)
+   Kosten: 0.70€ -> Erwartet: 0.93€
+   Outcomes:
+   ✅ [MAIN] AK-47 | VariCamo Grey (Factory New) (F:0.05871): 1.65€
+   ✅ [MAIN] Dual Berettas | Polished Malachite (Factory New) (F:0.06990): 2.11€
+   ❌ [MAIN] Galil AR | Acid Dart (Factory New) (F:0.05243): 0.43€
+   ❌ [MAIN] P2000 | Marsh (Factory New) (F:0.05243): 0.40€
+   ✅ [MAIN] MAC-10 | Acid Hex (Factory New) (F:0.05068): 1.96€
+   ❌ [MAIN] P90 | Mustard Gas (Factory New) (F:0.05505): 0.42€
+   ❌ [MAIN] R8 Revolver | Leafhopper (Factory New) (F:0.05688): 0.40€
+   ❌ [MAIN] SSG 08 | Tiger Tear (Factory New) (F:0.04806): 0.57€
+   ❌ [MAIN] Tec-9 | Garter-9 (Factory New) (F:0.06116): 0.46€
+----------------------------------------------------------------------
+#60 [ROI: 33.54%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x M249 | Sage Camo ((Factory New))
+      👉 Max REAL Float: < 0.05242 (Puffer: 0.0524)
+   Kosten: 0.70€ -> Erwartet: 0.93€
+   Outcomes:
+   ✅ [MAIN] AK-47 | VariCamo Grey (Factory New) (F:0.05871): 1.65€
+   ✅ [MAIN] Dual Berettas | Polished Malachite (Factory New) (F:0.06990): 2.11€
+   ❌ [MAIN] Galil AR | Acid Dart (Factory New) (F:0.05243): 0.43€
+   ❌ [MAIN] P2000 | Marsh (Factory New) (F:0.05243): 0.40€
+   ✅ [MAIN] MAC-10 | Acid Hex (Factory New) (F:0.05068): 1.96€
+   ❌ [MAIN] P90 | Mustard Gas (Factory New) (F:0.05505): 0.42€
+   ❌ [MAIN] R8 Revolver | Leafhopper (Factory New) (F:0.05688): 0.40€
+   ❌ [MAIN] SSG 08 | Tiger Tear (Factory New) (F:0.04806): 0.57€
+   ❌ [MAIN] Tec-9 | Garter-9 (Factory New) (F:0.06116): 0.46€
+----------------------------------------------------------------------
+#61 [ROI: 33.54%] 🔥 | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x MAG-7 | Copper Oxide ((Factory New))
+      👉 Max REAL Float: < 0.05679 (Puffer: 0.0568)
+   Kosten: 0.70€ -> Erwartet: 0.93€
+   Outcomes:
+   ✅ [MAIN] AK-47 | VariCamo Grey (Factory New) (F:0.05871): 1.65€
+   ✅ [MAIN] Dual Berettas | Polished Malachite (Factory New) (F:0.06990): 2.11€
+   ❌ [MAIN] Galil AR | Acid Dart (Factory New) (F:0.05243): 0.43€
+   ❌ [MAIN] P2000 | Marsh (Factory New) (F:0.05243): 0.40€
+   ✅ [MAIN] MAC-10 | Acid Hex (Factory New) (F:0.05068): 1.96€
+   ❌ [MAIN] P90 | Mustard Gas (Factory New) (F:0.05505): 0.42€
+   ❌ [MAIN] R8 Revolver | Leafhopper (Factory New) (F:0.05688): 0.40€
+   ❌ [MAIN] SSG 08 | Tiger Tear (Factory New) (F:0.04806): 0.57€
+   ❌ [MAIN] Tec-9 | Garter-9 (Factory New) (F:0.06116): 0.46€
+----------------------------------------------------------------------
+#62 [ROI: 32.60%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x G3SG1 | Hunter ((Minimal Wear))
+      👉 Max REAL Float: < 0.09708 (Puffer: 0.0271)
+   Kosten: 3.22€ -> Erwartet: 4.27€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tacticat (Factory New) (F:0.06796): 3.93€
+   ✅ [MAIN] MP9 | Goo (Factory New) (F:0.05825): 5.58€
+   ✅ [MAIN] SG 553 | Phantom (Factory New) (F:0.05825): 4.78€
+   ✅ [MAIN] UMP-45 | Exposure (Factory New) (F:0.05340): 3.52€
+   ✅ [MAIN] XM1014 | Ziggy (Factory New) (F:0.06990): 3.53€
+----------------------------------------------------------------------
+#63 [ROI: 32.36%] 🔥 | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x MP5-SD | Acid Wash ((Field-Tested))
+      👉 Max REAL Float: < 0.16932 (Puffer: 0.0193)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.94€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#64 [ROI: 31.13%] 🔥 | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x SCAR-20 | Torn ((Minimal Wear))
+      👉 Max REAL Float: < 0.11205 (Puffer: 0.0420)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.99€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#65 [ROI: 30.81%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x P2000 | Royal Baroque ((Minimal Wear))
+      👉 Max REAL Float: < 0.11640 (Puffer: 0.0464)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 8.82€ -> Erwartet: 11.54€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Midnight Laminate (Factory New) (F:0.06990): 50.00€
+   ✅ [MAIN] USP-S | Royal Guard (Factory New) (F:0.05592): 20.71€
+----------------------------------------------------------------------
+#66 [ROI: 30.69%] 🔥 | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Glock-18 | Death Rattle ((Minimal Wear))
+      👉 Max REAL Float: < 0.11670 (Puffer: 0.0367)
+   Kosten: 2.24€ -> Erwartet: 2.93€
+   Outcomes:
+   ❌ [MAIN] CZ75-Auto | Tuxedo (Factory New) (F:0.06990): 2.18€
+   ❌ [MAIN] Desert Eagle | Meteorite (Factory New) (F:0.01573): 2.11€
+   ✅ [MAIN] Galil AR | Tuxedo (Factory New) (F:0.06990): 4.50€
+----------------------------------------------------------------------
+#67 [ROI: 30.49%] 🔥 | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x P90 | Traction ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.21€ -> Erwartet: 6.80€
+   Outcomes:
+   ✅ [MAIN] AWP | PAW (Factory New) (F:0.03495): 7.43€
+   ✅ [MAIN] CZ75-Auto | Eco (Factory New) (F:0.06990): 28.30€
+   ✅ [MAIN] G3SG1 | High Seas (Factory New) (F:0.04893): 9.22€
+   ✅ [MAIN] MP7 | Powercore (Factory New) (F:0.05592): 21.88€
+   ✅ [MAIN] Nova | Toy Soldier (Factory New) (F:0.06990): 30.92€
+----------------------------------------------------------------------
+#68 [ROI: 30.36%] 🔥 | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x P250 | Verdigris ((Factory New))
+      👉 Max REAL Float: < 0.04893 (Puffer: 0.0489)
+   Kosten: 10.64€ -> Erwartet: 13.87€
+   Outcomes:
+   ✅ [MAIN] AWP | Atheris (Factory New) (F:0.06990): 20.78€
+   ❌ [MAIN] Desert Eagle | Light Rail (Factory New) (F:0.06291): 9.45€
+   ✅ [MAIN] MP5-SD | Gauss (Factory New) (F:0.06990): 24.50€
+   ✅ [MAIN] Tec-9 | Bamboozle (Factory New) (F:0.05592): 11.89€
+   ❌ [MAIN] UMP-45 | Moonrise (Factory New) (F:0.02796): 2.74€
+----------------------------------------------------------------------
+#69 [ROI: 29.65%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x AWP | Black Nile ((Field-Tested))
+      👉 Max REAL Float: < 0.18675 (Puffer: 0.0368)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 9.46€ -> Erwartet: 12.27€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Ramese's Reach (Factory New) (F:0.06990): 178.50€
+   ✅ [MAIN] Nova | Sobek's Bite (Factory New) (F:0.06990): 95.19€
+   ✅ [MAIN] P90 | ScaraB Rush (Factory New) (F:0.06990): 58.49€
+----------------------------------------------------------------------
+#70 [ROI: 29.63%] | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x Nova | Mandrel ((Factory New))
+      👉 Max REAL Float: < 0.04211 (Puffer: 0.0421)
+   Kosten: 0.42€ -> Erwartet: 0.54€
+   Outcomes:
+   ✅ [MAIN] Galil AR | Cold Fusion (Factory New) (F:0.06990): 1.04€
+   ✅ [MAIN] M4A4 | Mainframe (Factory New) (F:0.04211): 0.57€
+   ❌ [MAIN] MP7 | Motherboard (Factory New) (F:0.04211): 0.29€
+   ❌ [MAIN] Negev | Bulkhead (Factory New) (F:0.04211): 0.29€
+----------------------------------------------------------------------
+#71 [ROI: 29.61%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x R8 Revolver | Memento ((Field-Tested))
+      👉 Max REAL Float: < 0.19920 (Puffer: 0.0492)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.06€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#72 [ROI: 28.72%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x M249 | Warbird ((Field-Tested))
+      👉 Max REAL Float: < 0.19940 (Puffer: 0.0494)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.10€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#73 [ROI: 28.47%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x MP7 | Motherboard ((Factory New))
+      👉 Max REAL Float: < 0.04211 (Puffer: 0.0421)
+   Kosten: 3.36€ -> Erwartet: 4.32€
+   Outcomes:
+   ✅ [MAIN] AWP | Acheron (Factory New) (F:0.06990): 8.91€
+   ❌ [MAIN] MP5-SD | Co-Processor (Factory New) (F:0.04211): 2.53€
+   ✅ [MAIN] P250 | Exchanger (Factory New) (F:0.04211): 3.96€
+   ❌ [MAIN] P90 | Facility Negative (Factory New) (F:0.04211): 1.86€
+----------------------------------------------------------------------
+#74 [ROI: 28.47%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Negev | Bulkhead ((Factory New))
+      👉 Max REAL Float: < 0.04211 (Puffer: 0.0421)
+   Kosten: 3.36€ -> Erwartet: 4.32€
+   Outcomes:
+   ✅ [MAIN] AWP | Acheron (Factory New) (F:0.06990): 8.91€
+   ❌ [MAIN] MP5-SD | Co-Processor (Factory New) (F:0.04211): 2.53€
+   ✅ [MAIN] P250 | Exchanger (Factory New) (F:0.04211): 3.96€
+   ❌ [MAIN] P90 | Facility Negative (Factory New) (F:0.04211): 1.86€
+----------------------------------------------------------------------
+#75 [ROI: 27.90%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x P90 | Facility Negative ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 21.84€ -> Erwartet: 27.93€
+   Outcomes:
+   ❌ [MAIN] AUG | Random Access (Factory New) (F:0.03495): 13.63€
+   ✅ [MAIN] Glock-18 | Nuclear Garden (Factory New) (F:0.04893): 22.61€
+   ✅ [MAIN] MAG-7 | Core Breach (Factory New) (F:0.06990): 47.56€
+----------------------------------------------------------------------
+#76 [ROI: 27.39%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x Tec-9 | Toxic ((Field-Tested))
+      👉 Max REAL Float: < 0.22867 (Puffer: 0.0787)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 21.32€ -> Erwartet: 27.16€
+   Outcomes:
+   ✅ [MAIN] FAMAS | Styx (Factory New) (F:0.04660): 126.14€
+   ✅ [MAIN] Galil AR | Cerberus (Factory New) (F:0.06990): 393.16€
+----------------------------------------------------------------------
+#77 [ROI: 27.29%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x PP-Bizon | Cold Cell ((Factory New))
+      👉 Max REAL Float: < 0.02796 (Puffer: 0.0280)
+   Kosten: 2.80€ -> Erwartet: 3.56€
+   Outcomes:
+   ✅ [MAIN] Nova | Yorkshire (Factory New) (F:0.06990): 3.22€
+   ✅ [MAIN] P250 | Small Game (Factory New) (F:0.04893): 2.95€
+   ✅ [MAIN] SSG 08 | Zeno (Factory New) (F:0.04893): 3.01€
+   ✅ [MAIN] USP-S | Alpine Camo (Factory New) (F:0.04753): 5.07€
+----------------------------------------------------------------------
+#78 [ROI: 27.08%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x AUG | Triqua ((Minimal Wear))
+      👉 Max REAL Float: < 0.09708 (Puffer: 0.0271)
+   Kosten: 3.36€ -> Erwartet: 4.27€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tacticat (Factory New) (F:0.06796): 3.93€
+   ✅ [MAIN] MP9 | Goo (Factory New) (F:0.05825): 5.58€
+   ✅ [MAIN] SG 553 | Phantom (Factory New) (F:0.05825): 4.78€
+   ✅ [MAIN] UMP-45 | Exposure (Factory New) (F:0.05340): 3.52€
+   ✅ [MAIN] XM1014 | Ziggy (Factory New) (F:0.06990): 3.53€
+----------------------------------------------------------------------
+#79 [ROI: 27.08%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Tec-9 | Cracked Opal ((Minimal Wear))
+      👉 Max REAL Float: < 0.09708 (Puffer: 0.0271)
+   Kosten: 3.36€ -> Erwartet: 4.27€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tacticat (Factory New) (F:0.06796): 3.93€
+   ✅ [MAIN] MP9 | Goo (Factory New) (F:0.05825): 5.58€
+   ✅ [MAIN] SG 553 | Phantom (Factory New) (F:0.05825): 4.78€
+   ✅ [MAIN] UMP-45 | Exposure (Factory New) (F:0.05340): 3.52€
+   ✅ [MAIN] XM1014 | Ziggy (Factory New) (F:0.06990): 3.53€
+----------------------------------------------------------------------
+#80 [ROI: 27.00%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x SSG 08 | Necropos ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 9.20€ -> Erwartet: 11.68€
+   Outcomes:
+   ✅ [MAIN] FAMAS | Valence (Factory New) (F:0.05592): 35.70€
+   ✅ [MAIN] Five-SeveN | Triumvirate (Factory New) (F:0.04264): 30.20€
+   ✅ [MAIN] Glock-18 | Royal Legion (Factory New) (F:0.06990): 72.03€
+   ✅ [MAIN] MAG-7 | Praetorian (Factory New) (F:0.03145): 13.89€
+   ✅ [MAIN] MP7 | Impire (Factory New) (F:0.02796): 27.35€
+----------------------------------------------------------------------
+#81 [ROI: 26.81%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x MP5-SD | Gold Leaf ((Minimal Wear))
+      👉 Max REAL Float: < 0.11640 (Puffer: 0.0464)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.05€ -> Erwartet: 7.67€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Glockingbird (Factory New) (F:0.06244): 17.60€
+   ✅ [MAIN] M4A4 | Sheet Lightning (Factory New) (F:0.06990): 27.32€
+----------------------------------------------------------------------
+#82 [ROI: 26.30%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x M249 | Deep Relief ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 11.17€ -> Erwartet: 14.11€
+   Outcomes:
+   ✅ [MAIN] AWP | Exoskeleton (Factory New) (F:0.06990): 85.67€
+   ✅ [MAIN] Dual Berettas | Dezastre (Factory New) (F:0.06990): 22.05€
+   ✅ [MAIN] Nova | Clear Polymer (Factory New) (F:0.06990): 69.97€
+   ✅ [MAIN] SSG 08 | Parallax (Factory New) (F:0.06990): 23.32€
+   ✅ [MAIN] UMP-45 | Gold Bismuth (Factory New) (F:0.04893): 18.64€
+----------------------------------------------------------------------
+#83 [ROI: 25.83%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x Dual Berettas | Balance ((Field-Tested))
+      👉 Max REAL Float: < 0.24900 (Puffer: 0.0990)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.24€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#84 [ROI: 24.92%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Galil AR | Metallic Squeezer ((Minimal Wear))
+      👉 Max REAL Float: < 0.09447 (Puffer: 0.0245)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 7.31€ -> Erwartet: 9.13€
+   Outcomes:
+   ✅ [MAIN] AUG | Eye of Zapems (Factory New) (F:0.06990): 34.18€
+   ✅ [MAIN] Dual Berettas | Sweet Little Angels (Factory New) (F:0.06743): 24.54€
+   ✅ [MAIN] XM1014 | Monster Melt (Factory New) (F:0.06168): 23.26€
+----------------------------------------------------------------------
+#85 [ROI: 24.46%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x SCAR-20 | Green Marine ((Minimal Wear))
+      👉 Max REAL Float: < 0.09307 (Puffer: 0.0231)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 4.75€ -> Erwartet: 5.91€
+   Outcomes:
+   ✅ [MAIN] Galil AR | Stone Cold (Factory New) (F:0.06291): 30.56€
+   ✅ [MAIN] M249 | Nebula Crusader (Factory New) (F:0.06990): 12.35€
+   ✅ [MAIN] MP7 | Special Delivery (Factory New) (F:0.04334): 9.28€
+   ✅ [MAIN] P250 | Wingshot (Factory New) (F:0.06291): 14.15€
+----------------------------------------------------------------------
+#86 [ROI: 24.08%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x MP9 | Bioleak ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 10.22€ -> Erwartet: 12.68€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Red Astor (Factory New) (F:0.06990): 13.61€
+   ✅ [MAIN] Galil AR | Firefight (Factory New) (F:0.06990): 17.79€
+   ✅ [MAIN] SSG 08 | Ghost Crusader (Factory New) (F:0.06990): 21.37€
+   ❌ [MAIN] Tec-9 | Re-Entry (Factory New) (F:0.03006): 5.59€
+   ❌ [MAIN] XM1014 | Black Tie (Factory New) (F:0.05242): 5.03€
+----------------------------------------------------------------------
+#87 [ROI: 24.01%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x P90 | Wash me ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 3.50€ -> Erwartet: 4.34€
+   Outcomes:
+   ❌ [MAIN] Galil AR | Metallic Squeezer (Factory New) (F:0.04194): 2.69€
+   ❌ [MAIN] Glock-18 | Teal Graf (Factory New) (F:0.03495): 2.52€
+   ✅ [MAIN] MAC-10 | Pipsqueak (Factory New) (F:0.06291): 6.95€
+   ✅ [MAIN] Nova | Wurst Hölle (Factory New) (F:0.06990): 5.20€
+----------------------------------------------------------------------
+#88 [ROI: 23.61%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Dual Berettas | Cartel ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 9.45€ -> Erwartet: 11.68€
+   Outcomes:
+   ✅ [MAIN] FAMAS | Valence (Factory New) (F:0.05592): 35.70€
+   ✅ [MAIN] Five-SeveN | Triumvirate (Factory New) (F:0.04264): 30.20€
+   ✅ [MAIN] Glock-18 | Royal Legion (Factory New) (F:0.06990): 72.03€
+   ✅ [MAIN] MAG-7 | Praetorian (Factory New) (F:0.03145): 13.89€
+   ✅ [MAIN] MP7 | Impire (Factory New) (F:0.02796): 27.35€
+----------------------------------------------------------------------
+#89 [ROI: 23.57%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x MP9 | Capillary ((Factory New))
+      👉 Max REAL Float: < 0.04893 (Puffer: 0.0489)
+   Kosten: 15.82€ -> Erwartet: 19.55€
+   Outcomes:
+   ❌ [MAIN] AWP | PAW (Factory New) (F:0.03495): 7.43€
+   ✅ [MAIN] CZ75-Auto | Eco (Factory New) (F:0.06990): 28.30€
+   ❌ [MAIN] G3SG1 | High Seas (Factory New) (F:0.04893): 9.22€
+   ✅ [MAIN] MP7 | Powercore (Factory New) (F:0.05592): 21.88€
+   ✅ [MAIN] Nova | Toy Soldier (Factory New) (F:0.06990): 30.92€
+----------------------------------------------------------------------
+#90 [ROI: 23.18%] | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x SSG 08 | Jungle Dashed ((Minimal Wear))
+      👉 Max REAL Float: < 0.12806 (Puffer: 0.0581)
+   Kosten: 8.96€ -> Erwartet: 11.04€
+   Outcomes:
+   ❌ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ❌ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ❌ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#91 [ROI: 23.04%] | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x SG 553 | Lush Ruins ((Minimal Wear))
+      👉 Max REAL Float: < 0.10027 (Puffer: 0.0303)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 2.73€ -> Erwartet: 3.36€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ✅ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ✅ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#92 [ROI: 22.10%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x XM1014 | Bone Machine ((Field-Tested))
+      👉 Max REAL Float: < 0.19600 (Puffer: 0.0460)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 22.25€ -> Erwartet: 27.16€
+   Outcomes:
+   ✅ [MAIN] FAMAS | Styx (Factory New) (F:0.04660): 126.14€
+   ✅ [MAIN] Galil AR | Cerberus (Factory New) (F:0.06990): 393.16€
+----------------------------------------------------------------------
+#93 [ROI: 21.74%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x XM1014 | Copperflage ((Minimal Wear))
+      👉 Max REAL Float: < 0.11640 (Puffer: 0.0464)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.30€ -> Erwartet: 7.67€
+   Outcomes:
+   ✅ [MAIN] Glock-18 | Glockingbird (Factory New) (F:0.06244): 17.60€
+   ✅ [MAIN] M4A4 | Sheet Lightning (Factory New) (F:0.06990): 27.32€
+----------------------------------------------------------------------
+#94 [ROI: 21.66%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Glock-18 | Warhawk ((Minimal Wear))
+      👉 Max REAL Float: < 0.11633 (Puffer: 0.0463)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.59€ -> Erwartet: 6.80€
+   Outcomes:
+   ✅ [MAIN] AWP | PAW (Factory New) (F:0.03495): 7.43€
+   ✅ [MAIN] CZ75-Auto | Eco (Factory New) (F:0.06990): 28.30€
+   ✅ [MAIN] G3SG1 | High Seas (Factory New) (F:0.04893): 9.22€
+   ✅ [MAIN] MP7 | Powercore (Factory New) (F:0.05592): 21.88€
+   ✅ [MAIN] Nova | Toy Soldier (Factory New) (F:0.06990): 30.92€
+----------------------------------------------------------------------
+#95 [ROI: 21.25%] | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x M249 | Predator ((Minimal Wear))
+      👉 Max REAL Float: < 0.12466 (Puffer: 0.0547)
+   Kosten: 9.66€ -> Erwartet: 11.71€
+   Outcomes:
+   ✅ [MAIN] MP7 | Vault Heist (Factory New) (F:0.05243): 10.71€
+   ✅ [MAIN] Nova | Rust Coat (Factory New) (F:0.06990): 14.86€
+   ✅ [MAIN] R8 Revolver | Phoenix Marker (Factory New) (F:0.05243): 15.05€
+   ❌ [MAIN] UMP-45 | Houndstooth (Factory New) (F:0.05243): 6.22€
+----------------------------------------------------------------------
+#96 [ROI: 21.21%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x Nova | Plume ((Field-Tested))
+      👉 Max REAL Float: < 0.19920 (Puffer: 0.0492)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 6.48€ -> Erwartet: 7.86€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06990): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04893): 20.23€
+   ✅ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06990): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06990): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06990): 78.99€
+----------------------------------------------------------------------
+#97 [ROI: 21.03%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x UMP-45 | Oscillator ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 6.58€ -> Erwartet: 7.96€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Slate (Factory New) (F:0.06990): 19.80€
+   ❌ [MAIN] Desert Eagle | Trigger Discipline (Factory New) (F:0.06780): 6.10€
+   ❌ [MAIN] MAC-10 | Button Masher (Factory New) (F:0.06990): 6.30€
+   ❌ [MAIN] Negev | dev_texture (Factory New) (F:0.04543): 2.76€
+   ❌ [MAIN] P250 | Cyber Shell (Factory New) (F:0.05942): 4.86€
+----------------------------------------------------------------------
+#98 [ROI: 20.85%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x P2000 | Marsh ((Factory New))
+      👉 Max REAL Float: < 0.05592 (Puffer: 0.0559)
+   Kosten: 4.76€ -> Erwartet: 5.75€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Wintergreen (Factory New) (F:0.06990): 14.77€
+   ❌ [MAIN] MAC-10 | Poplar Thicket (Factory New) (F:0.06338): 3.37€
+   ❌ [MAIN] MP5-SD | Gold Leaf (Factory New) (F:0.05592): 3.27€
+   ✅ [MAIN] USP-S | Tropical Breeze (Factory New) (F:0.05126): 5.37€
+   ❌ [MAIN] XM1014 | Copperflage (Factory New) (F:0.05592): 1.99€
+----------------------------------------------------------------------
+#99 [ROI: 20.85%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x R8 Revolver | Leafhopper ((Factory New))
+      👉 Max REAL Float: < 0.06067 (Puffer: 0.0607)
+   Kosten: 4.76€ -> Erwartet: 5.75€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Wintergreen (Factory New) (F:0.06990): 14.77€
+   ❌ [MAIN] MAC-10 | Poplar Thicket (Factory New) (F:0.06338): 3.37€
+   ❌ [MAIN] MP5-SD | Gold Leaf (Factory New) (F:0.05592): 3.27€
+   ✅ [MAIN] USP-S | Tropical Breeze (Factory New) (F:0.05126): 5.37€
+   ❌ [MAIN] XM1014 | Copperflage (Factory New) (F:0.05592): 1.99€
+----------------------------------------------------------------------
+#100 [ROI: 19.99%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x SG 553 | Damascus Steel ((Field-Tested))
+      👉 Max REAL Float: < 0.34917 (Puffer: 0.1992)
+   🛒 Filler: 7x MAG-7 | Resupply ((Minimal Wear)) @ 0.20€
+   Kosten: 1.88€ -> Erwartet: 2.25€
+   Outcomes:
+   ✅ [MAIN] P2000 | Amber Fade (Factory New) (F:0.06990): 4.01€
+----------------------------------------------------------------------
+#101 [ROI: 19.51%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x SG 553 | Berry Gel Coat ((Field-Tested))
+      👉 Max REAL Float: < 0.19792 (Puffer: 0.0479)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 11.05€ -> Erwartet: 13.20€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Slalom (Factory New) (F:0.06225): 33.97€
+   ✅ [MAIN] M4A4 | Polysoup (Factory New) (F:0.06990): 50.34€
+   ✅ [MAIN] P90 | Attack Vector (Factory New) (F:0.06007): 38.39€
+----------------------------------------------------------------------
+#102 [ROI: 18.06%] | 1x+9x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x CZ75-Auto | Crimson Web ((Field-Tested))
+      👉 Max REAL Float: < 0.37357 (Puffer: 0.2236)
+   🛒 Filler: 9x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 5.95€ -> Erwartet: 7.02€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tread Plate (Factory New) (F:0.01747): 23.79€
+   ✅ [MAIN] Desert Eagle | Heirloom (Factory New) (F:0.06990): 160.65€
+   ✅ [MAIN] Five-SeveN | Copper Galaxy (Factory New) (F:0.01747): 34.81€
+   ✅ [MAIN] Tec-9 | Titanium Bit (Factory New) (F:0.01747): 13.85€
+----------------------------------------------------------------------
+#103 [ROI: 17.67%] | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x R8 Revolver | Night ((Minimal Wear))
+      👉 Max REAL Float: < 0.12806 (Puffer: 0.0581)
+   Kosten: 9.38€ -> Erwartet: 11.04€
+   Outcomes:
+   ❌ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ❌ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ❌ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#104 [ROI: 17.41%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x PP-Bizon | Death Rattle ((Field-Tested))
+      👉 Max REAL Float: < 0.18237 (Puffer: 0.0324)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.05€ -> Erwartet: 1.23€
+   Outcomes:
+   ✅ [MAIN] MP7 | Vault Heist (Factory New) (F:0.05243): 10.71€
+   ✅ [MAIN] Nova | Rust Coat (Factory New) (F:0.06990): 14.86€
+   ✅ [MAIN] R8 Revolver | Phoenix Marker (Factory New) (F:0.05243): 15.05€
+   ✅ [MAIN] UMP-45 | Houndstooth (Factory New) (F:0.05243): 6.22€
+----------------------------------------------------------------------
+#105 [ROI: 17.41%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x M249 | Predator ((Field-Tested))
+      👉 Max REAL Float: < 0.24037 (Puffer: 0.0904)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.05€ -> Erwartet: 1.23€
+   Outcomes:
+   ✅ [MAIN] MP7 | Vault Heist (Factory New) (F:0.05243): 10.71€
+   ✅ [MAIN] Nova | Rust Coat (Factory New) (F:0.06990): 14.86€
+   ✅ [MAIN] R8 Revolver | Phoenix Marker (Factory New) (F:0.05243): 15.05€
+   ✅ [MAIN] UMP-45 | Houndstooth (Factory New) (F:0.05243): 6.22€
+----------------------------------------------------------------------
+#106 [ROI: 17.40%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x P90 | Mustard Gas ((Factory New))
+      👉 Max REAL Float: < 0.05872 (Puffer: 0.0587)
+   Kosten: 4.90€ -> Erwartet: 5.75€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Wintergreen (Factory New) (F:0.06990): 14.77€
+   ❌ [MAIN] MAC-10 | Poplar Thicket (Factory New) (F:0.06338): 3.37€
+   ❌ [MAIN] MP5-SD | Gold Leaf (Factory New) (F:0.05592): 3.27€
+   ✅ [MAIN] USP-S | Tropical Breeze (Factory New) (F:0.05126): 5.37€
+   ❌ [MAIN] XM1014 | Copperflage (Factory New) (F:0.05592): 1.99€
+----------------------------------------------------------------------
+#107 [ROI: 17.30%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Glock-18 | Off World ((Minimal Wear))
+      👉 Max REAL Float: < 0.09708 (Puffer: 0.0271)
+   Kosten: 3.64€ -> Erwartet: 4.27€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Tacticat (Factory New) (F:0.06796): 3.93€
+   ✅ [MAIN] MP9 | Goo (Factory New) (F:0.05825): 5.58€
+   ✅ [MAIN] SG 553 | Phantom (Factory New) (F:0.05825): 4.78€
+   ❌ [MAIN] UMP-45 | Exposure (Factory New) (F:0.05340): 3.52€
+   ❌ [MAIN] XM1014 | Ziggy (Factory New) (F:0.06990): 3.53€
+----------------------------------------------------------------------
+#108 [ROI: 17.27%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x SG 553 | Aerial ((Factory New))
+      👉 Max REAL Float: < 0.04194 (Puffer: 0.0419)
+   Kosten: 7.42€ -> Erwartet: 8.70€
+   Outcomes:
+   ❌ [MAIN] AUG | Aristocrat (Factory New) (F:0.04613): 7.22€
+   ❌ [MAIN] AWP | Phobos (Factory New) (F:0.02796): 5.47€
+   ❌ [MAIN] P90 | Chopper (Factory New) (F:0.04194): 5.78€
+   ✅ [MAIN] R8 Revolver | Reboot (Factory New) (F:0.06990): 13.08€
+   ✅ [MAIN] Sawed-Off | Limelight (Factory New) (F:0.06990): 11.95€
+----------------------------------------------------------------------
+#109 [ROI: 16.84%] | 10x | Restricted
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x XM1014 | Zombie Offensive ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 24.08€ -> Erwartet: 28.14€
+   Outcomes:
+   ✅ [MAIN] Dual Berettas | Melondrama (Factory New) (F:0.06990): 24.92€
+   ✅ [MAIN] FAMAS | Rapid Eye Movement (Factory New) (F:0.06990): 29.75€
+   ✅ [MAIN] MP7 | Abyssal Apparition (Factory New) (F:0.06990): 29.74€
+----------------------------------------------------------------------
+#110 [ROI: 15.80%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Tec-9 | VariCamo ((Factory New))
+      👉 Max REAL Float: < 0.04194 (Puffer: 0.0419)
+   Kosten: 5.46€ -> Erwartet: 6.32€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Brass (Factory New) (F:0.06990): 11.88€
+   ❌ [MAIN] M4A1-S | VariCamo (Factory New) (F:0.04194): 4.15€
+   ❌ [MAIN] SG 553 | Damascus Steel (Factory New) (F:0.06990): 2.94€
+----------------------------------------------------------------------
+#111 [ROI: 14.77%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x M249 | System Lock ((Factory New))
+      👉 Max REAL Float: < 0.05592 (Puffer: 0.0559)
+   Kosten: 15.40€ -> Erwartet: 17.67€
+   Outcomes:
+   ✅ [MAIN] Desert Eagle | Naga (Factory New) (F:0.06990): 45.30€
+   ❌ [MAIN] Dual Berettas | Urban Shock (Factory New) (F:0.03285): 6.84€
+   ❌ [MAIN] MAC-10 | Malachite (Factory New) (F:0.03495): 11.95€
+   ❌ [MAIN] Sawed-Off | Serenity (Factory New) (F:0.03495): 6.60€
+----------------------------------------------------------------------
+#112 [ROI: 14.36%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x Tec-9 | Phoenix Chalk ((Field-Tested))
+      👉 Max REAL Float: < 0.19500 (Puffer: 0.0450)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.08€ -> Erwartet: 1.23€
+   Outcomes:
+   ✅ [MAIN] MP7 | Vault Heist (Factory New) (F:0.05243): 10.71€
+   ✅ [MAIN] Nova | Rust Coat (Factory New) (F:0.06990): 14.86€
+   ✅ [MAIN] R8 Revolver | Phoenix Marker (Factory New) (F:0.05243): 15.05€
+   ✅ [MAIN] UMP-45 | Houndstooth (Factory New) (F:0.05243): 6.22€
+----------------------------------------------------------------------
+#113 [ROI: 14.14%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Galil AR | Acid Dart ((Factory New))
+      👉 Max REAL Float: < 0.05592 (Puffer: 0.0559)
+   Kosten: 5.04€ -> Erwartet: 5.75€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Wintergreen (Factory New) (F:0.06990): 14.77€
+   ❌ [MAIN] MAC-10 | Poplar Thicket (Factory New) (F:0.06338): 3.37€
+   ❌ [MAIN] MP5-SD | Gold Leaf (Factory New) (F:0.05592): 3.27€
+   ✅ [MAIN] USP-S | Tropical Breeze (Factory New) (F:0.05126): 5.37€
+   ❌ [MAIN] XM1014 | Copperflage (Factory New) (F:0.05592): 1.99€
+----------------------------------------------------------------------
+#114 [ROI: 14.07%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x SG 553 | Basket Halftone ((Factory New))
+      👉 Max REAL Float: < 0.05570 (Puffer: 0.0557)
+   Kosten: 3.50€ -> Erwartet: 3.99€
+   Outcomes:
+   ❌ [MAIN] AWP | Arsenic Spill (Factory New) (F:0.04660): 3.21€
+   ✅ [MAIN] Glock-18 | Coral Bloom (Factory New) (F:0.06990): 5.08€
+   ❌ [MAIN] M4A1-S | Rose Hex (Factory New) (F:0.04642): 3.08€
+   ✅ [MAIN] MP9 | Shredded (Factory New) (F:0.05570): 3.99€
+   ✅ [MAIN] P250 | Red Tide (Factory New) (F:0.06963): 5.00€
+   ✅ [MAIN] SSG 08 | Blush Pour (Factory New) (F:0.06298): 3.59€
+----------------------------------------------------------------------
+#115 [ROI: 13.67%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x MP5-SD | Acid Wash ((Factory New))
+      👉 Max REAL Float: < 0.07000 (Puffer: 0.0700)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 18.40€ -> Erwartet: 20.91€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Rat Rod (Factory New) (F:0.06588): 202.29€
+   ✅ [MAIN] AUG | Arctic Wolf (Factory New) (F:0.04612): 20.23€
+   ❌ [MAIN] PP-Bizon | Embargo (Factory New) (F:0.06588): 7.14€
+   ✅ [MAIN] P2000 | Obsidian (Factory New) (F:0.06588): 24.34€
+   ✅ [MAIN] MP7 | Neon Ply (Factory New) (F:0.06588): 78.99€
+----------------------------------------------------------------------
+#116 [ROI: 13.26%] | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x R8 Revolver | Inlay ((Factory New))
+      👉 Max REAL Float: < 0.04645 (Puffer: 0.0465)
+   Kosten: 5.18€ -> Erwartet: 5.87€
+   Outcomes:
+   ❌ [MAIN] M4A1-S | Mud-Spec (Factory New) (F:0.04462): 4.59€
+   ❌ [MAIN] MAC-10 | Echoing Sands (Factory New) (F:0.06768): 4.86€
+   ❌ [MAIN] SSG 08 | Azure Glyph (Factory New) (F:0.06990): 3.57€
+   ✅ [MAIN] USP-S | Desert Tactical (Factory New) (F:0.06112): 10.45€
+----------------------------------------------------------------------
+#117 [ROI: 12.86%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x Sawed-Off | Zander ((Minimal Wear))
+      👉 Max REAL Float: < 0.11641 (Puffer: 0.0464)
+   Kosten: 5.74€ -> Erwartet: 6.48€
+   Outcomes:
+   ✅ [MAIN] Galil AR | Crimson Tsunami (Factory New) (F:0.03844): 10.58€
+   ❌ [MAIN] M249 | Emerald Poison Dart (Factory New) (F:0.03145): 3.42€
+   ✅ [MAIN] MAC-10 | Last Dive (Factory New) (F:0.03635): 5.83€
+   ✅ [MAIN] UMP-45 | Scaffold (Factory New) (F:0.06990): 8.85€
+   ❌ [MAIN] XM1014 | Seasons (Factory New) (F:0.03495): 3.71€
+----------------------------------------------------------------------
+#118 [ROI: 12.47%] | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x Dual Berettas | Oil Change ((Minimal Wear))
+      👉 Max REAL Float: < 0.13015 (Puffer: 0.0602)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 3.65€ -> Erwartet: 4.11€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Breaker Box (Factory New) (F:0.05592): 7.08€
+   ✅ [MAIN] Glock-18 | Red Tire (Factory New) (F:0.06990): 35.69€
+   ✅ [MAIN] SSG 08 | Carbon Fiber (Factory New) (F:0.01525): 6.77€
+   ✅ [MAIN] UMP-45 | Mechanism (Factory New) (F:0.06227): 4.62€
+----------------------------------------------------------------------
+#119 [ROI: 12.34%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x MAC-10 | Strats ((Field-Tested))
+      👉 Max REAL Float: < 0.38000 (Puffer: 0.2300)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.26€ -> Erwartet: 1.42€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Breaker Box (Factory New) (F:0.05559): 7.08€
+   ✅ [MAIN] Glock-18 | Red Tire (Factory New) (F:0.06948): 35.69€
+   ✅ [MAIN] SSG 08 | Carbon Fiber (Factory New) (F:0.01516): 6.77€
+   ✅ [MAIN] UMP-45 | Mechanism (Factory New) (F:0.06190): 4.62€
+----------------------------------------------------------------------
+#120 [ROI: 11.61%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x P250 | Contaminant ((Factory New))
+      👉 Max REAL Float: < 0.07000 (Puffer: 0.0700)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 12.64€ -> Erwartet: 14.11€
+   Outcomes:
+   ✅ [MAIN] AWP | Exoskeleton (Factory New) (F:0.06500): 85.67€
+   ✅ [MAIN] Dual Berettas | Dezastre (Factory New) (F:0.06500): 22.05€
+   ✅ [MAIN] Nova | Clear Polymer (Factory New) (F:0.06500): 69.97€
+   ✅ [MAIN] SSG 08 | Parallax (Factory New) (F:0.06500): 23.32€
+   ✅ [MAIN] UMP-45 | Gold Bismuth (Factory New) (F:0.04550): 18.64€
+----------------------------------------------------------------------
+#121 [ROI: 11.58%] | 3x+7x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 3x M249 | Predator ((Minimal Wear))
+      👉 Max REAL Float: < 0.15000 (Puffer: 0.0800)
+   🛒 Filler: 7x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 3.19€ -> Erwartet: 3.56€
+   Outcomes:
+   ✅ [MAIN] MP7 | Vault Heist (Factory New) (F:0.05129): 10.71€
+   ✅ [MAIN] Nova | Rust Coat (Factory New) (F:0.06839): 14.86€
+   ✅ [MAIN] R8 Revolver | Phoenix Marker (Factory New) (F:0.05129): 15.05€
+   ✅ [MAIN] UMP-45 | Houndstooth (Factory New) (F:0.05129): 6.22€
+----------------------------------------------------------------------
+#122 [ROI: 11.29%] | 10x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 10x UMP-45 | Green Swirl ((Factory New))
+      👉 Max REAL Float: < 0.06116 (Puffer: 0.0612)
+   Kosten: 0.84€ -> Erwartet: 0.93€
+   Outcomes:
+   ✅ [MAIN] AK-47 | VariCamo Grey (Factory New) (F:0.05871): 1.65€
+   ✅ [MAIN] Dual Berettas | Polished Malachite (Factory New) (F:0.06990): 2.11€
+   ❌ [MAIN] Galil AR | Acid Dart (Factory New) (F:0.05243): 0.43€
+   ❌ [MAIN] P2000 | Marsh (Factory New) (F:0.05243): 0.40€
+   ✅ [MAIN] MAC-10 | Acid Hex (Factory New) (F:0.05068): 1.96€
+   ❌ [MAIN] P90 | Mustard Gas (Factory New) (F:0.05505): 0.42€
+   ❌ [MAIN] R8 Revolver | Leafhopper (Factory New) (F:0.05688): 0.40€
+   ❌ [MAIN] SSG 08 | Tiger Tear (Factory New) (F:0.04806): 0.57€
+   ❌ [MAIN] Tec-9 | Garter-9 (Factory New) (F:0.06116): 0.46€
+----------------------------------------------------------------------
+#123 [ROI: 11.11%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x Dual Berettas | Oil Change ((Field-Tested))
+      👉 Max REAL Float: < 0.32045 (Puffer: 0.1705)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.27€ -> Erwartet: 1.42€
+   Outcomes:
+   ✅ [MAIN] PP-Bizon | Breaker Box (Factory New) (F:0.05592): 7.08€
+   ✅ [MAIN] Glock-18 | Red Tire (Factory New) (F:0.06990): 35.69€
+   ✅ [MAIN] SSG 08 | Carbon Fiber (Factory New) (F:0.01525): 6.77€
+   ✅ [MAIN] UMP-45 | Mechanism (Factory New) (F:0.06227): 4.62€
+----------------------------------------------------------------------
+#124 [ROI: 10.98%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x R8 Revolver | Night ((Field-Tested))
+      👉 Max REAL Float: < 0.27441 (Puffer: 0.1244)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.05€ -> Erwartet: 1.17€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ✅ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ✅ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#125 [ROI: 10.98%] | 1x+9x | Consumer Grade
+   Collection: The 2018 Nuke Collection
+   🛒 Main: 1x SSG 08 | Jungle Dashed ((Field-Tested))
+      👉 Max REAL Float: < 0.27441 (Puffer: 0.1244)
+   🛒 Filler: 9x Nova | Mandrel ((Factory New)) @ 0.04€
+   Kosten: 1.05€ -> Erwartet: 1.17€
+   Outcomes:
+   ✅ [MAIN] CZ75-Auto | Silver (Factory New) (F:0.00736): 4.75€
+   ✅ [MAIN] G3SG1 | Ancient Ritual (Factory New) (F:0.06990): 8.33€
+   ✅ [MAIN] P2000 | Panther Camo (Factory New) (F:0.04599): 7.13€
+   ✅ [MAIN] MP7 | Tall Grass (Factory New) (F:0.05978): 23.94€
+----------------------------------------------------------------------
+#126 [ROI: 10.73%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x Five-SeveN | Midnight Paintover ((Factory New))
+      👉 Max REAL Float: < 0.03495 (Puffer: 0.0350)
+   Kosten: 3.92€ -> Erwartet: 4.34€
+   Outcomes:
+   ❌ [MAIN] Galil AR | Metallic Squeezer (Factory New) (F:0.04194): 2.69€
+   ❌ [MAIN] Glock-18 | Teal Graf (Factory New) (F:0.03495): 2.52€
+   ✅ [MAIN] MAC-10 | Pipsqueak (Factory New) (F:0.06291): 6.95€
+   ✅ [MAIN] Nova | Wurst Hölle (Factory New) (F:0.06990): 5.20€
+----------------------------------------------------------------------
+#127 [ROI: 10.64%] | 10x | Industrial Grade
+   Collection: The Train Collection
+   🛒 Main: 10x MP7 | Astrolabe ((Minimal Wear))
+      👉 Max REAL Float: < 0.08737 (Puffer: 0.0174)
+   Kosten: 6.16€ -> Erwartet: 6.82€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Crossfade (Factory New) (F:0.04369): 8.58€
+   ❌ [MAIN] SCAR-20 | Wild Berry (Factory New) (F:0.05679): 5.02€
+   ✅ [MAIN] SG 553 | Berry Gel Coat (Factory New) (F:0.06990): 9.83€
+   ❌ [MAIN] XM1014 | Halftone Shift (Factory New) (F:0.05243): 3.83€
+----------------------------------------------------------------------
+#128 [ROI: 10.32%] | 3x+7x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 3x Desert Eagle | Mint Fan ((Minimal Wear))
+      👉 Max REAL Float: < 0.11640 (Puffer: 0.0464)
+   🛒 Filler: 7x MAG-7 | Foresight ((Factory New)) @ 0.50€
+   Kosten: 10.46€ -> Erwartet: 11.54€
+   Outcomes:
+   ✅ [MAIN] AK-47 | Midnight Laminate (Factory New) (F:0.06990): 50.00€
+   ✅ [MAIN] USP-S | Royal Guard (Factory New) (F:0.05592): 20.71€
+----------------------------------------------------------------------
+#129 [ROI: 10.09%] | 1x+9x | Restricted
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 1x Glock-18 | Glockingbird ((Field-Tested))
+      👉 Max REAL Float: < 0.20234 (Puffer: 0.0523)
+   🛒 Filler: 9x XM1014 | Zombie Offensive ((Factory New)) @ 2.41€
+   Kosten: 24.79€ -> Erwartet: 27.30€
+   Outcomes:
+   ✅ [MAIN] AWP | Green Energy (Factory New) (F:0.06990): 188.02€
+----------------------------------------------------------------------
+#130 [ROI: 10.08%] | 10x | Mil-Spec Grade
+   Collection: The Dreams & Nightmares Collection
+   🛒 Main: 10x FAMAS | Crypsis ((Factory New))
+      👉 Max REAL Float: < 0.03845 (Puffer: 0.0384)
+   Kosten: 12.60€ -> Erwartet: 13.87€
+   Outcomes:
+   ✅ [MAIN] AWP | Atheris (Factory New) (F:0.06990): 20.78€
+   ❌ [MAIN] Desert Eagle | Light Rail (Factory New) (F:0.06291): 9.45€
+   ✅ [MAIN] MP5-SD | Gauss (Factory New) (F:0.06990): 24.50€
+   ❌ [MAIN] Tec-9 | Bamboozle (Factory New) (F:0.05592): 11.89€
+   ❌ [MAIN] UMP-45 | Moonrise (Factory New) (F:0.02796): 2.74€
+----------------------------------------------------------------------
