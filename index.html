@@ -1,275 +1,720 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS2 TradeUp Engine</title>
-    
-    <link rel="icon" type="image/png" href="favicon.png">
-
+    <title>TradeUp Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <style>
+        /* --- STRICT COLOR PALETTE (DARK ONLY) --- */
+        :root {
+            --bg-core: #000000;
+            --bg-card: #111111;
+            --bg-input: #1a1a1a;
+            --bg-badge: #222222;
+            --border-color: #333333;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --shadow-color: rgba(0,0,0,0.5);
+            
+            /* ACCENTS */
+            --color-pink: #e056fd; 
+            --color-green: #00ff9d;
+            
+            --bs-body-bg: var(--bg-core);
+            --bs-body-color: var(--text-main);
+        }
+
         body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-core);
+            /* Modern Radial Gradient: Spotlight effect from top center */
+            background-image: radial-gradient(circle at 50% 0%, #1c1c1c 0%, #000000 85%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-main);
         }
-        .container {
-            max-width: 900px;
-        }
-        .card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
+
+        /* --- UI COMPONENTS --- */
+        .card-clean {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .form-control {
-            background-color: #2d2d2d;
-            border: 1px solid #444;
-            color: #fff;
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-main);
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
-        .form-control:focus {
-            background-color: #333;
-            color: #fff;
-            border-color: #666;
-            box-shadow: none;
-        }
-        .btn-primary {
-            background-color: #0d6efd;
-            border: none;
+
+        hr { border-color: var(--border-color); opacity: 1; }
+
+        .form-control, .form-select {
+            background-color: var(--bg-input) !important;
+            border: 1px solid var(--border-color) !important;
+            color: #fff !important;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: none !important;
+            transition: all 0.2s;
         }
         
-        /* Status Farben für die neue Logik */
-        .text-jackpot { color: #ff00de; font-weight: bold; } /* Pink */
-        .text-profit { color: #00ff00; font-weight: bold; }  /* Grün */
-        .text-loss { color: #888888; }                       /* Grau */
+        .form-control:focus {
+            border-color: var(--color-pink) !important;
+            background-color: #222 !important;
+        }
 
+        .form-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .label-desc {
+            text-transform: none;
+            font-weight: 400;
+            opacity: 0.7;
+            font-size: 0.7rem;
+            letter-spacing: 0;
+            margin-left: 5px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-pink {
+            background-color: var(--color-pink);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            transition: all 0.2s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .btn-pink:hover {
+            background-color: #d046ec;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(224, 86, 253, 0.3);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 5px 12px;
+        }
+        .btn-outline:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        /* --- STATUS INDICATORS --- */
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            background-color: var(--border-color);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-loaded { background-color: var(--color-green); box-shadow: 0 0 8px var(--color-green); }
+        .status-error { background-color: #ff4081; box-shadow: 0 0 8px #ff4081; }
+
+        .data-status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-input);
+            padding: 12px 15px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- RESULT CARDS --- */
+        .result-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--border-color); 
+            border-radius: 6px;
+            margin-bottom: 16px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .result-card:hover {
+            background-color: #161616;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .status-profit { border-left-color: var(--color-green); }
+        .status-jackpot { border-left-color: var(--color-pink); }
+
+        .text-green { color: var(--color-green) !important; }
+        .text-pink { color: var(--color-pink) !important; text-shadow: 0 0 15px rgba(224, 86, 253, 0.3); }
+        .text-white { color: #ffffff !important; }
+        .text-grey { color: var(--text-muted) !important; }
+
+        .badge-mode {
+            background: var(--bg-badge);
+            color: #fff;
+            border: 1px solid var(--border-color);
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        
+        .badge-jackpot {
+            background: rgba(224, 86, 253, 0.15);
+            color: var(--color-pink);
+            border: 1px solid var(--color-pink);
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-left: 8px;
+        }
+
+        .rarity-badge {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid;
+            font-weight: 600;
+        }
+        .rarity-Consumer { color: #b0c3d9; border-color: #b0c3d9; }
+        .rarity-Industrial { color: #5e98d9; border-color: #5e98d9; }
+        .rarity-Mil-Spec { color: #4b69ff; border-color: #4b69ff; }
+        .rarity-Restricted { color: #8847ff; border-color: #8847ff; }
+        .rarity-Classified { color: #d32ce6; border-color: #d32ce6; }
+        .rarity-Covert { color: #eb4b4b; border-color: #eb4b4b; }
+
+        .outcomes-container {
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            display: none;
+        }
+        
         .outcome-row {
-            padding: 5px 0;
-            border-bottom: 1px solid #333;
-            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #1a1a1a;
         }
         .outcome-row:last-child { border-bottom: none; }
+
+        .tag-win { color: var(--color-green); font-weight: 700; min-width: 40px; }
+        .tag-loss { color: #444; font-weight: 700; min-width: 40px; }
+
+        .expand-link {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-bottom: 1px dotted #555;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .expand-link:hover { color: #fff; border-color: #fff; }
+
+        /* File Input Fixes */
+        input[type="file"]::file-selector-button {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-core); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <div class="container py-5">
-        <h1 class="text-center mb-4">CS2 TradeUp Engine</h1>
-
-        <div class="card p-4">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Max Budget (€)</label>
-                    <input type="number" id="max-budget" class="form-control" value="10">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Min Yield (%)</label>
-                    <input type="number" id="min-roi" class="form-control" value="10">
-                    <div style="font-size: 0.7em; color: #888;">(10 = 10% Profit)</div>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Float Buffer</label>
-                    <input type="number" id="float-buffer" class="form-control" value="0.001" step="0.001">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Price Factor</label>
-                    <input type="number" id="price-factor" class="form-control" value="0.95" step="0.01">
-                </div>
-                <div class="col-12 text-end">
-                    <button class="btn btn-primary px-4" onclick="startCalculation()">Run Simulation</button>
-                </div>
-            </div>
-            <div id="status-msg" class="text-end mt-2" style="font-size: 0.8em; color: #888;">Loading data...</div>
+<div class="container py-5">
+    <div class="row mb-5 text-center">
+        <div class="col-12">
+            <h2 class="mb-0 fw-bold text-white" style="letter-spacing: -1px; text-shadow: 0 0 30px rgba(255,255,255,0.1);">TRADEUP ENGINE</h2>
         </div>
-
-        <div id="results-container"></div>
     </div>
 
-    <script>
-        let database = [];
-        let prices = {};
-
-        // --- 1. AUTO LOAD & SAVE (LocalStorage) ---
-        window.onload = async function() {
-            initSettings(); // Erst Inputs wiederherstellen
-            await loadFiles(); // Dann Daten laden
-        };
-
-        function initSettings() {
-            const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor'];
-            fields.forEach(id => {
-                const element = document.getElementById(id);
-                // Laden
-                const savedValue = localStorage.getItem(id);
-                if (savedValue !== null) element.value = savedValue;
-                // Speichern
-                element.addEventListener('input', function() {
-                    localStorage.setItem(id, this.value);
-                });
-            });
-        }
-
-        async function loadFiles() {
-            try {
-                const dbReq = await fetch('database.json');
-                database = await dbReq.json();
-
-                const priceReq = await fetch('prices_cache.json');
-                prices = await priceReq.json();
-
-                document.getElementById('status-msg').innerText = 'Data Ready';
-                document.getElementById('status-msg').style.color = '#00ff00';
-            } catch (error) {
-                console.error(error);
-                document.getElementById('status-msg').innerText = 'Error loading files';
-                document.getElementById('status-msg').style.color = 'red';
-            }
-        }
-
-        function startCalculation() {
-            if(!database || Object.keys(prices).length === 0) { 
-                alert("Datenbank noch nicht geladen!"); 
-                return; 
-            }
-            
-            const MAX_COST = parseFloat(document.getElementById('max-budget').value);
-            
-            // --- 2. FILTER LOGIK (+100) ---
-            // Wenn User "10" eingibt, meint er 10% Profit -> Filter auf 110% Yield
-            let inputRoi = parseFloat(document.getElementById('min-roi').value);
-            const MIN_ROI = inputRoi + 100;
-
-            const BUFFER = parseFloat(document.getElementById('float-buffer').value);
-            const FACTOR = parseFloat(document.getElementById('price-factor').value);
-
-            const container = document.getElementById('results-container');
-            container.innerHTML = '<div class="text-center mt-5 text-muted">Calculating...</div>';
-
-            setTimeout(() => {
-                let results = [];
-
-                database.forEach(collection => {
-                    collection.inputs.forEach(inputSkin => {
-                        let inputPrice = prices[inputSkin.name];
-                        if(!inputPrice) return;
-
-                        let realInputPrice = inputPrice * FACTOR; 
-                        let totalCost = realInputPrice * 10;
-                        
-                        if(totalCost > MAX_COST) return;
-
-                        let simulation = runSimulation(collection, inputSkin, realInputPrice, BUFFER);
-                        
-                        if(simulation && simulation.roi >= MIN_ROI) {
-                            results.push(simulation);
-                        }
-                    });
-                });
-
-                renderResults(results);
-            }, 50);
-        }
-
-        function runSimulation(collection, inputSkin, singleInputPrice, buffer) {
-            let outcomes = [];
-            let totalEv = 0;
-            
-            let avgFloat = (inputSkin.min_float + buffer); 
-            let possibleOutputs = collection.outputs.filter(o => o.rarity === nextRarity(inputSkin.rarity));
-            
-            if(possibleOutputs.length === 0) return null;
-
-            possibleOutputs.forEach(outSkin => {
-                let outFloat = (avgFloat * (outSkin.max_float - outSkin.min_float)) + outSkin.min_float;
-                let condition = getCondition(outFloat);
-                let priceName = condition ? `${outSkin.name} (${condition})` : outSkin.name;
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card-clean">
+                <h6 class="text-white mb-4">DATA SOURCE</h6>
                 
-                let outPrice = prices[priceName] || 0;
-                let prob = 1 / possibleOutputs.length; 
-
-                outcomes.push({ name: priceName, price: outPrice, float: outFloat });
-                totalEv += (outPrice * prob);
-            });
-
-            if(totalEv === 0) return null;
-            let cost = singleInputPrice * 10;
-            
-            // --- 3. NEUE ROI FORMEL (YIELD) ---
-            let roi = (totalEv / cost) * 100; // Ergebnis z.B. 110.5
-
-            return {
-                inputName: inputSkin.name,
-                cost: cost,
-                ev: totalEv,
-                roi: roi,
-                outcomes: outcomes
-            };
-        }
-
-        function renderResults(results) {
-            const container = document.getElementById('results-container');
-            container.innerHTML = '';
-
-            if(results.length === 0) {
-                container.innerHTML = '<div class="alert alert-warning">Keine Ergebnisse gefunden.</div>';
-                return;
-            }
-
-            results.sort((a, b) => b.roi - a.roi);
-
-            results.slice(0, 50).forEach(res => {
+                <div class="data-status-row">
+                    <span><span id="dot-db" class="status-dot"></span> Database</span>
+                    <span id="text-db" class="text-muted" style="font-size:0.75rem">Waiting...</span>
+                </div>
+                <div class="data-status-row">
+                    <span><span id="dot-price" class="status-dot"></span> Prices</span>
+                    <span id="text-price" class="text-muted" style="font-size:0.75rem">Waiting...</span>
+                </div>
                 
-                // --- 4. NEUE FARB LOGIK ---
-                let isJackpot = res.roi > 130;  // Über 30% Profit
-                let isProfit = res.roi >= 100;  // Über 0% Profit
+                <div id="file-error-msg" class="alert alert-danger mt-2 p-2 small d-none" style="background: rgba(255, 64, 129, 0.1); border-color: #ff4081; color: #ff80ab;">
+                    <strong>Error:</strong> Could not load files. Ensure this HTML is in the same folder as the JSON files. If opening locally, use Firefox or run a local server (CORS).
+                </div>
 
-                let colorClass = isJackpot ? 'text-jackpot' : (isProfit ? 'text-profit' : 'text-loss');
-                let jackpotBadge = isJackpot ? '<span class="badge bg-danger ms-2">JACKPOT</span>' : '';
-
-                // HTML Struktur (Klassisch / Original)
-                let html = `
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="m-0">${res.inputName} ${jackpotBadge}</h5>
-                        <div class="text-end">
-                            <div style="font-size: 0.8em; color:#888;">Yield</div>
-                            <div class="${colorClass}" style="font-size: 1.2em;">${res.roi.toFixed(2)}%</div>
-                        </div>
+                <h6 class="text-white mb-4 mt-5">ENGINE SETTINGS</h6>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label">Budget (€)</label>
+                        <input type="number" id="max-budget" class="form-control" value="25.0">
                     </div>
-                    
-                    <div class="row mb-2" style="font-size: 0.9em;">
-                        <div class="col-6">Cost: <b>${res.cost.toFixed(2)}€</b></div>
-                        <div class="col-6 text-end">EV: <b>${res.ev.toFixed(2)}€</b></div>
-                    </div>
-
-                    <div style="background: #252525; padding: 10px; border-radius: 5px;">
-                        ${res.outcomes.map(o => `
-                            <div class="d-flex justify-content-between outcome-row">
-                                <span>${o.name}</span>
-                                <span class="${o.price > res.cost ? 'text-success' : 'text-muted'}">${o.price.toFixed(2)}€</span>
-                            </div>
-                        `).join('')}
+                    <div class="col-6">
+                        <label class="form-label">Min ROI (%)</label>
+                        <input type="number" id="min-roi" class="form-control" value="10.0">
                     </div>
                 </div>
-                `;
-                container.innerHTML += html;
-            });
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Float Buffer 
+                        <span class="label-desc">(Safe space to lower limit)</span>
+                    </label>
+                    <input type="number" id="float-buffer" class="form-control" value="0.015" step="0.001">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">
+                        Price Factor 
+                        <span class="label-desc">(Multiplier, e.g. 1.0)</span>
+                    </label>
+                    <input type="number" id="price-factor" class="form-control" value="1.0" step="0.1">
+                </div>
+
+                <button onclick="startCalculation()" id="btn-start" class="btn-pink mt-2" disabled>
+                    Start Engine
+                </button>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-grey" style="font-size: 0.8rem; font-weight: 600;">RESULTS: <span id="result-count" class="text-white">0</span></span>
+                <button onclick="clearResults()" class="btn-outline">Clear</button>
+            </div>
+            
+            <div id="results-container">
+                <div class="text-center p-5 border rounded" style="border-color: var(--border-color) !important; border-style: dashed !important;">
+                    <p class="text-grey mb-0" style="font-size: 0.85rem; opacity: 0.5;">ENGINE READY. WAITING FOR START.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* --- AUTO LOAD LOGIC --- */
+    window.onload = async function() {
+        await loadFiles();
+    };
+
+    async function loadFiles() {
+        // Load Database
+        try {
+            const response = await fetch('database.json');
+            if (!response.ok) throw new Error("404 Not Found");
+            database = await response.json();
+            
+            document.getElementById('dot-db').classList.add('status-loaded');
+            document.getElementById('text-db').innerText = "OK";
+            document.getElementById('text-db').classList.add('text-green');
+        } catch (error) {
+            document.getElementById('dot-db').classList.add('status-error');
+            document.getElementById('text-db').innerText = "ERROR";
+            document.getElementById('file-error-msg').classList.remove('d-none');
+            console.error("DB Error:", error);
         }
 
-        function nextRarity(rarity) {
-            const rarities = ["Consumer Grade", "Industrial Grade", "Mil-Spec Grade", "Restricted", "Classified", "Covert"];
-            let idx = rarities.indexOf(rarity);
-            return (idx >= 0 && idx < rarities.length - 1) ? rarities[idx + 1] : null;
+        // Load Prices
+        try {
+            const response = await fetch('prices_cache.json');
+            if (!response.ok) throw new Error("404 Not Found");
+            const raw = await response.json();
+            
+            // Process Prices
+            prices = {};
+            let items = Array.isArray(raw) ? raw : (raw.items || raw);
+            
+            // Auto-detect format
+            if (!Array.isArray(items) && raw["AK-47 | Slate (Factory New)"]) {
+                for(let k in raw) {
+                    let p = raw[k];
+                    if(typeof p==='object' && p.steam) prices[k] = p.steam.last_24h || p.steam.last_7d || 0;
+                    else if(typeof p==='number') prices[k] = p;
+                }
+            } else {
+                for(let item of items) {
+                    let n = item.market_hash_name || item.market_name;
+                    let p = item.min_price || item.price;
+                    if(n && p) { prices[n] = parseFloat(p); }
+                }
+            }
+
+            document.getElementById('dot-price').classList.add('status-loaded');
+            document.getElementById('text-price').innerText = "OK";
+            document.getElementById('text-price').classList.add('text-green');
+        } catch (error) {
+            document.getElementById('dot-price').classList.add('status-error');
+            document.getElementById('text-price').innerText = "ERROR";
+            document.getElementById('file-error-msg').classList.remove('d-none');
+            console.error("Price Error:", error);
         }
 
-        function getCondition(floatVal) {
-            if(floatVal < 0.07) return "Factory New";
-            if(floatVal < 0.15) return "Minimal Wear";
-            if(floatVal < 0.38) return "Field-Tested";
-            if(floatVal < 0.45) return "Well-Worn";
-            return "Battle-Scarred";
+        // Enable button if both loaded
+        if (database && Object.keys(prices).length > 0) {
+            document.getElementById('btn-start').disabled = false;
         }
-    </script>
+    }
+
+    /* --- CORE LOGIC --- */
+    let database = null;
+    let prices = {};
+    let cheapestFillers = {};
+    let uniqueResults = {};
+    const RARITY_ORDER = ["Consumer Grade", "Industrial Grade", "Mil-Spec Grade", "Restricted", "Classified", "Covert"];
+    const to32Bit = (val) => Math.fround(val);
+
+    function getTradeFloat(realFloat, minCap, maxCap) {
+        let range = maxCap - minCap;
+        return range === 0 ? 0.0 : (realFloat - minCap) / range;
+    }
+    function getRealFloatFromTrade(tradeFloat, minCap, maxCap) {
+        return (tradeFloat * (maxCap - minCap)) + minCap;
+    }
+    function calculateOutputFloat(avgTradeFloat, outMin, outMax) {
+        let avg32 = to32Bit(avgTradeFloat);
+        let range32 = to32Bit(outMax - outMin);
+        let step1 = to32Bit(avg32 * range32);
+        return to32Bit(step1 + outMin);
+    }
+    function getConditionInfo(floatVal) {
+        if (floatVal < 0.07) return "FN";
+        if (floatVal < 0.15) return "MW";
+        if (floatVal < 0.38) return "FT";
+        if (floatVal < 0.45) return "WW";
+        return "BS";
+    }
+    function getLongConditionName(shortInfo) {
+        if (shortInfo === "FN") return "(Factory New)";
+        if (shortInfo === "MW") return "(Minimal Wear)";
+        if (shortInfo === "FT") return "(Field-Tested)";
+        if (shortInfo === "WW") return "(Well-Worn)";
+        return "(Battle-Scarred)";
+    }
+    function getConditionLimits(longName) {
+        if (longName === "(Factory New)") return [0.00, 0.07];
+        if (longName === "(Minimal Wear)") return [0.07, 0.15];
+        if (longName === "(Field-Tested)") return [0.15, 0.38];
+        if (longName === "(Well-Worn)") return [0.38, 0.45];
+        return [0.45, 1.00];
+    }
+
+    /* --- ALGORITHM --- */
+    function findBestFillers() {
+        cheapestFillers = {};
+        for(let col in database) {
+            for(let s of database[col]) {
+                let r = s.rarity;
+                for(let c of ["(Factory New)", "(Minimal Wear)"]) {
+                    let name = `${s.name} ${c}`;
+                    if(prices[name]) {
+                        let p = prices[name];
+                        let key = `${r}_${c}`;
+                        if(!cheapestFillers[key] || p < cheapestFillers[key].price) {
+                            let rIdx = RARITY_ORDER.indexOf(r);
+                            if (rIdx < RARITY_ORDER.length - 1) {
+                                let nextR = RARITY_ORDER[rIdx+1];
+                                let outs = database[col].filter(x => x.rarity === nextR);
+                                if(outs.length > 0) {
+                                    cheapestFillers[key] = { name: s.name, cond: c, price: p, min: s.min, max: s.max, outcomes: outs, col: col };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function startCalculation() {
+        if(!database || Object.keys(prices).length === 0) { alert("Data not loaded properly."); return; }
+        const MAX_COST = parseFloat(document.getElementById('max-budget').value);
+        const MIN_ROI = parseFloat(document.getElementById('min-roi').value);
+        const BUFFER = parseFloat(document.getElementById('float-buffer').value);
+        const FACTOR = parseFloat(document.getElementById('price-factor').value);
+
+        const container = document.getElementById('results-container');
+        container.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-light mb-3" style="width: 2rem; height: 2rem;"></div><p class="text-grey mb-0">RUNNING ENGINE...</p></div>';
+
+        setTimeout(() => {
+            uniqueResults = {}; 
+            findBestFillers(); 
+            for(let col in database) {
+                let skins = database[col];
+                let byRarity = {};
+                for(let s of skins) { if(!byRarity[s.rarity]) byRarity[s.rarity] = []; byRarity[s.rarity].push(s); }
+                for(let rarity in byRarity) {
+                    let rIdx = RARITY_ORDER.indexOf(rarity);
+                    if(rIdx === -1 || rIdx >= RARITY_ORDER.length - 1) continue;
+                    let nextRarity = RARITY_ORDER[rIdx+1];
+                    let possibleOutputs = byRarity[nextRarity];
+                    if(!possibleOutputs) continue;
+                    
+                    let reqAvgTrade = 1.0;
+                    let impossible = false;
+                    for(let out of possibleOutputs) {
+                        if(out.min >= 0.07) { impossible = true; break; }
+                        let range = out.max - out.min;
+                        if(range === 0) continue;
+                        let req = (0.0699 - out.min) / range;
+                        if(req < reqAvgTrade) reqAvgTrade = req;
+                    }
+                    if(impossible || reqAvgTrade <= 0) continue;
+                    if(reqAvgTrade > 1.0) reqAvgTrade = 1.0;
+
+                    let inputSkins = byRarity[rarity];
+                    for(let inputSkin of inputSkins) {
+                        runSimulation("10x", inputSkin, possibleOutputs, reqAvgTrade, 10, null, MAX_COST, MIN_ROI, BUFFER, FACTOR);
+                        for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
+                            let fKey = `${rarity}_${cond}`;
+                            if(cheapestFillers[fKey]) {
+                                runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
+                                runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
+                            }
+                        }
+                    }
+                }
+            }
+            renderResults();
+        }, 50);
+    }
+
+    function runSimulation(mode, mainSkin, mainOuts, reqAvgTrade, mainCount, filler, MAX_COST, MIN_ROI, BUFFER, FACTOR) {
+        let fillerCount = 10 - mainCount;
+        for(let cond of ["(Factory New)", "(Minimal Wear)", "(Field-Tested)"]) {
+            let name = `${mainSkin.name} ${cond}`;
+            if(!prices[name]) continue;
+            let mainPrice = prices[name] * FACTOR;
+            let fillerTradeFloat = 0.0, fillerPrice = 0.0, fAssumedRaw = 0.0;
+            
+            if(filler) {
+                fillerPrice = filler.price * FACTOR;
+                let fCondLimits = getConditionLimits(filler.cond);
+                let fTrueBottom = Math.max(fCondLimits[0], filler.min);
+                let fBufferReq = BUFFER;
+                if(filler.cond === "(Factory New)") fBufferReq = Math.min(BUFFER, 0.065);
+                fAssumedRaw = fTrueBottom + fBufferReq;
+                if(fAssumedRaw > fCondLimits[1]) continue;
+                fillerTradeFloat = getTradeFloat(fAssumedRaw, filler.min, filler.max);
+            }
+
+            let maxMainTrade = ((10 * reqAvgTrade) - (fillerCount * fillerTradeFloat)) / mainCount;
+            if(maxMainTrade > 1.0) maxMainTrade = 1.0;
+            if(maxMainTrade < 0.0) continue;
+
+            let maxMainReal = getRealFloatFromTrade(maxMainTrade, mainSkin.min, mainSkin.max);
+            let condLimits = getConditionLimits(cond);
+            let trueBottom = Math.max(condLimits[0], mainSkin.min);
+            if(maxMainReal < trueBottom) continue; 
+
+            let testFloat = Math.min(maxMainReal, condLimits[1]);
+            let foundSafe = false, safeFloat = 0.0;
+            for(let i=0; i<15; i++) {
+                if(testFloat < trueBottom) break;
+                let tMain = getTradeFloat(testFloat, mainSkin.min, mainSkin.max);
+                let sumT = (tMain * mainCount) + (fillerTradeFloat * fillerCount);
+                let avgT = to32Bit(sumT / 10.0);
+                let allFn = true;
+                for(let out of mainOuts) {
+                    if(calculateOutputFloat(avgT, out.min, out.max) >= 0.07) { allFn = false; break; }
+                }
+                if(allFn) { foundSafe = true; safeFloat = testFloat; break; }
+                testFloat -= 0.001;
+            }
+            if(!foundSafe) continue;
+            if((safeFloat - trueBottom) < BUFFER) continue;
+
+            let cost = (mainCount * mainPrice) + (fillerCount * fillerPrice);
+            if(cost > MAX_COST) continue;
+
+            let expVal = 0, details = [];
+            let tMainFinal = getTradeFloat(safeFloat, mainSkin.min, mainSkin.max);
+            let avgFinal = to32Bit(((tMainFinal * mainCount) + (fillerTradeFloat * fillerCount))/10.0);
+            let avgInputCalc = ((mainCount * safeFloat) + (fillerCount * fAssumedRaw)) / 10;
+            let probMain = (mainCount/10) * (1/mainOuts.length);
+
+            for(let out of mainOuts) {
+                let outF = calculateOutputFloat(avgFinal, out.min, out.max);
+                let outC = getConditionInfo(outF);
+                let pName = `${out.name} ${getLongConditionName(outC)}`;
+                let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
+                let val = (pBase * FACTOR) * 0.85; 
+                details.push({ name: out.name, cond: outC, float: outF, val: val, win: (val - cost) > 0, isMain: true });
+                expVal += val * probMain;
+            }
+            if(filler) {
+                let probFiller = (fillerCount/10) * (1/filler.outcomes.length);
+                for(let out of filler.outcomes) {
+                    let outF = calculateOutputFloat(avgFinal, out.min, out.max);
+                    let outC = getConditionInfo(outF);
+                    let pName = `${out.name} ${getLongConditionName(outC)}`;
+                    let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
+                    let val = (pBase * FACTOR) * 0.85;
+                    details.push({ name: out.name, cond: outC, float: outF, val: val, win: (val - cost) > 0, isMain: false });
+                    expVal += val * probFiller;
+                }
+            }
+            if(expVal === 0) continue;
+            let roi = ((expVal - cost) / cost) * 100;
+
+            if(roi > MIN_ROI) {
+                let uKey = `${mainSkin.name}_${mode}`;
+                if(!uniqueResults[uKey] || roi > uniqueResults[uKey].roi) {
+                    uniqueResults[uKey] = {
+                        roi: roi, mode: mode, main: mainSkin.name, cond: cond, rarity: mainSkin.rarity,
+                        filler: filler, cost: cost, exp: expVal, mainCount: mainCount, maxFloat: safeFloat, 
+                        space: (safeFloat - trueBottom), details: details, fillerFloat: fAssumedRaw, targetAvg: avgInputCalc, col: mainSkin.col
+                    };
+                }
+            }
+        }
+    }
+
+    function renderResults() {
+        const container = document.getElementById('results-container');
+        const countBadge = document.getElementById('result-count');
+        let results = Object.values(uniqueResults).sort((a,b) => b.roi - a.roi);
+        
+        countBadge.innerText = results.length;
+        container.innerHTML = "";
+
+        if(results.length === 0) {
+            container.innerHTML = '<div class="text-center p-5 border rounded" style="border-color: var(--border-color) !important;"><p class="text-grey mb-0">NO RESULTS FOUND.</p></div>';
+            return;
+        }
+
+        let html = "";
+        results.forEach((res, idx) => {
+            let isJackpot = res.roi > 30;
+            let statusClass = isJackpot ? 'status-jackpot' : 'status-profit';
+            let roiClass = isJackpot ? 'text-pink' : 'text-green';
+            let jackpotBadge = isJackpot ? '<span class="badge-jackpot">JACKPOT</span>' : '';
+            let rarityShort = res.rarity.split(" ")[0].toUpperCase();
+            let rarityClass = "rarity-" + res.rarity.split(" ")[0];
+
+            let fillerHtml = "";
+            if(res.filler) {
+                let cnt = 10 - res.mainCount;
+                fillerHtml = `<div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-secondary border-opacity-10" style="font-size:0.8rem;">
+                    <span class="text-grey">FILLER (${cnt}x)</span>
+                    <span class="text-white text-end" style="max-width:60%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${res.filler.name}</span>
+                </div>
+                <div class="d-flex justify-content-between" style="font-size:0.8rem;">
+                    <span class="text-grey">REQ FLOAT</span>
+                    <span class="text-pink">&lt; ${res.fillerFloat.toFixed(4)}</span>
+                </div>`;
+            }
+
+            let outcomesHtml = res.details.map(d => {
+                return `
+                <div class="outcome-row">
+                    <div style="flex:1;">
+                        <span class="${d.win ? 'tag-win' : 'tag-loss'}">${d.win ? 'WIN' : 'LOSS'}</span>
+                        <span style="color:#888;">${d.name} <span class="text-grey" style="font-size:0.75rem">${d.cond}</span></span>
+                    </div>
+                    <div class="text-end">
+                        <span class="text-grey me-2" style="font-size:0.75rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
+                        <span class="${d.win ? 'text-white' : 'text-grey'}">${d.val.toFixed(2)}€</span>
+                    </div>
+                </div>`;
+            }).join("");
+
+            html += `
+            <div class="result-card ${statusClass}">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div style="flex:1;">
+                        <div class="mb-1">
+                            <span class="text-grey me-2" style="font-size:0.8rem;">#${idx+1}</span>
+                            <span class="rarity-badge ${rarityClass}">${rarityShort}</span>
+                            <span class="badge-mode ms-2">${res.mode}</span>
+                            ${jackpotBadge}
+                        </div>
+                        <h5 class="mb-0 mt-2 text-white">${res.main}</h5>
+                        <p class="text-grey small mb-0">${res.col}</p>
+                    </div>
+                    <div class="text-end">
+                        <h3 class="${roiClass} mb-0">${res.roi.toFixed(2)}%</h3>
+                        <div class="text-grey" style="font-size:0.65rem; letter-spacing:1px; font-weight:600;">ROI</div>
+                    </div>
+                </div>
+
+                <div class="mt-3 p-3 rounded" style="background-color: var(--bg-input);">
+                    <div class="d-flex justify-content-between mb-1" style="font-size:0.8rem;">
+                        <span class="text-grey">MAIN (${res.mainCount}x)</span>
+                        <span class="text-white">${res.cond.replace('(','').replace(')','')}</span>
+                    </div>
+                    <div class="d-flex justify-content-between" style="font-size:0.8rem;">
+                        <span class="text-grey">MAX FLOAT</span>
+                        <span class="text-pink">&lt; ${res.maxFloat.toFixed(5)}</span>
+                    </div>
+                    ${fillerHtml}
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3" style="font-size:0.8rem;">
+                    <div>
+                        <span class="text-grey">COST:</span> <span class="text-white fw-bold me-3">${res.cost.toFixed(2)}€</span>
+                        <span class="text-grey">EV:</span> <span class="text-green fw-bold">${res.exp.toFixed(2)}€</span>
+                    </div>
+                    <span class="text-grey">AVG < ${res.targetAvg.toFixed(4)}</span>
+                </div>
+
+                <div class="mt-3 text-center">
+                    <a class="expand-link" onclick="this.parentElement.nextElementSibling.style.display = this.parentElement.nextElementSibling.style.display==='block'?'none':'block'; return false;">
+                        VIEW OUTCOMES
+                    </a>
+                </div>
+                <div class="outcomes-container">
+                    ${outcomesHtml}
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function clearResults() {
+        document.getElementById('results-container').innerHTML = "";
+        document.getElementById('result-count').innerText = "0";
+    }
+</script>
 </body>
 </html>
