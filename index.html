@@ -30,7 +30,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-core);
-            /* Modern Radial Gradient: Spotlight effect from top center */
             background-image: radial-gradient(circle at 50% 0%, #1c1c1c 0%, #000000 85%);
             background-attachment: fixed;
             min-height: 100vh;
@@ -175,9 +174,9 @@
         .text-grey { color: var(--text-muted) !important; }
 
         .badge-mode {
-            background: var(--bg-badge);
+            background: #222;
             color: #fff;
-            border: 1px solid var(--border-color);
+            border: 1px solid #333;
             font-size: 0.7rem;
             padding: 3px 8px;
             border-radius: 4px;
@@ -266,6 +265,7 @@
     </div>
 
     <div class="row">
+        <!-- CONFIGURATION PANEL -->
         <div class="col-lg-4">
             <div class="card-clean">
                 <h6 class="text-white mb-4">DATA SOURCE</h6>
@@ -299,7 +299,7 @@
                 <div class="mb-3">
                     <label class="form-label">
                         Float Buffer 
-                        <span class="label-desc">(Safe space to lower limit)</span>
+                        <span class="label-desc">(Safe space to skin limit)</span>
                     </label>
                     <input type="number" id="float-buffer" class="form-control" value="0.015" step="0.001">
                 </div>
@@ -318,6 +318,7 @@
             </div>
         </div>
 
+        <!-- RESULTS PANEL -->
         <div class="col-lg-8">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-grey" style="font-size: 0.8rem; font-weight: 600;">RESULTS: <span id="result-count" class="text-white">0</span></span>
@@ -334,39 +335,27 @@
 </div>
 
 <script>
-    /* --- AUTO LOAD LOGIC --- */
-    /* --- AUTO LOAD & SETTINGS LOGIC --- */
+    /* --- AUTO LOAD & SETTINGS --- */
     window.onload = async function() {
-        initSettings(); // Erst Einstellungen laden
-        await loadFiles(); // Dann Dateien laden
+        initSettings(); 
+        await loadFiles(); 
     };
 
     function initSettings() {
-        // Die IDs deiner Eingabefelder
         const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor'];
-
         fields.forEach(id => {
             const element = document.getElementById(id);
-            
-            // 1. Laden: Prüfen ob ein Wert gespeichert ist
             const savedValue = localStorage.getItem(id);
-            if (savedValue !== null) {
-                element.value = savedValue;
-            }
-
-            // 2. Speichern: Bei jeder Änderung sofort speichern
-            element.addEventListener('input', function() {
-                localStorage.setItem(id, this.value);
-            });
+            if (savedValue !== null) element.value = savedValue;
+            element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
         });
     }
+
     async function loadFiles() {
-        // Load Database
         try {
             const response = await fetch('database.json');
             if (!response.ok) throw new Error("404 Not Found");
             database = await response.json();
-            
             document.getElementById('dot-db').classList.add('status-loaded');
             document.getElementById('text-db').innerText = "OK";
             document.getElementById('text-db').classList.add('text-green');
@@ -374,20 +363,14 @@
             document.getElementById('dot-db').classList.add('status-error');
             document.getElementById('text-db').innerText = "ERROR";
             document.getElementById('file-error-msg').classList.remove('d-none');
-            console.error("DB Error:", error);
         }
 
-        // Load Prices
         try {
             const response = await fetch('prices_cache.json');
             if (!response.ok) throw new Error("404 Not Found");
             const raw = await response.json();
-            
-            // Process Prices
             prices = {};
             let items = Array.isArray(raw) ? raw : (raw.items || raw);
-            
-            // Auto-detect format
             if (!Array.isArray(items) && raw["AK-47 | Slate (Factory New)"]) {
                 for(let k in raw) {
                     let p = raw[k];
@@ -401,7 +384,6 @@
                     if(n && p) { prices[n] = parseFloat(p); }
                 }
             }
-
             document.getElementById('dot-price').classList.add('status-loaded');
             document.getElementById('text-price').innerText = "OK";
             document.getElementById('text-price').classList.add('text-green');
@@ -409,10 +391,8 @@
             document.getElementById('dot-price').classList.add('status-error');
             document.getElementById('text-price').innerText = "ERROR";
             document.getElementById('file-error-msg').classList.remove('d-none');
-            console.error("Price Error:", error);
         }
 
-        // Enable button if both loaded
         if (database && Object.keys(prices).length > 0) {
             document.getElementById('btn-start').disabled = false;
         }
@@ -530,6 +510,7 @@
                         for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
                             let fKey = `${rarity}_${cond}`;
                             if(cheapestFillers[fKey]) {
+                                runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
                                 runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
                                 runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
                             }
@@ -552,9 +533,13 @@
             if(filler) {
                 fillerPrice = filler.price * FACTOR;
                 let fCondLimits = getConditionLimits(filler.cond);
+                
+                // CORRECT BUFFER LOGIC: Buffer from SKIN CAP, not just condition start
                 let fTrueBottom = Math.max(fCondLimits[0], filler.min);
+                
                 let fBufferReq = BUFFER;
                 if(filler.cond === "(Factory New)") fBufferReq = Math.min(BUFFER, 0.065);
+                
                 fAssumedRaw = fTrueBottom + fBufferReq;
                 if(fAssumedRaw > fCondLimits[1]) continue;
                 fillerTradeFloat = getTradeFloat(fAssumedRaw, filler.min, filler.max);
@@ -566,6 +551,8 @@
 
             let maxMainReal = getRealFloatFromTrade(maxMainTrade, mainSkin.min, mainSkin.max);
             let condLimits = getConditionLimits(cond);
+            
+            // CORRECT BUFFER LOGIC FOR MAIN SKIN
             let trueBottom = Math.max(condLimits[0], mainSkin.min);
             if(maxMainReal < trueBottom) continue; 
 
@@ -592,17 +579,21 @@
             let expVal = 0, details = [];
             let tMainFinal = getTradeFloat(safeFloat, mainSkin.min, mainSkin.max);
             let avgFinal = to32Bit(((tMainFinal * mainCount) + (fillerTradeFloat * fillerCount))/10.0);
-            let avgInputCalc = ((mainCount * safeFloat) + (fillerCount * fAssumedRaw)) / 10;
+            
+            // WEIGHTED WIN CHANCE CALCULATION
+            let totalWinProb = 0;
+            
             let probMain = (mainCount/10) * (1/mainOuts.length);
-
             for(let out of mainOuts) {
                 let outF = calculateOutputFloat(avgFinal, out.min, out.max);
                 let outC = getConditionInfo(outF);
                 let pName = `${out.name} ${getLongConditionName(outC)}`;
                 let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
                 let val = (pBase * FACTOR) * 0.85; 
-                details.push({ name: out.name, cond: outC, float: outF, val: val, win: (val - cost) > 0, isMain: true });
+                let isWin = (val - cost) > 0;
+                details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: true });
                 expVal += val * probMain;
+                if(isWin) totalWinProb += probMain;
             }
             if(filler) {
                 let probFiller = (fillerCount/10) * (1/filler.outcomes.length);
@@ -612,8 +603,10 @@
                     let pName = `${out.name} ${getLongConditionName(outC)}`;
                     let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
                     let val = (pBase * FACTOR) * 0.85;
-                    details.push({ name: out.name, cond: outC, float: outF, val: val, win: (val - cost) > 0, isMain: false });
+                    let isWin = (val - cost) > 0;
+                    details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: false });
                     expVal += val * probFiller;
+                    if(isWin) totalWinProb += probFiller;
                 }
             }
             if(expVal === 0) continue;
@@ -625,7 +618,8 @@
                     uniqueResults[uKey] = {
                         roi: roi, mode: mode, main: mainSkin.name, cond: cond, rarity: mainSkin.rarity,
                         filler: filler, cost: cost, exp: expVal, mainCount: mainCount, maxFloat: safeFloat, 
-                        space: (safeFloat - trueBottom), details: details, fillerFloat: fAssumedRaw, targetAvg: avgInputCalc, col: mainSkin.col
+                        space: (safeFloat - trueBottom), details: details, fillerFloat: fAssumedRaw, 
+                        col: mainSkin.col, winChance: totalWinProb * 100
                     };
                 }
             }
@@ -648,12 +642,12 @@
         let html = "";
         results.forEach((res, idx) => {
             let isJackpot = res.roi > 130;
-            let isProfit = res.roi >= 100;
             let statusClass = isJackpot ? 'status-jackpot' : 'status-profit';
             let roiClass = isJackpot ? 'text-pink' : 'text-green';
             let jackpotBadge = isJackpot ? '<span class="badge-jackpot">JACKPOT</span>' : '';
             let rarityShort = res.rarity.split(" ")[0].toUpperCase();
             let rarityClass = "rarity-" + res.rarity.split(" ")[0];
+            let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
 
             let fillerHtml = "";
             if(res.filler) {
@@ -697,7 +691,8 @@
                     </div>
                     <div class="text-end">
                         <h3 class="${roiClass} mb-0">${res.roi.toFixed(2)}%</h3>
-                        <div class="text-grey" style="font-size:0.65rem; letter-spacing:1px; font-weight:600;">ROI</div>
+                        <div class="text-grey" style="font-size:0.65rem; letter-spacing:1px; font-weight:600; margin-bottom:2px;">ROI</div>
+                        <div class="${oddsClass}" style="font-size:0.75rem; font-weight:600;">Odds: ${res.winChance.toFixed(1)}%</div>
                     </div>
                 </div>
 
@@ -718,7 +713,6 @@
                         <span class="text-grey">COST:</span> <span class="text-white fw-bold me-3">${res.cost.toFixed(2)}€</span>
                         <span class="text-grey">EV:</span> <span class="text-green fw-bold">${res.exp.toFixed(2)}€</span>
                     </div>
-                    <span class="text-grey">AVG < ${res.targetAvg.toFixed(4)}</span>
                 </div>
 
                 <div class="mt-3 text-center">
