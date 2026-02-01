@@ -6,7 +6,7 @@ import os
 # --- KONFIGURATION ---
 OUTPUT_FILE = "prices_cache.json"
 PRICE_API_URL = "https://api.skinport.com/v1/items?app_id=730&currency=EUR"
-STEAM_FACTOR = 1.40  # Umrechnung von Skinport-Cash auf Steam-Guthaben
+STEAM_FACTOR = 1.0  # Umrechnung von Skinport-Cash auf Steam-Guthaben
 
 def fetch_prices():
     print(f"🌍 Verbinde zu Skinport API...")
