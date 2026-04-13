@@ -226,18 +226,21 @@
             border-color: var(--color-pink);
         }
 
-        /* Saved Items */
-        .saved-item {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            font-size: 0.8rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Saved Items Hover Effect */
+        .saved-item-header {
+            transition: background-color 0.2s;
         }
+        .saved-item-header:hover {
+            background-color: #222;
+        }
+        .chevron-icon {
+            display: inline-block;
+            transition: transform 0.2s;
+            font-size: 0.6rem;
+            color: #888;
+            margin-right: 4px;
+        }
+        .chevron-open { transform: rotate(90deg); }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-core); }
@@ -349,6 +352,13 @@
 
     window.onload = async function() {
         savedTradeups = JSON.parse(localStorage.getItem('saved-tradeups') || '[]');
+        
+        // MIGRATION: Alte Speicherstände löschen, falls Details fehlen
+        if (savedTradeups.length > 0 && !savedTradeups[0].details) {
+            savedTradeups = [];
+            localStorage.setItem('saved-tradeups', '[]');
+        }
+
         initSettings(); 
         await loadFiles(); 
         renderSaved();
@@ -416,17 +426,19 @@
     }
 
     /* --- SAVED ITEMS LOGIC --- */
-    function toggleSave(uKey, mainName, mode, roi) {
+    function toggleSave(uKey) {
         let idx = savedTradeups.findIndex(t => t.id === uKey);
         if (idx > -1) {
             savedTradeups.splice(idx, 1);
         } else {
-            savedTradeups.push({ id: uKey, name: mainName, mode: mode, roi: roi });
+            if(uniqueResults[uKey]) {
+                savedTradeups.push(uniqueResults[uKey]);
+            }
         }
         localStorage.setItem('saved-tradeups', JSON.stringify(savedTradeups));
         renderSaved();
         
-        // Update Result Cards if they are currently rendered
+        // Update main results if rendered
         if(document.getElementById('results-container').innerHTML.includes('result-card')) {
             renderResults(); 
         }
@@ -435,6 +447,18 @@
     function toggleSaved() {
         showAllSaved = !showAllSaved;
         renderSaved();
+    }
+
+    function toggleSavedDetails(id, chevronId) {
+        let el = document.getElementById(id);
+        let chevron = document.getElementById(chevronId);
+        if(el.classList.contains('d-none')) {
+            el.classList.remove('d-none');
+            chevron.classList.add('chevron-open');
+        } else {
+            el.classList.add('d-none');
+            chevron.classList.remove('chevron-open');
+        }
     }
 
     function renderSaved() {
@@ -450,14 +474,74 @@
         
         let displayList = showAllSaved ? savedTradeups : savedTradeups.slice(0, 5);
         displayList.forEach(t => {
-            container.innerHTML += `
-                <div class="saved-item">
-                    <div class="text-truncate text-white" style="max-width: 65%;" title="${t.name}">
-                        ${t.name} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>
+            let isJackpot = t.roi > 130;
+            let roiClass = isJackpot ? 'text-pink' : 'text-green';
+
+            let fillerHtml = "";
+            if(t.filler) {
+                let cnt = 10 - t.mainCount;
+                fillerHtml = `
+                <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-secondary border-opacity-25" style="font-size:0.75rem;">
+                    <span class="text-grey">FILLER (${cnt}x)</span>
+                    <span class="text-white text-end text-truncate" style="max-width:60%;">${t.filler.name}</span>
+                </div>
+                <div class="d-flex justify-content-between" style="font-size:0.75rem;">
+                    <span class="text-grey">REQ FLOAT</span>
+                    <span class="text-pink">&lt; ${t.fillerFloat.toFixed(4)}</span>
+                </div>`;
+            }
+
+            let outcomesHtml = t.details.map(d => {
+                return `
+                <div class="outcome-row" style="font-size: 0.75rem;">
+                    <div style="flex:1;">
+                        <span class="${d.win ? 'tag-win' : 'tag-loss'}">${d.win ? 'WIN' : 'LOSS'}</span>
+                        <span style="color:#888;">${d.name} <span class="text-grey" style="font-size:0.65rem">${d.cond}</span></span>
                     </div>
-                    <div class="text-end text-green" style="font-weight: 600;">
-                        ${t.roi.toFixed(1)}% 
-                        <span style="cursor:pointer; color:#ff4081; margin-left: 8px; font-size: 1rem;" onclick="toggleSave('${t.id}')">×</span>
+                    <div class="text-end">
+                        <span class="text-grey me-2" style="font-size:0.65rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
+                        <span class="${d.win ? 'text-white' : 'text-grey'}">${d.val.toFixed(2)}€</span>
+                    </div>
+                </div>`;
+            }).join("");
+
+            container.innerHTML += `
+                <div class="mb-2" style="background-color: var(--bg-input); border: 1px solid var(--border-color); border-radius: 6px;">
+                    <div class="p-2 d-flex justify-content-between align-items-center saved-item-header" style="cursor: pointer; border-radius: 6px;" onclick="toggleSavedDetails('details-${t.id}', 'chev-${t.id}')">
+                        <div class="text-truncate text-white" style="max-width: 65%; font-size: 0.8rem;" title="${t.main}">
+                            <span id="chev-${t.id}" class="chevron-icon">▶</span>
+                            ${t.main} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>
+                        </div>
+                        <div class="text-end ${roiClass}" style="font-weight: 600; font-size: 0.8rem;">
+                            ${t.roi.toFixed(1)}% 
+                            <span style="color:#ff4081; margin-left: 8px; font-size: 1rem;" onclick="event.stopPropagation(); toggleSave('${t.id}')">×</span>
+                        </div>
+                    </div>
+                    
+                    <div id="details-${t.id}" class="d-none border-top" style="border-color: var(--border-color) !important; padding: 12px; background-color: #111; border-radius: 0 0 6px 6px;">
+                        <div class="d-flex justify-content-between mb-1" style="font-size:0.75rem;">
+                            <span class="text-grey">MAIN (${t.mainCount}x)</span>
+                            <span class="text-white">${t.cond.replace('(','').replace(')','')}</span>
+                        </div>
+                        <div class="d-flex justify-content-between" style="font-size:0.75rem;">
+                            <span class="text-grey">MAX FLOAT</span>
+                            <span class="text-pink">&lt; ${t.maxFloat.toFixed(5)}</span>
+                        </div>
+                        ${fillerHtml}
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary border-opacity-25" style="font-size:0.75rem;">
+                            <div><span class="text-grey">COST:</span> <span class="text-white fw-bold">${t.cost.toFixed(2)}€</span></div>
+                            <div><span class="text-grey">EV:</span> <span class="text-green fw-bold">${t.exp.toFixed(2)}€</span></div>
+                        </div>
+                        
+                        <div class="mt-2 pt-2 border-top border-secondary border-opacity-25">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-grey" style="font-size: 0.75rem;">Outcomes (Odds: ${t.winChance.toFixed(1)}%)</span>
+                            </div>
+                            <div style="max-height: 150px; overflow-y: auto; padding-right: 5px;">
+                                ${outcomesHtml}
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -548,7 +632,6 @@
         const BUFFER = parseFloat(document.getElementById('float-buffer').value);
         const FACTOR = parseFloat(document.getElementById('price-factor').value);
 
-        // Active Rarities
         const activeRarities = Array.from(document.querySelectorAll('.rarity-checkbox:checked')).map(cb => cb.value);
 
         const container = document.getElementById('results-container');
@@ -563,7 +646,6 @@
                 for(let s of skins) { if(!byRarity[s.rarity]) byRarity[s.rarity] = []; byRarity[s.rarity].push(s); }
                 
                 for(let rarity in byRarity) {
-                    // Check if rarity is allowed by user filter
                     if (!activeRarities.includes(rarity)) continue;
 
                     let rIdx = RARITY_ORDER.indexOf(rarity);
@@ -706,7 +788,6 @@
         const container = document.getElementById('results-container');
         const countBadge = document.getElementById('result-count');
         
-        // Ensure uniqueResults exist, just in case called out of context
         if(!uniqueResults) return; 
         
         let results = Object.values(uniqueResults).sort((a,b) => b.roi - a.roi);
@@ -729,9 +810,8 @@
             let rarityClass = "rarity-" + res.rarity.split(" ")[0];
             let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
             
-            // Check if saved
             let isSaved = savedTradeups.some(t => t.id === res.id);
-            let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave('${res.id}', '${res.main.replace(/'/g, "\\'")}', '${res.mode}', ${res.roi})">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
+            let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave('${res.id}')">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
 
             let fillerHtml = "";
             if(res.filler) {
