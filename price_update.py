@@ -1,75 +1,36 @@
+import requests
 import json
-import cloudscraper
-import time
-import os
 
-# --- KONFIGURATION ---
-OUTPUT_FILE = "prices_cache.json"
-PRICE_API_URL = "https://api.skinport.com/v1/items?app_id=730&currency=EUR"
-STEAM_FACTOR = 1.0  # Umrechnung von Skinport-Cash auf Steam-Guthaben
-
-def fetch_prices():
-    print(f"🌍 Verbinde zu Skinport API...")
-    print(f"   URL: {PRICE_API_URL}")
+def fetch_steam_prices():
+    print("🌍 Lade Steam SCM Preise (CSGO Backpack API)...")
+    url = "http://csgobackpack.net/api/GetItemsList/v2/"
     
-    scraper = cloudscraper.create_scraper()
-    headers = {
-        "Accept-Encoding": "gzip, deflate, br", 
-        "Accept": "application/json"
-    }
-
     try:
-        start_time = time.time()
-        response = scraper.get(PRICE_API_URL, headers=headers)
-        
-        if response.status_code == 429:
-            print("❌ FEHLER 429: Zu viele Anfragen! Du wurdest kurzzeitig blockiert.")
-            print("   Warte 5-10 Minuten und versuche es erneut.")
-            return
-
-        if response.status_code != 200:
-            print(f"❌ API Fehler: {response.status_code}")
-            return
-
+        response = requests.get(url)
         data = response.json()
-        duration = time.time() - start_time
         
-        # --- VERARBEITUNG ---
-        # Wir speichern die Preise in einem kompakten Format für die HTML-Datei
-        # Format: { "AK-47 | Slate (Factory New)": 15.50, ... }
+        prices_cache = {}
+        items = data.get("items_list", {})
         
-        processed_prices = {}
-        count = 0
-        
-        print(f"⚙️  Verarbeite Daten (Faktor x{STEAM_FACTOR})...")
-        
-        for item in data:
-            name = item.get('market_hash_name')
-            price = item.get('min_price')
+        for name, details in items.items():
+            price_data = details.get("price")
+            if not price_data: 
+                continue
             
-            if name and price is not None:
-                # Umrechnung auf Steam-Niveau
-                steam_price = float(price) * STEAM_FACTOR
-                processed_prices[name] = round(steam_price, 2)
-                count += 1
+            # 7-Tage-Schnitt (Sicherste Metrik für Trade Ups)
+            if "7_days" in price_data and "average" in price_data["7_days"]:
+                prices_cache[name] = float(price_data["7_days"]["average"])
+            elif "30_days" in price_data and "average" in price_data["30_days"]:
+                prices_cache[name] = float(price_data["30_days"]["average"])
 
-        # Speichern
-        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-            json.dump(processed_prices, f, separators=(',', ':')) # Minified JSON
+        # Speichern in die Cache-Datei
+        with open("prices_cache.json", "w", encoding="utf-8") as f:
+            json.dump(prices_cache, f, ensure_ascii=False, indent=2)
             
-        file_size = os.path.getsize(OUTPUT_FILE) / 1024 # KB
-
-        print("-" * 50)
-        print(f"✅ ERFOLG! {count} Preise gespeichert.")
-        print(f"📂 Datei: '{OUTPUT_FILE}' ({file_size:.2f} KB)")
-        print(f"⏱️  Dauer: {duration:.2f} Sekunden")
-        print("-" * 50)
-        print("💡 Du kannst diese Datei jetzt in den HTML-Rechner laden.")
+        print(f"✅ ERFOLG: {len(prices_cache)} Steam-Preise gespeichert!")
 
     except Exception as e:
-        print(f"❌ Ein kritischer Fehler ist aufgetreten: {e}")
+        print(f"❌ Fehler: {e}")
 
 if __name__ == "__main__":
-    fetch_prices()
-    # Damit sich das Fenster nicht sofort schließt (falls per Doppelklick gestartet)
-    input("\nDrücke Enter zum Beenden...")
+    fetch_steam_prices()
