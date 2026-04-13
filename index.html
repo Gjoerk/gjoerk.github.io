@@ -117,36 +117,12 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             padding: 5px 12px;
+            border-radius: 4px;
+            transition: all 0.2s;
         }
         .btn-outline:hover {
             border-color: #fff;
             color: #fff;
-        }
-
-        /* --- STATUS INDICATORS --- */
-        .status-dot {
-            height: 10px;
-            width: 10px;
-            background-color: var(--border-color);
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-        .status-loaded { background-color: var(--color-green); box-shadow: 0 0 8px var(--color-green); }
-        .status-error { background-color: #ff4081; box-shadow: 0 0 8px #ff4081; }
-
-        .data-status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-input);
-            padding: 12px 15px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
         }
 
         /* --- RESULT CARDS --- */
@@ -209,7 +185,6 @@
         .rarity-Mil-Spec { color: #4b69ff; border-color: #4b69ff; }
         .rarity-Restricted { color: #8847ff; border-color: #8847ff; }
         .rarity-Classified { color: #d32ce6; border-color: #d32ce6; }
-        .rarity-Covert { color: #eb4b4b; border-color: #eb4b4b; }
 
         .outcomes-container {
             margin-top: 15px;
@@ -241,13 +216,27 @@
         }
         .expand-link:hover { color: #fff; border-color: #fff; }
 
-        /* File Input Fixes */
-        input[type="file"]::file-selector-button {
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
-            border-radius: 4px;
-            margin-right: 10px;
+        /* Custom Checkboxes */
+        .form-check-input {
+            background-color: var(--bg-input);
+            border-color: var(--border-color);
+        }
+        .form-check-input:checked {
+            background-color: var(--color-pink);
+            border-color: var(--color-pink);
+        }
+
+        /* Saved Items */
+        .saved-item {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -265,25 +254,13 @@
     </div>
 
     <div class="row">
-        <!-- CONFIGURATION PANEL -->
         <div class="col-lg-4">
             <div class="card-clean">
-                <h6 class="text-white mb-4">DATA SOURCE</h6>
-                
-                <div class="data-status-row">
-                    <span><span id="dot-db" class="status-dot"></span> Database</span>
-                    <span id="text-db" class="text-muted" style="font-size:0.75rem">Waiting...</span>
-                </div>
-                <div class="data-status-row">
-                    <span><span id="dot-price" class="status-dot"></span> Prices</span>
-                    <span id="text-price" class="text-muted" style="font-size:0.75rem">Waiting...</span>
-                </div>
-                
-                <div id="file-error-msg" class="alert alert-danger mt-2 p-2 small d-none" style="background: rgba(255, 64, 129, 0.1); border-color: #ff4081; color: #ff80ab;">
-                    <strong>Error:</strong> Could not load files. Ensure this HTML is in the same folder as the JSON files. If opening locally, use Firefox or run a local server (CORS).
+                <div id="file-error-msg" class="alert alert-danger mb-4 p-2 small d-none" style="background: rgba(255, 64, 129, 0.1); border-color: #ff4081; color: #ff80ab;">
+                    <strong>Error:</strong> Could not load database or prices. Please ensure JSON files are present.
                 </div>
 
-                <h6 class="text-white mb-4 mt-5">ENGINE SETTINGS</h6>
+                <h6 class="text-white mb-4">ENGINE SETTINGS</h6>
                 
                 <div class="row g-3 mb-3">
                     <div class="col-6">
@@ -304,7 +281,7 @@
                     <input type="number" id="float-buffer" class="form-control" value="0.015" step="0.001">
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">
                         Price Factor 
                         <span class="label-desc">(Multiplier, e.g. 1.0)</span>
@@ -312,13 +289,44 @@
                     <input type="number" id="price-factor" class="form-control" value="1.0" step="0.1">
                 </div>
 
+                <div class="mb-4">
+                    <label class="form-label">Target Input Rarities</label>
+                    <div class="d-flex flex-wrap gap-3 text-white" style="font-size: 0.8rem;">
+                        <div class="form-check">
+                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Consumer Grade" id="rc-consumer">
+                            <label class="form-check-label" for="rc-consumer">Consumer</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Industrial Grade" id="rc-industrial">
+                            <label class="form-check-label" for="rc-industrial">Industrial</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Mil-Spec Grade" id="rc-milspec" checked>
+                            <label class="form-check-label" for="rc-milspec">Mil-Spec</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Restricted" id="rc-restricted" checked>
+                            <label class="form-check-label" for="rc-restricted">Restricted</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Classified" id="rc-classified" checked>
+                            <label class="form-check-label" for="rc-classified">Classified</label>
+                        </div>
+                    </div>
+                </div>
+
                 <button onclick="startCalculation()" id="btn-start" class="btn-pink mt-2" disabled>
-                    Start Engine
+                    Loading Data...
                 </button>
+
+                <hr class="my-4">
+                <h6 class="text-white mb-3" style="font-size: 0.8rem;">SAVED TRADE UPS</h6>
+                <div id="saved-container"></div>
+                <button id="btn-toggle-saved" class="btn-outline w-100 mt-2 d-none" onclick="toggleSaved()">Show All</button>
+
             </div>
         </div>
 
-        <!-- RESULTS PANEL -->
         <div class="col-lg-8">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-grey" style="font-size: 0.8rem; font-weight: 600;">RESULTS: <span id="result-count" class="text-white">0</span></span>
@@ -336,9 +344,14 @@
 
 <script>
     /* --- AUTO LOAD & SETTINGS --- */
+    let savedTradeups = [];
+    let showAllSaved = false;
+
     window.onload = async function() {
+        savedTradeups = JSON.parse(localStorage.getItem('saved-tradeups') || '[]');
         initSettings(); 
         await loadFiles(); 
+        renderSaved();
     };
 
     function initSettings() {
@@ -349,19 +362,25 @@
             if (savedValue !== null) element.value = savedValue;
             element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
         });
+
+        const checkboxes = document.querySelectorAll('.rarity-checkbox');
+        checkboxes.forEach(cb => {
+            const saved = localStorage.getItem('cb-' + cb.value);
+            if (saved !== null) cb.checked = (saved === 'true');
+            cb.addEventListener('change', function() { localStorage.setItem('cb-' + this.value, this.checked); });
+        });
     }
 
     async function loadFiles() {
+        let dbLoaded = false;
+        let pricesLoaded = false;
+
         try {
             const response = await fetch('database.json');
             if (!response.ok) throw new Error("404 Not Found");
             database = await response.json();
-            document.getElementById('dot-db').classList.add('status-loaded');
-            document.getElementById('text-db').innerText = "OK";
-            document.getElementById('text-db').classList.add('text-green');
+            dbLoaded = true;
         } catch (error) {
-            document.getElementById('dot-db').classList.add('status-error');
-            document.getElementById('text-db').innerText = "ERROR";
             document.getElementById('file-error-msg').classList.remove('d-none');
         }
 
@@ -384,17 +403,71 @@
                     if(n && p) { prices[n] = parseFloat(p); }
                 }
             }
-            document.getElementById('dot-price').classList.add('status-loaded');
-            document.getElementById('text-price').innerText = "OK";
-            document.getElementById('text-price').classList.add('text-green');
+            pricesLoaded = true;
         } catch (error) {
-            document.getElementById('dot-price').classList.add('status-error');
-            document.getElementById('text-price').innerText = "ERROR";
             document.getElementById('file-error-msg').classList.remove('d-none');
         }
 
-        if (database && Object.keys(prices).length > 0) {
-            document.getElementById('btn-start').disabled = false;
+        if (dbLoaded && pricesLoaded) {
+            const btn = document.getElementById('btn-start');
+            btn.disabled = false;
+            btn.innerText = "Start Engine";
+        }
+    }
+
+    /* --- SAVED ITEMS LOGIC --- */
+    function toggleSave(uKey, mainName, mode, roi) {
+        let idx = savedTradeups.findIndex(t => t.id === uKey);
+        if (idx > -1) {
+            savedTradeups.splice(idx, 1);
+        } else {
+            savedTradeups.push({ id: uKey, name: mainName, mode: mode, roi: roi });
+        }
+        localStorage.setItem('saved-tradeups', JSON.stringify(savedTradeups));
+        renderSaved();
+        
+        // Update Result Cards if they are currently rendered
+        if(document.getElementById('results-container').innerHTML.includes('result-card')) {
+            renderResults(); 
+        }
+    }
+
+    function toggleSaved() {
+        showAllSaved = !showAllSaved;
+        renderSaved();
+    }
+
+    function renderSaved() {
+        const container = document.getElementById('saved-container');
+        const btn = document.getElementById('btn-toggle-saved');
+        container.innerHTML = '';
+        
+        if (savedTradeups.length === 0) {
+            container.innerHTML = '<div class="text-muted" style="font-size: 0.8rem;">No saved trade ups yet.</div>';
+            btn.classList.add('d-none');
+            return;
+        }
+        
+        let displayList = showAllSaved ? savedTradeups : savedTradeups.slice(0, 5);
+        displayList.forEach(t => {
+            container.innerHTML += `
+                <div class="saved-item">
+                    <div class="text-truncate text-white" style="max-width: 65%;" title="${t.name}">
+                        ${t.name} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>
+                    </div>
+                    <div class="text-end text-green" style="font-weight: 600;">
+                        ${t.roi.toFixed(1)}% 
+                        <span style="cursor:pointer; color:#ff4081; margin-left: 8px; font-size: 1rem;" onclick="toggleSave('${t.id}')">×</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (savedTradeups.length > 5) {
+            btn.classList.remove('d-none');
+            btn.innerText = showAllSaved ? 'Show Less' : `Show All (${savedTradeups.length})`;
+        } else {
+            btn.classList.add('d-none');
         }
     }
 
@@ -475,6 +548,9 @@
         const BUFFER = parseFloat(document.getElementById('float-buffer').value);
         const FACTOR = parseFloat(document.getElementById('price-factor').value);
 
+        // Active Rarities
+        const activeRarities = Array.from(document.querySelectorAll('.rarity-checkbox:checked')).map(cb => cb.value);
+
         const container = document.getElementById('results-container');
         container.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-light mb-3" style="width: 2rem; height: 2rem;"></div><p class="text-grey mb-0">RUNNING ENGINE...</p></div>';
 
@@ -485,7 +561,11 @@
                 let skins = database[col];
                 let byRarity = {};
                 for(let s of skins) { if(!byRarity[s.rarity]) byRarity[s.rarity] = []; byRarity[s.rarity].push(s); }
+                
                 for(let rarity in byRarity) {
+                    // Check if rarity is allowed by user filter
+                    if (!activeRarities.includes(rarity)) continue;
+
                     let rIdx = RARITY_ORDER.indexOf(rarity);
                     if(rIdx === -1 || rIdx >= RARITY_ORDER.length - 1) continue;
                     let nextRarity = RARITY_ORDER[rIdx+1];
@@ -534,9 +614,7 @@
                 fillerPrice = filler.price * FACTOR;
                 let fCondLimits = getConditionLimits(filler.cond);
                 
-                // CORRECT BUFFER LOGIC: Buffer from SKIN CAP, not just condition start
                 let fTrueBottom = Math.max(fCondLimits[0], filler.min);
-                
                 let fBufferReq = BUFFER;
                 if(filler.cond === "(Factory New)") fBufferReq = Math.min(BUFFER, 0.065);
                 
@@ -552,7 +630,6 @@
             let maxMainReal = getRealFloatFromTrade(maxMainTrade, mainSkin.min, mainSkin.max);
             let condLimits = getConditionLimits(cond);
             
-            // CORRECT BUFFER LOGIC FOR MAIN SKIN
             let trueBottom = Math.max(condLimits[0], mainSkin.min);
             if(maxMainReal < trueBottom) continue; 
 
@@ -580,10 +657,9 @@
             let tMainFinal = getTradeFloat(safeFloat, mainSkin.min, mainSkin.max);
             let avgFinal = to32Bit(((tMainFinal * mainCount) + (fillerTradeFloat * fillerCount))/10.0);
             
-            // WEIGHTED WIN CHANCE CALCULATION
             let totalWinProb = 0;
-            
             let probMain = (mainCount/10) * (1/mainOuts.length);
+            
             for(let out of mainOuts) {
                 let outF = calculateOutputFloat(avgFinal, out.min, out.max);
                 let outC = getConditionInfo(outF);
@@ -616,7 +692,7 @@
                 let uKey = `${mainSkin.name}_${mode}`;
                 if(!uniqueResults[uKey] || roi > uniqueResults[uKey].roi) {
                     uniqueResults[uKey] = {
-                        roi: roi, mode: mode, main: mainSkin.name, cond: cond, rarity: mainSkin.rarity,
+                        id: uKey, roi: roi, mode: mode, main: mainSkin.name, cond: cond, rarity: mainSkin.rarity,
                         filler: filler, cost: cost, exp: expVal, mainCount: mainCount, maxFloat: safeFloat, 
                         space: (safeFloat - trueBottom), details: details, fillerFloat: fAssumedRaw, 
                         col: mainSkin.col, winChance: totalWinProb * 100
@@ -629,6 +705,10 @@
     function renderResults() {
         const container = document.getElementById('results-container');
         const countBadge = document.getElementById('result-count');
+        
+        // Ensure uniqueResults exist, just in case called out of context
+        if(!uniqueResults) return; 
+        
         let results = Object.values(uniqueResults).sort((a,b) => b.roi - a.roi);
         
         countBadge.innerText = results.length;
@@ -648,6 +728,10 @@
             let rarityShort = res.rarity.split(" ")[0].toUpperCase();
             let rarityClass = "rarity-" + res.rarity.split(" ")[0];
             let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
+            
+            // Check if saved
+            let isSaved = savedTradeups.some(t => t.id === res.id);
+            let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave('${res.id}', '${res.main.replace(/'/g, "\\'")}', '${res.mode}', ${res.roi})">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
 
             let fillerHtml = "";
             if(res.filler) {
@@ -680,11 +764,12 @@
             <div class="result-card ${statusClass}">
                 <div class="d-flex justify-content-between align-items-start">
                     <div style="flex:1;">
-                        <div class="mb-1">
-                            <span class="text-grey me-2" style="font-size:0.8rem;">#${idx+1}</span>
+                        <div class="mb-1 d-flex align-items-center flex-wrap gap-1">
+                            <span class="text-grey me-1" style="font-size:0.8rem;">#${idx+1}</span>
                             <span class="rarity-badge ${rarityClass}">${rarityShort}</span>
-                            <span class="badge-mode ms-2">${res.mode}</span>
+                            <span class="badge-mode ms-1">${res.mode}</span>
                             ${jackpotBadge}
+                            ${saveBtnHtml}
                         </div>
                         <h5 class="mb-0 mt-2 text-white">${res.main}</h5>
                         <p class="text-grey small mb-0">${res.col}</p>
@@ -731,6 +816,7 @@
     function clearResults() {
         document.getElementById('results-container').innerHTML = "";
         document.getElementById('result-count').innerText = "0";
+        uniqueResults = {};
     }
 </script>
 </body>
