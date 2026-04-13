@@ -1,36 +1,38 @@
 import requests
 import json
 
-def fetch_steam_prices():
-    print("🌍 Lade Steam SCM Preise (CSGO Backpack API)...")
-    url = "http://csgobackpack.net/api/GetItemsList/v2/"
+def fetch_steam_prices_via_skinport():
+    print("🌍 Lade Steam Preise (via Skinport Suggested Price)...")
+    url = "https://api.skinport.com/v1/items?app_id=730&currency=EUR"
     
     try:
-        response = requests.get(url)
-        data = response.json()
+        # Skinport blockiert lokale Heim-IPs in der Regel nicht
+        response = requests.get(url, timeout=30)
         
-        prices_cache = {}
-        items = data.get("items_list", {})
-        
-        for name, details in items.items():
-            price_data = details.get("price")
-            if not price_data: 
-                continue
+        if response.status_code != 200:
+            print(f"❌ Fehler: Skinport antwortete mit Code {response.status_code}")
+            return
             
-            # 7-Tage-Schnitt (Sicherste Metrik für Trade Ups)
-            if "7_days" in price_data and "average" in price_data["7_days"]:
-                prices_cache[name] = float(price_data["7_days"]["average"])
-            elif "30_days" in price_data and "average" in price_data["30_days"]:
-                prices_cache[name] = float(price_data["30_days"]["average"])
+        data = response.json()
+        prices_cache = {}
+        
+        print("⚙️ Extrahiere Steam-Preise...")
+        for item in data:
+            name = item.get("market_hash_name")
+            
+            # suggested_price ist der von Skinport berechnete Steam-Marktpreis!
+            steam_price = item.get("suggested_price") 
+            
+            if name and steam_price:
+                prices_cache[name] = float(steam_price)
 
-        # Speichern in die Cache-Datei
         with open("prices_cache.json", "w", encoding="utf-8") as f:
             json.dump(prices_cache, f, ensure_ascii=False, indent=2)
             
         print(f"✅ ERFOLG: {len(prices_cache)} Steam-Preise gespeichert!")
 
     except Exception as e:
-        print(f"❌ Fehler: {e}")
+        print(f"❌ Kritischer Fehler: {e}")
 
 if __name__ == "__main__":
-    fetch_steam_prices()
+    fetch_steam_prices_via_skinport()
