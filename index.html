@@ -284,12 +284,15 @@
                     <input type="number" id="float-buffer" class="form-control" value="0.015" step="0.001">
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">
-                        Price Factor 
-                        <span class="label-desc">(Multiplier, e.g. 1.0)</span>
-                    </label>
-                    <input type="number" id="price-factor" class="form-control" value="1.0" step="0.1">
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <label class="form-label">Buy Factor <span class="label-desc" style="display:block;margin-left:0;">(Multiplier, e.g. 1.0)</span></label>
+                        <input type="number" id="price-factor" class="form-control" value="1.0" step="0.1">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Sell Fee (%) <span class="label-desc" style="display:block;margin-left:0;">(Steam Tax = 15)</span></label>
+                        <input type="number" id="sell-fee" class="form-control" value="15.0" step="0.1">
+                    </div>
                 </div>
 
                 <div class="mb-4">
@@ -353,7 +356,7 @@
     window.onload = async function() {
         savedTradeups = JSON.parse(localStorage.getItem('saved-tradeups') || '[]');
         
-        // MIGRATION: Alte Speicherstände löschen, falls Details fehlen
+        // Cleanup old formats
         if (savedTradeups.length > 0 && !savedTradeups[0].details) {
             savedTradeups = [];
             localStorage.setItem('saved-tradeups', '[]');
@@ -365,7 +368,7 @@
     };
 
     function initSettings() {
-        const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor'];
+        const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor', 'sell-fee'];
         fields.forEach(id => {
             const element = document.getElementById(id);
             const savedValue = localStorage.getItem(id);
@@ -438,7 +441,6 @@
         localStorage.setItem('saved-tradeups', JSON.stringify(savedTradeups));
         renderSaved();
         
-        // Update main results if rendered
         if(document.getElementById('results-container').innerHTML.includes('result-card')) {
             renderResults(); 
         }
@@ -630,7 +632,10 @@
         const MAX_COST = parseFloat(document.getElementById('max-budget').value);
         const MIN_ROI = parseFloat(document.getElementById('min-roi').value) + 100;
         const BUFFER = parseFloat(document.getElementById('float-buffer').value);
-        const FACTOR = parseFloat(document.getElementById('price-factor').value);
+        
+        // Neu: Buy Factor & Sell Fee extrahieren
+        const BUY_FACTOR = parseFloat(document.getElementById('price-factor').value);
+        const SELL_FEE = parseFloat(document.getElementById('sell-fee').value) || 0;
 
         const activeRarities = Array.from(document.querySelectorAll('.rarity-checkbox:checked')).map(cb => cb.value);
 
@@ -668,13 +673,13 @@
 
                     let inputSkins = byRarity[rarity];
                     for(let inputSkin of inputSkins) {
-                        runSimulation("10x", inputSkin, possibleOutputs, reqAvgTrade, 10, null, MAX_COST, MIN_ROI, BUFFER, FACTOR);
+                        runSimulation("10x", inputSkin, possibleOutputs, reqAvgTrade, 10, null, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
                         for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
                             let fKey = `${rarity}_${cond}`;
                             if(cheapestFillers[fKey]) {
-                                runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
-                                runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
-                                runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, FACTOR);
+                                runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
+                                runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
+                                runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
                             }
                         }
                     }
@@ -684,16 +689,16 @@
         }, 50);
     }
 
-    function runSimulation(mode, mainSkin, mainOuts, reqAvgTrade, mainCount, filler, MAX_COST, MIN_ROI, BUFFER, FACTOR) {
+    function runSimulation(mode, mainSkin, mainOuts, reqAvgTrade, mainCount, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE) {
         let fillerCount = 10 - mainCount;
         for(let cond of ["(Factory New)", "(Minimal Wear)", "(Field-Tested)"]) {
             let name = `${mainSkin.name} ${cond}`;
             if(!prices[name]) continue;
-            let mainPrice = prices[name] * FACTOR;
+            let mainPrice = prices[name] * BUY_FACTOR;
             let fillerTradeFloat = 0.0, fillerPrice = 0.0, fAssumedRaw = 0.0;
             
             if(filler) {
-                fillerPrice = filler.price * FACTOR;
+                fillerPrice = filler.price * BUY_FACTOR;
                 let fCondLimits = getConditionLimits(filler.cond);
                 
                 let fTrueBottom = Math.max(fCondLimits[0], filler.min);
@@ -747,7 +752,15 @@
                 let outC = getConditionInfo(outF);
                 let pName = `${out.name} ${getLongConditionName(outC)}`;
                 let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
-                let val = (pBase * FACTOR) * 0.85; 
+                
+                // Exakte Steam Steuer Logik (Sonderfall bei 15%)
+                let val = 0;
+                if(SELL_FEE === 15.0) {
+                    val = pBase / 1.15;
+                } else {
+                    val = pBase * (1 - (SELL_FEE / 100));
+                }
+
                 let isWin = (val - cost) > 0;
                 details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: true });
                 expVal += val * probMain;
@@ -760,7 +773,14 @@
                     let outC = getConditionInfo(outF);
                     let pName = `${out.name} ${getLongConditionName(outC)}`;
                     let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
-                    let val = (pBase * FACTOR) * 0.85;
+                    
+                    let val = 0;
+                    if(SELL_FEE === 15.0) {
+                        val = pBase / 1.15;
+                    } else {
+                        val = pBase * (1 - (SELL_FEE / 100));
+                    }
+
                     let isWin = (val - cost) > 0;
                     details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: false });
                     expVal += val * probFiller;
