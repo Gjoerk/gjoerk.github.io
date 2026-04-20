@@ -1,4 +1,108 @@
 {
+    "The Dead Hand Collection": [
+        {
+            "name": "AK-47 | Crane Flight",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "AWP | Queen's Gambit",
+            "rarity": "Covert",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "PP-Bizon | RMX",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Desert Eagle | Firebreathing",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Five-SeveN | Dark Polymer",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Galil AR | Galigator",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Glock-18 | Fully Tuned",
+            "rarity": "Covert",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "M249 | Bock Blocks",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "M4A4 | Zubastick",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "M4A1-S | Electrum",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MP7 | Amberline",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MP9 | Urban Sovereign",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "P250 | Kintsugi",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "P90 | Deathgaze",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Sawed-Off | Fusion",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "UMP-45 | Fragment",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "USP-S | Silent Shot",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        }
+    ],
     "The Fever Collection": [
         {
             "name": "AK-47 | Searing Rage",
