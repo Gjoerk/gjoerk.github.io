@@ -171,6 +171,17 @@
             margin-left: 8px;
         }
 
+        .badge-st {
+            background: #cf6a32;
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
         .rarity-badge {
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -225,6 +236,10 @@
             background-color: var(--color-pink);
             border-color: var(--color-pink);
         }
+        .form-check-input.st-checkbox:checked {
+            background-color: #cf6a32;
+            border-color: #cf6a32;
+        }
 
         /* Saved Items Hover Effect */
         .saved-item-header {
@@ -267,17 +282,17 @@
                 
                 <div class="row g-3 mb-3">
                     <div class="col-6">
-                        <label class="form-label">Budget (€)</label>
+                        <label class="form-label" for="max-budget">Budget (€)</label>
                         <input type="number" id="max-budget" class="form-control" value="25.0">
                     </div>
                     <div class="col-6">
-                        <label class="form-label">Min ROI (%)</label>
+                        <label class="form-label" for="min-roi">Min ROI (%)</label>
                         <input type="number" id="min-roi" class="form-control" value="10.0">
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">
+                    <label class="form-label" for="float-buffer">
                         Float Buffer 
                         <span class="label-desc">(Safe space to skin limit)</span>
                     </label>
@@ -286,36 +301,50 @@
 
                 <div class="row g-3 mb-4">
                     <div class="col-6">
-                        <label class="form-label">Buy Factor <span class="label-desc" style="display:block;margin-left:0;">(Multiplier, e.g. 1.0)</span></label>
+                        <label class="form-label" for="price-factor">Buy Factor <span class="label-desc" style="display:block;margin-left:0;">(Multiplier, e.g. 1.0)</span></label>
                         <input type="number" id="price-factor" class="form-control" value="1.0" step="0.1">
                     </div>
                     <div class="col-6">
-                        <label class="form-label">Sell Fee (%) <span class="label-desc" style="display:block;margin-left:0;">(Steam Tax = 15)</span></label>
+                        <label class="form-label" for="sell-fee">Sell Fee (%) <span class="label-desc" style="display:block;margin-left:0;">(Steam Tax = 15)</span></label>
                         <input type="number" id="sell-fee" class="form-control" value="15.0" step="0.1">
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Target Input Rarities</label>
+                    <div class="form-label">Item Type</div>
                     <div class="d-flex flex-wrap gap-3 text-white" style="font-size: 0.8rem;">
                         <div class="form-check">
-                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Consumer Grade" id="rc-consumer">
+                            <input class="form-check-input config-checkbox" type="checkbox" value="normal" id="type-normal" checked>
+                            <label class="form-check-label" for="type-normal">Normal</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox st-checkbox" type="checkbox" value="stattrak" id="type-stattrak">
+                            <label class="form-check-label text-warning" for="type-stattrak" style="font-weight: 600;">StatTrak™</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="form-label">Target Input Rarities</div>
+                    <div class="d-flex flex-wrap gap-3 text-white" style="font-size: 0.8rem;">
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Consumer Grade" id="rc-consumer">
                             <label class="form-check-label" for="rc-consumer">Consumer</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Industrial Grade" id="rc-industrial">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Industrial Grade" id="rc-industrial">
                             <label class="form-check-label" for="rc-industrial">Industrial</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Mil-Spec Grade" id="rc-milspec" checked>
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Mil-Spec Grade" id="rc-milspec" checked>
                             <label class="form-check-label" for="rc-milspec">Mil-Spec</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Restricted" id="rc-restricted" checked>
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Restricted" id="rc-restricted" checked>
                             <label class="form-check-label" for="rc-restricted">Restricted</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input rarity-checkbox" type="checkbox" value="Classified" id="rc-classified" checked>
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Classified" id="rc-classified" checked>
                             <label class="form-check-label" for="rc-classified">Classified</label>
                         </div>
                     </div>
@@ -376,11 +405,12 @@
             element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
         });
 
-        const checkboxes = document.querySelectorAll('.rarity-checkbox');
+        // Alle Checkboxen (Rarities + Type) speichern
+        const checkboxes = document.querySelectorAll('.config-checkbox');
         checkboxes.forEach(cb => {
-            const saved = localStorage.getItem('cb-' + cb.value);
+            const saved = localStorage.getItem('cb-' + cb.id);
             if (saved !== null) cb.checked = (saved === 'true');
-            cb.addEventListener('change', function() { localStorage.setItem('cb-' + this.value, this.checked); });
+            cb.addEventListener('change', function() { localStorage.setItem('cb-' + this.id, this.checked); });
         });
     }
 
@@ -478,6 +508,7 @@
         displayList.forEach(t => {
             let isJackpot = t.roi > 130;
             let roiClass = isJackpot ? 'text-pink' : 'text-green';
+            let stBadge = t.isST ? '<span class="badge-st">ST™</span>' : '';
 
             let fillerHtml = "";
             if(t.filler) {
@@ -512,7 +543,7 @@
                     <div class="p-2 d-flex justify-content-between align-items-center saved-item-header" style="cursor: pointer; border-radius: 6px;" onclick="toggleSavedDetails('details-${t.id}', 'chev-${t.id}')">
                         <div class="text-truncate text-white" style="max-width: 65%; font-size: 0.8rem;" title="${t.main}">
                             <span id="chev-${t.id}" class="chevron-icon">▶</span>
-                            ${t.main} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>
+                            ${t.main} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>${stBadge}
                         </div>
                         <div class="text-end ${roiClass}" style="font-weight: 600; font-size: 0.8rem;">
                             ${t.roi.toFixed(1)}% 
@@ -607,17 +638,22 @@
             for(let s of database[col]) {
                 let r = s.rarity;
                 for(let c of ["(Factory New)", "(Minimal Wear)"]) {
-                    let name = `${s.name} ${c}`;
-                    if(prices[name]) {
-                        let p = prices[name];
-                        let key = `${r}_${c}`;
-                        if(!cheapestFillers[key] || p < cheapestFillers[key].price) {
-                            let rIdx = RARITY_ORDER.indexOf(r);
-                            if (rIdx < RARITY_ORDER.length - 1) {
-                                let nextR = RARITY_ORDER[rIdx+1];
-                                let outs = database[col].filter(x => x.rarity === nextR);
-                                if(outs.length > 0) {
-                                    cheapestFillers[key] = { name: s.name, cond: c, price: p, min: s.min, max: s.max, outcomes: outs, col: col };
+                    // Suche Filler sowohl für Normal als auch für StatTrak
+                    for(let isST of [false, true]) {
+                        let prefix = isST ? "StatTrak™ " : "";
+                        let name = `${prefix}${s.name} ${c}`;
+                        if(prices[name]) {
+                            let p = prices[name];
+                            let key = `${isST ? 'ST' : 'NORM'}_${r}_${c}`;
+                            
+                            if(!cheapestFillers[key] || p < cheapestFillers[key].price) {
+                                let rIdx = RARITY_ORDER.indexOf(r);
+                                if (rIdx < RARITY_ORDER.length - 1) {
+                                    let nextR = RARITY_ORDER[rIdx+1];
+                                    let outs = database[col].filter(x => x.rarity === nextR);
+                                    if(outs.length > 0) {
+                                        cheapestFillers[key] = { name: s.name, cond: c, price: p, min: s.min, max: s.max, outcomes: outs, col: col, isST: isST };
+                                    }
                                 }
                             }
                         }
@@ -633,11 +669,12 @@
         const MIN_ROI = parseFloat(document.getElementById('min-roi').value) + 100;
         const BUFFER = parseFloat(document.getElementById('float-buffer').value);
         
-        // Neu: Buy Factor & Sell Fee extrahieren
         const BUY_FACTOR = parseFloat(document.getElementById('price-factor').value);
         const SELL_FEE = parseFloat(document.getElementById('sell-fee').value) || 0;
 
         const activeRarities = Array.from(document.querySelectorAll('.rarity-checkbox:checked')).map(cb => cb.value);
+        const calcNormal = document.getElementById('type-normal').checked;
+        const calcST = document.getElementById('type-stattrak').checked;
 
         const container = document.getElementById('results-container');
         container.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-light mb-3" style="width: 2rem; height: 2rem;"></div><p class="text-grey mb-0">RUNNING ENGINE...</p></div>';
@@ -673,13 +710,20 @@
 
                     let inputSkins = byRarity[rarity];
                     for(let inputSkin of inputSkins) {
-                        runSimulation("10x", inputSkin, possibleOutputs, reqAvgTrade, 10, null, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
-                        for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
-                            let fKey = `${rarity}_${cond}`;
-                            if(cheapestFillers[fKey]) {
-                                runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
-                                runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
-                                runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE);
+                        // Durchlauf für Normal und StatTrak, falls im UI aktiviert
+                        for(let isST of [false, true]) {
+                            if(isST && !calcST) continue;
+                            if(!isST && !calcNormal) continue;
+
+                            runSimulation("10x", inputSkin, possibleOutputs, reqAvgTrade, 10, null, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                            
+                            for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
+                                let fKey = `${isST ? 'ST' : 'NORM'}_${rarity}_${cond}`;
+                                if(cheapestFillers[fKey]) {
+                                    runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                    runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                    runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                }
                             }
                         }
                     }
@@ -689,12 +733,17 @@
         }, 50);
     }
 
-    function runSimulation(mode, mainSkin, mainOuts, reqAvgTrade, mainCount, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE) {
+    function runSimulation(mode, mainSkin, mainOuts, reqAvgTrade, mainCount, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST) {
         let fillerCount = 10 - mainCount;
+        let prefix = isST ? "StatTrak™ " : "";
+
         for(let cond of ["(Factory New)", "(Minimal Wear)", "(Field-Tested)"]) {
-            let name = `${mainSkin.name} ${cond}`;
-            if(!prices[name]) continue;
-            let mainPrice = prices[name] * BUY_FACTOR;
+            let pNameMain = `${prefix}${mainSkin.name} ${cond}`;
+            
+            // Wenn der Skin nicht als StatTrak in der Preisliste ist (z.B. Map Collection), skippe ihn.
+            if(!prices[pNameMain]) continue; 
+            
+            let mainPrice = prices[pNameMain] * BUY_FACTOR;
             let fillerTradeFloat = 0.0, fillerPrice = 0.0, fAssumedRaw = 0.0;
             
             if(filler) {
@@ -750,10 +799,9 @@
             for(let out of mainOuts) {
                 let outF = calculateOutputFloat(avgFinal, out.min, out.max);
                 let outC = getConditionInfo(outF);
-                let pName = `${out.name} ${getLongConditionName(outC)}`;
-                let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
+                let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
+                let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
                 
-                // Exakte Steam Steuer Logik (Sonderfall bei 15%)
                 let val = 0;
                 if(SELL_FEE === 15.0) {
                     val = pBase / 1.15;
@@ -771,8 +819,8 @@
                 for(let out of filler.outcomes) {
                     let outF = calculateOutputFloat(avgFinal, out.min, out.max);
                     let outC = getConditionInfo(outF);
-                    let pName = `${out.name} ${getLongConditionName(outC)}`;
-                    let pBase = prices[pName] || prices[`${out.name} (Minimal Wear)`] || 0;
+                    let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
+                    let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
                     
                     let val = 0;
                     if(SELL_FEE === 15.0) {
@@ -791,13 +839,14 @@
             let roi = (expVal / cost) * 100;
 
             if(roi > MIN_ROI) {
-                let uKey = `${mainSkin.name}_${mode}`;
+                // Key generieren, damit normal und ST einzigartig bleiben
+                let uKey = `${prefix}${mainSkin.name}_${mode}`;
                 if(!uniqueResults[uKey] || roi > uniqueResults[uKey].roi) {
                     uniqueResults[uKey] = {
                         id: uKey, roi: roi, mode: mode, main: mainSkin.name, cond: cond, rarity: mainSkin.rarity,
                         filler: filler, cost: cost, exp: expVal, mainCount: mainCount, maxFloat: safeFloat, 
                         space: (safeFloat - trueBottom), details: details, fillerFloat: fAssumedRaw, 
-                        col: mainSkin.col, winChance: totalWinProb * 100
+                        col: mainSkin.col, winChance: totalWinProb * 100, isST: isST
                     };
                 }
             }
@@ -826,6 +875,8 @@
             let statusClass = isJackpot ? 'status-jackpot' : 'status-profit';
             let roiClass = isJackpot ? 'text-pink' : 'text-green';
             let jackpotBadge = isJackpot ? '<span class="badge-jackpot">JACKPOT</span>' : '';
+            let stBadge = res.isST ? '<span class="badge-st">StatTrak™</span>' : '';
+            
             let rarityShort = res.rarity.split(" ")[0].toUpperCase();
             let rarityClass = "rarity-" + res.rarity.split(" ")[0];
             let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
@@ -851,7 +902,7 @@
                 <div class="outcome-row">
                     <div style="flex:1;">
                         <span class="${d.win ? 'tag-win' : 'tag-loss'}">${d.win ? 'WIN' : 'LOSS'}</span>
-                        <span style="color:#888;">${d.name} <span class="text-grey" style="font-size:0.75rem">${d.cond}</span></span>
+                        <span style="color:#888;">${res.isST ? 'StatTrak™ ' : ''}${d.name} <span class="text-grey" style="font-size:0.75rem">${d.cond}</span></span>
                     </div>
                     <div class="text-end">
                         <span class="text-grey me-2" style="font-size:0.75rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
@@ -869,6 +920,7 @@
                             <span class="rarity-badge ${rarityClass}">${rarityShort}</span>
                             <span class="badge-mode ms-1">${res.mode}</span>
                             ${jackpotBadge}
+                            ${stBadge}
                             ${saveBtnHtml}
                         </div>
                         <h5 class="mb-0 mt-2 text-white">${res.main}</h5>
