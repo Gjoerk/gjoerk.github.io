@@ -6,6 +6,13 @@ import time
 GITHUB_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/skins.json"
 OUTPUT_FILE = "database.json"
 
+# --- NEU: Blacklist für Skins, die NICHT im Trade-Up genutzt werden können ---
+EXCLUDED_SKINS = [
+    "Heat Treated",   # Filtert Desert Eagle | Heat Treated
+    "Aphrodite",      # Filtert AK-47 | Aphrodite
+    # "Ein weiterer Skin", <- Hier kannst du später einfach neue eintragen
+]
+
 def fetch_from_github():
     print(f"🚀 Lade skins.json von ByMykel/CSGO-API herunter...")
     
@@ -24,20 +31,29 @@ def fetch_from_github():
         
         for item in data:
             # 1. Basis-Filterung
-            # Wir wollen nur Skins, die für Trade Ups relevant sind.
-            # Filtere Messer, Handschuhe, Agenten etc. raus, falls sie in skins.json sind.
-            # ByMykel trennt das meist gut, aber sicher ist sicher.
             category = item.get('category', {}).get('id', '')
             if category and category != "sfui_invpanel_filter_rifle" and \
                category != "sfui_invpanel_filter_pistol" and \
                category != "sfui_invpanel_filter_smg" and \
                category != "sfui_invpanel_filter_heavy":
-                # Fallback: Wenn Category-ID komisch ist, prüfe Waffennamen
                 weapon_id = item.get('weapon', {}).get('id', '')
                 if not weapon_id or "knife" in weapon_id or "glove" in weapon_id:
                     continue
 
             name = item.get('name')
+            if not name:
+                continue
+                
+            # --- NEU: Check gegen die Blacklist ---
+            is_excluded = False
+            for excluded in EXCLUDED_SKINS:
+                if excluded in name:
+                    is_excluded = True
+                    break
+            
+            if is_excluded:
+                continue # Überspringt diesen Skin komplett
+            # ----------------------------------------
             
             # 2. Float Caps holen
             min_float = item.get('min_float')
@@ -50,26 +66,23 @@ def fetch_from_github():
             # 3. Rarity holen
             rarity_obj = item.get('rarity')
             if not rarity_obj: continue
-            rarity_name = rarity_obj.get('name') # z.B. "Mil-Spec Grade"
+            rarity_name = rarity_obj.get('name') 
             
             # "Contraband" (Howl) kann nicht getrade-upt werden -> Skip
             if "Contraband" in rarity_name: continue
 
             # 4. Collection finden
-            # ByMykel speichert Collections in einer Liste "collections"
             collections = item.get('collections', [])
             
             if not collections:
-                continue # Skins ohne Collection (z.B. manche Exclusives) sind nutzlos für Trade Up
+                continue 
             
-            # Wir nehmen die erste Collection in der Liste
             col_name = collections[0].get('name')
             
             # 5. Speichern
             if col_name not in all_skins_by_collection:
                 all_skins_by_collection[col_name] = []
             
-            # Skin Objekt erstellen
             skin_entry = {
                 "name": name,
                 "rarity": rarity_name,
@@ -81,7 +94,6 @@ def fetch_from_github():
             count_processed += 1
 
         # 6. Datenbank bereinigen
-        # Collections mit zu wenigen Skins (weniger als 2) bringen nichts
         final_db = {}
         for col, skins in all_skins_by_collection.items():
             if len(skins) > 1:
