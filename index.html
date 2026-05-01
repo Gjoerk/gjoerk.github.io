@@ -22,6 +22,7 @@
             /* ACCENTS */
             --color-pink: #e056fd; 
             --color-green: #00ff9d;
+            --color-coffee: #FFDD00;
             
             --bs-body-bg: var(--bg-core);
             --bs-body-color: var(--text-main);
@@ -123,6 +124,32 @@
         .btn-outline:hover {
             border-color: #fff;
             color: #fff;
+        }
+
+        /* --- BUY ME A COFFEE FLOATING BUTTON --- */
+        .bmc-floating-button {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            background-color: var(--color-coffee);
+            border-radius: 50px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #000000;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .bmc-floating-button:hover {
+            transform: scale(1.05);
+            color: #000000;
+        }
+        .bmc-floating-button img {
+            width: 24px;
+            margin-right: 8px;
         }
 
         /* --- RESULT CARDS --- */
@@ -264,6 +291,11 @@
 </head>
 <body>
 
+<a href="https://buymeacoffee.com/gabrielschq" target="_blank" class="bmc-floating-button">
+    <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee">
+    <span>Buy me a coffee</span>
+</a>
+
 <div class="container py-5">
     <div class="row mb-5 text-center">
         <div class="col-12">
@@ -375,6 +407,15 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <p class="text-muted" style="font-size: 0.9rem;">
+                If you found this tool helpful and it saved you some time or made you a profit, consider supporting its development.<br>
+                <a href="https://buymeacoffee.com/gabrielschq" target="_blank" style="color: var(--color-coffee); text-decoration: none; font-weight: 600;">Buy me a coffee here! ☕</a>
+            </p>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -405,7 +446,6 @@
             element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
         });
 
-        // Alle Checkboxen (Rarities + Type) speichern
         const checkboxes = document.querySelectorAll('.config-checkbox');
         checkboxes.forEach(cb => {
             const saved = localStorage.getItem('cb-' + cb.id);
@@ -508,7 +548,7 @@
         displayList.forEach(t => {
             let isJackpot = t.roi > 130;
             let roiClass = isJackpot ? 'text-pink' : 'text-green';
-            let stBadge = t.isST ? '<span class="badge-st">ST™</span>' : '';
+            let stBadge = t.isST ? '<span class="badge-st">StatTrak™</span>' : '';
 
             let fillerHtml = "";
             if(t.filler) {
@@ -529,7 +569,7 @@
                 <div class="outcome-row" style="font-size: 0.75rem;">
                     <div style="flex:1;">
                         <span class="${d.win ? 'tag-win' : 'tag-loss'}">${d.win ? 'WIN' : 'LOSS'}</span>
-                        <span style="color:#888;">${d.name} <span class="text-grey" style="font-size:0.65rem">${d.cond}</span></span>
+                        <span style="color:#888;">${t.isST ? 'StatTrak™ ' : ''}${d.name} <span class="text-grey" style="font-size:0.65rem">${d.cond}</span></span>
                     </div>
                     <div class="text-end">
                         <span class="text-grey me-2" style="font-size:0.65rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
@@ -638,7 +678,6 @@
             for(let s of database[col]) {
                 let r = s.rarity;
                 for(let c of ["(Factory New)", "(Minimal Wear)"]) {
-                    // Suche Filler sowohl für Normal als auch für StatTrak
                     for(let isST of [false, true]) {
                         let prefix = isST ? "StatTrak™ " : "";
                         let name = `${prefix}${s.name} ${c}`;
@@ -710,7 +749,6 @@
 
                     let inputSkins = byRarity[rarity];
                     for(let inputSkin of inputSkins) {
-                        // Durchlauf für Normal und StatTrak, falls im UI aktiviert
                         for(let isST of [false, true]) {
                             if(isST && !calcST) continue;
                             if(!isST && !calcNormal) continue;
@@ -739,8 +777,6 @@
 
         for(let cond of ["(Factory New)", "(Minimal Wear)", "(Field-Tested)"]) {
             let pNameMain = `${prefix}${mainSkin.name} ${cond}`;
-            
-            // Wenn der Skin nicht als StatTrak in der Preisliste ist (z.B. Map Collection), skippe ihn.
             if(!prices[pNameMain]) continue; 
             
             let mainPrice = prices[pNameMain] * BUY_FACTOR;
@@ -749,11 +785,9 @@
             if(filler) {
                 fillerPrice = filler.price * BUY_FACTOR;
                 let fCondLimits = getConditionLimits(filler.cond);
-                
                 let fTrueBottom = Math.max(fCondLimits[0], filler.min);
                 let fBufferReq = BUFFER;
                 if(filler.cond === "(Factory New)") fBufferReq = Math.min(BUFFER, 0.065);
-                
                 fAssumedRaw = fTrueBottom + fBufferReq;
                 if(fAssumedRaw > fCondLimits[1]) continue;
                 fillerTradeFloat = getTradeFloat(fAssumedRaw, filler.min, filler.max);
@@ -765,7 +799,6 @@
 
             let maxMainReal = getRealFloatFromTrade(maxMainTrade, mainSkin.min, mainSkin.max);
             let condLimits = getConditionLimits(cond);
-            
             let trueBottom = Math.max(condLimits[0], mainSkin.min);
             if(maxMainReal < trueBottom) continue; 
 
@@ -801,14 +834,7 @@
                 let outC = getConditionInfo(outF);
                 let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
                 let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
-                
-                let val = 0;
-                if(SELL_FEE === 15.0) {
-                    val = pBase / 1.15;
-                } else {
-                    val = pBase * (1 - (SELL_FEE / 100));
-                }
-
+                let val = (SELL_FEE === 15.0) ? (pBase / 1.15) : (pBase * (1 - (SELL_FEE / 100)));
                 let isWin = (val - cost) > 0;
                 details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: true });
                 expVal += val * probMain;
@@ -821,14 +847,7 @@
                     let outC = getConditionInfo(outF);
                     let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
                     let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
-                    
-                    let val = 0;
-                    if(SELL_FEE === 15.0) {
-                        val = pBase / 1.15;
-                    } else {
-                        val = pBase * (1 - (SELL_FEE / 100));
-                    }
-
+                    let val = (SELL_FEE === 15.0) ? (pBase / 1.15) : (pBase * (1 - (SELL_FEE / 100)));
                     let isWin = (val - cost) > 0;
                     details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: false });
                     expVal += val * probFiller;
@@ -839,7 +858,6 @@
             let roi = (expVal / cost) * 100;
 
             if(roi > MIN_ROI) {
-                // Key generieren, damit normal und ST einzigartig bleiben
                 let uKey = `${prefix}${mainSkin.name}_${mode}`;
                 if(!uniqueResults[uKey] || roi > uniqueResults[uKey].roi) {
                     uniqueResults[uKey] = {
@@ -856,14 +874,10 @@
     function renderResults() {
         const container = document.getElementById('results-container');
         const countBadge = document.getElementById('result-count');
-        
         if(!uniqueResults) return; 
-        
         let results = Object.values(uniqueResults).sort((a,b) => b.roi - a.roi);
-        
         countBadge.innerText = results.length;
         container.innerHTML = "";
-
         if(results.length === 0) {
             container.innerHTML = '<div class="text-center p-5 border rounded" style="border-color: var(--border-color) !important;"><p class="text-grey mb-0">NO RESULTS FOUND.</p></div>';
             return;
@@ -876,11 +890,9 @@
             let roiClass = isJackpot ? 'text-pink' : 'text-green';
             let jackpotBadge = isJackpot ? '<span class="badge-jackpot">JACKPOT</span>' : '';
             let stBadge = res.isST ? '<span class="badge-st">StatTrak™</span>' : '';
-            
             let rarityShort = res.rarity.split(" ")[0].toUpperCase();
             let rarityClass = "rarity-" + res.rarity.split(" ")[0];
             let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
-            
             let isSaved = savedTradeups.some(t => t.id === res.id);
             let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave('${res.id}')">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
 
@@ -919,9 +931,7 @@
                             <span class="text-grey me-1" style="font-size:0.8rem;">#${idx+1}</span>
                             <span class="rarity-badge ${rarityClass}">${rarityShort}</span>
                             <span class="badge-mode ms-1">${res.mode}</span>
-                            ${jackpotBadge}
-                            ${stBadge}
-                            ${saveBtnHtml}
+                            ${jackpotBadge}${stBadge}${saveBtnHtml}
                         </div>
                         <h5 class="mb-0 mt-2 text-white">${res.main}</h5>
                         <p class="text-grey small mb-0">${res.col}</p>
@@ -932,7 +942,6 @@
                         <div class="${oddsClass}" style="font-size:0.75rem; font-weight:600;">Odds: ${res.winChance.toFixed(1)}%</div>
                     </div>
                 </div>
-
                 <div class="mt-3 p-3 rounded" style="background-color: var(--bg-input);">
                     <div class="d-flex justify-content-between mb-1" style="font-size:0.8rem;">
                         <span class="text-grey">MAIN (${res.mainCount}x)</span>
@@ -944,14 +953,12 @@
                     </div>
                     ${fillerHtml}
                 </div>
-
                 <div class="d-flex justify-content-between align-items-center mt-3" style="font-size:0.8rem;">
                     <div>
                         <span class="text-grey">COST:</span> <span class="text-white fw-bold me-3">${res.cost.toFixed(2)}€</span>
                         <span class="text-grey">EV:</span> <span class="text-green fw-bold">${res.exp.toFixed(2)}€</span>
                     </div>
                 </div>
-
                 <div class="mt-3 text-center">
                     <a class="expand-link" onclick="this.parentElement.nextElementSibling.style.display = this.parentElement.nextElementSibling.style.display==='block'?'none':'block'; return false;">
                         VIEW OUTCOMES
