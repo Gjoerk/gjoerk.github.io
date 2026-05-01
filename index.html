@@ -299,4 +299,695 @@
 <div class="container py-4">
     <div class="row mb-4 text-center">
         <div class="col-12">
-            <img src="http://googleusercontent.com/image_generation_content/0
+            <img src="http://googleusercontent.com/image_generation_content/0" alt="TradeUpEngine Banner" class="img-fluid rounded mb-3" style="border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(224, 86, 253, 0.15); max-height: 250px; width: 100%; object-fit: cover;">
+            
+            <h2 class="mb-2 fw-bold text-white d-none" style="letter-spacing: -1px; text-shadow: 0 0 30px rgba(255,255,255,0.1);">TradeUpEngine</h2>
+            
+            <div class="mt-3 d-flex justify-content-center">
+                <div style="background: rgba(224, 86, 253, 0.05); border: 1px solid rgba(224, 86, 253, 0.2); padding: 8px 15px; border-radius: 8px; font-size: 0.75rem; color: #bbbbbb; max-width: 600px; line-height: 1.4;">
+                    <span style="color: var(--color-pink); font-weight: 800; letter-spacing: 0.5px;">ATTENTION:</span> 
+                    Prices are updated daily and may vary from live market data. 
+                    Always <strong>double-check</strong> current prices on your marketplace before buying skins.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card-clean">
+                <div id="file-error-msg" class="alert alert-danger mb-4 p-2 small d-none" style="background: rgba(255, 64, 129, 0.1); border-color: #ff4081; color: #ff80ab;">
+                    <strong>Error:</strong> Could not load database or prices. Please ensure JSON files are present.
+                </div>
+
+                <h6 class="text-white mb-4">ENGINE SETTINGS</h6>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label" for="max-budget">Budget (€)</label>
+                        <input type="number" id="max-budget" class="form-control" value="25.0">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" for="min-roi">Min ROI (%)</label>
+                        <input type="number" id="min-roi" class="form-control" value="10.0">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="float-buffer">
+                        Float Buffer 
+                        <span class="label-desc">(Safe space to skin limit)</span>
+                    </label>
+                    <input type="number" id="float-buffer" class="form-control" value="0.015" step="0.001">
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <label class="form-label" for="price-factor">Buy Factor <span class="label-desc" style="display:block;margin-left:0;">(Multiplier, e.g. 1.0)</span></label>
+                        <input type="number" id="price-factor" class="form-control" value="1.0" step="0.1">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" for="sell-fee">Sell Fee (%) <span class="label-desc" style="display:block;margin-left:0;">(Steam Tax = 15)</span></label>
+                        <input type="number" id="sell-fee" class="form-control" value="15.0" step="0.1">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="form-label">Item Type</div>
+                    <div class="d-flex flex-wrap gap-3 text-white" style="font-size: 0.8rem;">
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox" type="checkbox" value="normal" id="type-normal" checked>
+                            <label class="form-check-label" for="type-normal">Normal</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox st-checkbox" type="checkbox" value="stattrak" id="type-stattrak">
+                            <label class="form-check-label text-warning" for="type-stattrak" style="font-weight: 600;">StatTrak™</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="form-label">Target Input Rarities</div>
+                    <div class="d-flex flex-wrap gap-3 text-white" style="font-size: 0.8rem;">
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Consumer Grade" id="rc-consumer">
+                            <label class="form-check-label" for="rc-consumer">Consumer</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Industrial Grade" id="rc-industrial">
+                            <label class="form-check-label" for="rc-industrial">Industrial</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Mil-Spec Grade" id="rc-milspec" checked>
+                            <label class="form-check-label" for="rc-milspec">Mil-Spec</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Restricted" id="rc-restricted" checked>
+                            <label class="form-check-label" for="rc-restricted">Restricted</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input config-checkbox rarity-checkbox" type="checkbox" value="Classified" id="rc-classified" checked>
+                            <label class="form-check-label" for="rc-classified">Classified</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="startCalculation()" id="btn-start" class="btn-pink mt-2" disabled>
+                    Loading Data...
+                </button>
+
+                <hr class="my-4">
+                <h6 class="text-white mb-3" style="font-size: 0.8rem;">SAVED TRADE UPS</h6>
+                <div id="saved-container"></div>
+                <button id="btn-toggle-saved" class="btn-outline w-100 mt-2 d-none" onclick="toggleSaved()">Show All</button>
+
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-grey" style="font-size: 0.8rem; font-weight: 600;">RESULTS: <span id="result-count" class="text-white">0</span></span>
+                <button onclick="clearResults()" class="btn-outline">Clear</button>
+            </div>
+            
+            <div id="results-container">
+                <div class="text-center p-5 border rounded" style="border-color: var(--border-color) !important; border-style: dashed !important;">
+                    <p class="text-grey mb-0" style="font-size: 0.85rem; opacity: 0.5;">ENGINE READY. WAITING FOR START.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 pb-5">
+        <div class="col-12 text-center">
+            <p style="color: #e0e0e0; font-size: 0.9rem; max-width: 700px; margin: 0 auto;">
+                If you found this tool helpful and it saved you some time or made you a profit, consider supporting its development.<br>
+                <a href="https://buymeacoffee.com/gabrielschq" target="_blank" style="color: var(--color-coffee); text-decoration: none; font-weight: 700;">Click here to buy me a coffee! ☕</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* --- AUTO LOAD & SETTINGS --- */
+    let savedTradeups = [];
+    let showAllSaved = false;
+
+    window.onload = async function() {
+        savedTradeups = JSON.parse(localStorage.getItem('saved-tradeups') || '[]');
+        
+        if (savedTradeups.length > 0 && !savedTradeups[0].details) {
+            savedTradeups = [];
+            localStorage.setItem('saved-tradeups', '[]');
+        }
+
+        initSettings(); 
+        await loadFiles(); 
+        renderSaved();
+    };
+
+    function initSettings() {
+        const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor', 'sell-fee'];
+        fields.forEach(id => {
+            const element = document.getElementById(id);
+            const savedValue = localStorage.getItem(id);
+            if (savedValue !== null) element.value = savedValue;
+            element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
+        });
+
+        const checkboxes = document.querySelectorAll('.config-checkbox');
+        checkboxes.forEach(cb => {
+            const saved = localStorage.getItem('cb-' + cb.id);
+            if (saved !== null) cb.checked = (saved === 'true');
+            cb.addEventListener('change', function() { localStorage.setItem('cb-' + this.id, this.checked); });
+        });
+    }
+
+    async function loadFiles() {
+        let dbLoaded = false;
+        let pricesLoaded = false;
+
+        try {
+            const response = await fetch('database.json');
+            if (!response.ok) throw new Error("404 Not Found");
+            database = await response.json();
+            dbLoaded = true;
+        } catch (error) {
+            document.getElementById('file-error-msg').classList.remove('d-none');
+        }
+
+        try {
+            const response = await fetch('prices_cache.json');
+            if (!response.ok) throw new Error("404 Not Found");
+            const raw = await response.json();
+            prices = {};
+            let items = Array.isArray(raw) ? raw : (raw.items || raw);
+            if (!Array.isArray(items) && raw["AK-47 | Slate (Factory New)"]) {
+                for(let k in raw) {
+                    let p = raw[k];
+                    if(typeof p==='object' && p.steam) prices[k] = p.steam.last_24h || p.steam.last_7d || 0;
+                    else if(typeof p==='number') prices[k] = p;
+                }
+            } else {
+                for(let item of items) {
+                    let n = item.market_hash_name || item.market_name;
+                    let p = item.min_price || item.price;
+                    if(n && p) { prices[n] = parseFloat(p); }
+                }
+            }
+            pricesLoaded = true;
+        } catch (error) {
+            document.getElementById('file-error-msg').classList.remove('d-none');
+        }
+
+        if (dbLoaded && pricesLoaded) {
+            const btn = document.getElementById('btn-start');
+            btn.disabled = false;
+            btn.innerText = "Start Engine";
+        }
+    }
+
+    /* --- SAVED ITEMS LOGIC --- */
+    function toggleSave(uKey) {
+        let idx = savedTradeups.findIndex(t => t.id === uKey);
+        if (idx > -1) {
+            savedTradeups.splice(idx, 1);
+        } else {
+            if(uniqueResults[uKey]) {
+                savedTradeups.push(uniqueResults[uKey]);
+            }
+        }
+        localStorage.setItem('saved-tradeups', JSON.stringify(savedTradeups));
+        renderSaved();
+        
+        if(document.getElementById('results-container').innerHTML.includes('result-card')) {
+            renderResults(); 
+        }
+    }
+
+    function toggleSaved() {
+        showAllSaved = !showAllSaved;
+        renderSaved();
+    }
+
+    function toggleSavedDetails(id, chevronId) {
+        let el = document.getElementById(id);
+        let chevron = document.getElementById(chevronId);
+        if(el.classList.contains('d-none')) {
+            el.classList.remove('d-none');
+            chevron.classList.add('chevron-open');
+        } else {
+            el.classList.add('d-none');
+            chevron.classList.remove('chevron-open');
+        }
+    }
+
+    function renderSaved() {
+        const container = document.getElementById('saved-container');
+        const btn = document.getElementById('btn-toggle-saved');
+        container.innerHTML = '';
+        
+        if (savedTradeups.length === 0) {
+            container.innerHTML = '<div style="color: #e0e0e0; font-size: 0.8rem;">No saved trade ups yet.</div>';
+            btn.classList.add('d-none');
+            return;
+        }
+        
+        let displayList = showAllSaved ? savedTradeups : savedTradeups.slice(0, 5);
+        displayList.forEach(t => {
+            let isJackpot = t.roi > 130;
+            let roiClass = isJackpot ? 'text-pink' : 'text-green';
+            let stBadge = t.isST ? '<span class="badge-st">StatTrak™</span>' : '';
+
+            let fillerHtml = "";
+            if(t.filler) {
+                let cnt = 10 - t.mainCount;
+                fillerHtml = `
+                <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-secondary border-opacity-25" style="font-size:0.75rem;">
+                    <span class="text-grey">FILLER (${cnt}x)</span>
+                    <span class="text-white text-end text-truncate" style="max-width:60%;">${t.filler.name}</span>
+                </div>
+                <div class="d-flex justify-content-between" style="font-size:0.75rem;">
+                    <span class="text-grey">REQ FLOAT</span>
+                    <span class="text-pink">&lt; ${t.fillerFloat.toFixed(4)}</span>
+                </div>`;
+            }
+
+            let outcomesHtml = t.details.map(d => {
+                return `
+                <div class="outcome-row" style="font-size: 0.75rem;">
+                    <div style="flex:1;">
+                        <span class="${d.win ? 'tag-win' : 'tag-loss'}">${d.win ? 'WIN' : 'LOSS'}</span>
+                        <span style="color:#888;">${t.isST ? 'StatTrak™ ' : ''}${d.name} <span class="text-grey" style="font-size:0.65rem">${d.cond}</span></span>
+                    </div>
+                    <div class="text-end">
+                        <span class="text-grey me-2" style="font-size:0.65rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
+                        <span class="${d.win ? 'text-white' : 'text-grey'}">${d.val.toFixed(2)}€</span>
+                    </div>
+                </div>`;
+            }).join("");
+
+            container.innerHTML += `
+                <div class="mb-2" style="background-color: var(--bg-input); border: 1px solid var(--border-color); border-radius: 6px;">
+                    <div class="p-2 d-flex justify-content-between align-items-center saved-item-header" style="cursor: pointer; border-radius: 6px;" onclick="toggleSavedDetails('details-${t.id}', 'chev-${t.id}')">
+                        <div class="text-truncate text-white" style="max-width: 65%; font-size: 0.8rem;" title="${t.main}">
+                            <span id="chev-${t.id}" class="chevron-icon">▶</span>
+                            ${t.main} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>${stBadge}
+                        </div>
+                        <div class="text-end ${roiClass}" style="font-weight: 600; font-size: 0.8rem;">
+                            ${t.roi.toFixed(1)}% 
+                            <span style="color:#ff4081; margin-left: 8px; font-size: 1rem;" onclick="event.stopPropagation(); toggleSave('${t.id}')">×</span>
+                        </div>
+                    </div>
+                    
+                    <div id="details-${t.id}" class="d-none border-top" style="border-color: var(--border-color) !important; padding: 12px; background-color: #111; border-radius: 0 0 6px 6px;">
+                        <div class="d-flex justify-content-between mb-1" style="font-size:0.75rem;">
+                            <span class="text-grey">MAIN (${t.mainCount}x)</span>
+                            <span class="text-white">${t.cond.replace('(','').replace(')','')}</span>
+                        </div>
+                        <div class="d-flex justify-content-between" style="font-size:0.75rem;">
+                            <span class="text-grey">MAX FLOAT</span>
+                            <span class="text-pink">&lt; ${t.maxFloat.toFixed(5)}</span>
+                        </div>
+                        ${fillerHtml}
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary border-opacity-25" style="font-size:0.75rem;">
+                            <div><span class="text-grey">COST:</span> <span class="text-white fw-bold">${t.cost.toFixed(2)}€</span></div>
+                            <div><span class="text-grey">EV:</span> <span class="text-green fw-bold">${t.exp.toFixed(2)}€</span></div>
+                        </div>
+                        
+                        <div class="mt-2 pt-2 border-top border-secondary border-opacity-25">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-grey" style="font-size: 0.75rem;">Outcomes (Odds: ${t.winChance.toFixed(1)}%)</span>
+                            </div>
+                            <div style="max-height: 150px; overflow-y: auto; padding-right: 5px;">
+                                ${outcomesHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (savedTradeups.length > 5) {
+            btn.classList.remove('d-none');
+            btn.innerText = showAllSaved ? 'Show Less' : `Show All (${savedTradeups.length})`;
+        } else {
+            btn.classList.add('d-none');
+        }
+    }
+
+    /* --- CORE LOGIC --- */
+    let database = null;
+    let prices = {};
+    let cheapestFillers = {};
+    let uniqueResults = {};
+    const RARITY_ORDER = ["Consumer Grade", "Industrial Grade", "Mil-Spec Grade", "Restricted", "Classified", "Covert"];
+    const to32Bit = (val) => Math.fround(val);
+
+    function getTradeFloat(realFloat, minCap, maxCap) {
+        let range = maxCap - minCap;
+        return range === 0 ? 0.0 : (realFloat - minCap) / range;
+    }
+    function getRealFloatFromTrade(tradeFloat, minCap, maxCap) {
+        return (tradeFloat * (maxCap - minCap)) + minCap;
+    }
+    function calculateOutputFloat(avgTradeFloat, outMin, outMax) {
+        let avg32 = to32Bit(avgTradeFloat);
+        let range32 = to32Bit(outMax - outMin);
+        let step1 = to32Bit(avg32 * range32);
+        return to32Bit(step1 + outMin);
+    }
+    function getConditionInfo(floatVal) {
+        if (floatVal < 0.07) return "FN";
+        if (floatVal < 0.15) return "MW";
+        if (floatVal < 0.38) return "FT";
+        if (floatVal < 0.45) return "WW";
+        return "BS";
+    }
+    function getLongConditionName(shortInfo) {
+        if (shortInfo === "FN") return "(Factory New)";
+        if (shortInfo === "MW") return "(Minimal Wear)";
+        if (shortInfo === "FT") return "(Field-Tested)";
+        if (shortInfo === "WW") return "(Well-Worn)";
+        return "(Battle-Scarred)";
+    }
+    function getConditionLimits(longName) {
+        if (longName === "(Factory New)") return [0.00, 0.07];
+        if (longName === "(Minimal Wear)") return [0.07, 0.15];
+        if (longName === "(Field-Tested)") return [0.15, 0.38];
+        if (longName === "(Well-Worn)") return [0.38, 0.45];
+        return [0.45, 1.00];
+    }
+
+    /* --- ALGORITHM --- */
+    function findBestFillers() {
+        cheapestFillers = {};
+        for(let col in database) {
+            for(let s of database[col]) {
+                let r = s.rarity;
+                for(let c of ["(Factory New)", "(Minimal Wear)"]) {
+                    for(let isST of [false, true]) {
+                        let prefix = isST ? "StatTrak™ " : "";
+                        let name = `${prefix}${s.name} ${c}`;
+                        if(prices[name]) {
+                            let p = prices[name];
+                            let key = `${isST ? 'ST' : 'NORM'}_${r}_${c}`;
+                            
+                            if(!cheapestFillers[key] || p < cheapestFillers[key].price) {
+                                let rIdx = RARITY_ORDER.indexOf(r);
+                                if (rIdx < RARITY_ORDER.length - 1) {
+                                    let nextR = RARITY_ORDER[rIdx+1];
+                                    let outs = database[col].filter(x => x.rarity === nextR);
+                                    if(outs.length > 0) {
+                                        cheapestFillers[key] = { name: s.name, cond: c, price: p, min: s.min, max: s.max, outcomes: outs, col: col, isST: isST };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function startCalculation() {
+        if(!database || Object.keys(prices).length === 0) { alert("Data not loaded properly."); return; }
+        const MAX_COST = parseFloat(document.getElementById('max-budget').value);
+        const MIN_ROI = parseFloat(document.getElementById('min-roi').value) + 100;
+        const BUFFER = parseFloat(document.getElementById('float-buffer').value);
+        
+        const BUY_FACTOR = parseFloat(document.getElementById('price-factor').value);
+        const SELL_FEE = parseFloat(document.getElementById('sell-fee').value) || 0;
+
+        const activeRarities = Array.from(document.querySelectorAll('.rarity-checkbox:checked')).map(cb => cb.value);
+        const calcNormal = document.getElementById('type-normal').checked;
+        const calcST = document.getElementById('type-stattrak').checked;
+
+        const container = document.getElementById('results-container');
+        container.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-light mb-3" style="width: 2rem; height: 2rem;"></div><p class="text-grey mb-0">RUNNING ENGINE...</p></div>';
+
+        setTimeout(() => {
+            uniqueResults = {}; 
+            findBestFillers(); 
+            for(let col in database) {
+                let skins = database[col];
+                let byRarity = {};
+                for(let s of skins) { if(!byRarity[s.rarity]) byRarity[s.rarity] = []; byRarity[s.rarity].push(s); }
+                
+                for(let rarity in byRarity) {
+                    if (!activeRarities.includes(rarity)) continue;
+
+                    let rIdx = RARITY_ORDER.indexOf(rarity);
+                    if(rIdx === -1 || rIdx >= RARITY_ORDER.length - 1) continue;
+                    let nextRarity = RARITY_ORDER[rIdx+1];
+                    let possibleOutputs = byRarity[nextRarity];
+                    if(!possibleOutputs) continue;
+                    
+                    let reqAvgTrade = 1.0;
+                    let impossible = false;
+                    for(let out of possibleOutputs) {
+                        if(out.min >= 0.07) { impossible = true; break; }
+                        let range = out.max - out.min;
+                        if(range === 0) continue;
+                        let req = (0.0699 - out.min) / range;
+                        if(req < reqAvgTrade) reqAvgTrade = req;
+                    }
+                    if(impossible || reqAvgTrade <= 0) continue;
+                    if(reqAvgTrade > 1.0) reqAvgTrade = 1.0;
+
+                    let inputSkins = byRarity[rarity];
+                    for(let inputSkin of inputSkins) {
+                        for(let isST of [false, true]) {
+                            if(isST && !calcST) continue;
+                            if(!isST && !calcNormal) continue;
+
+                            runSimulation("10x", inputSkin, possibleOutputs, reqAvgTrade, 10, null, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                            
+                            for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
+                                let fKey = `${isST ? 'ST' : 'NORM'}_${rarity}_${cond}`;
+                                if(cheapestFillers[fKey]) {
+                                    runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                    runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                    runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            renderResults();
+        }, 50);
+    }
+
+    function runSimulation(mode, mainSkin, mainOuts, reqAvgTrade, mainCount, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST) {
+        let fillerCount = 10 - mainCount;
+        let prefix = isST ? "StatTrak™ " : "";
+
+        for(let cond of ["(Factory New)", "(Minimal Wear)", "(Field-Tested)"]) {
+            let pNameMain = `${prefix}${mainSkin.name} ${cond}`;
+            if(!prices[pNameMain]) continue; 
+            
+            let mainPrice = prices[pNameMain] * BUY_FACTOR;
+            let fillerTradeFloat = 0.0, fillerPrice = 0.0, fAssumedRaw = 0.0;
+            
+            if(filler) {
+                fillerPrice = filler.price * BUY_FACTOR;
+                let fCondLimits = getConditionLimits(filler.cond);
+                let fTrueBottom = Math.max(fCondLimits[0], filler.min);
+                let fBufferReq = BUFFER;
+                if(filler.cond === "(Factory New)") fBufferReq = Math.min(BUFFER, 0.065);
+                fAssumedRaw = fTrueBottom + fBufferReq;
+                if(fAssumedRaw > fCondLimits[1]) continue;
+                fillerTradeFloat = getTradeFloat(fAssumedRaw, filler.min, filler.max);
+            }
+
+            let maxMainTrade = ((10 * reqAvgTrade) - (fillerCount * fillerTradeFloat)) / mainCount;
+            if(maxMainTrade > 1.0) maxMainTrade = 1.0;
+            if(maxMainTrade < 0.0) continue;
+
+            let maxMainReal = getRealFloatFromTrade(maxMainTrade, mainSkin.min, mainSkin.max);
+            let condLimits = getConditionLimits(cond);
+            let trueBottom = Math.max(condLimits[0], mainSkin.min);
+            if(maxMainReal < trueBottom) continue; 
+
+            let testFloat = Math.min(maxMainReal, condLimits[1]);
+            let foundSafe = false, safeFloat = 0.0;
+            for(let i=0; i<15; i++) {
+                if(testFloat < trueBottom) break;
+                let tMain = getTradeFloat(testFloat, mainSkin.min, mainSkin.max);
+                let sumT = (tMain * mainCount) + (fillerTradeFloat * fillerCount);
+                let avgT = to32Bit(sumT / 10.0);
+                let allFn = true;
+                for(let out of mainOuts) {
+                    if(calculateOutputFloat(avgT, out.min, out.max) >= 0.07) { allFn = false; break; }
+                }
+                if(allFn) { foundSafe = true; safeFloat = testFloat; break; }
+                testFloat -= 0.001;
+            }
+            if(!foundSafe) continue;
+            if((safeFloat - trueBottom) < BUFFER) continue;
+
+            let cost = (mainCount * mainPrice) + (fillerCount * fillerPrice);
+            if(cost > MAX_COST) continue;
+
+            let expVal = 0, details = [];
+            let tMainFinal = getTradeFloat(safeFloat, mainSkin.min, mainSkin.max);
+            let avgFinal = to32Bit(((tMainFinal * mainCount) + (fillerTradeFloat * fillerCount))/10.0);
+            
+            let totalWinProb = 0;
+            let probMain = (mainCount/10) * (1/mainOuts.length);
+            
+            for(let out of mainOuts) {
+                let outF = calculateOutputFloat(avgFinal, out.min, out.max);
+                let outC = getConditionInfo(outF);
+                let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
+                let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
+                let val = (SELL_FEE === 15.0) ? (pBase / 1.15) : (pBase * (1 - (SELL_FEE / 100)));
+                let isWin = (val - cost) > 0;
+                details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: true });
+                expVal += val * probMain;
+                if(isWin) totalWinProb += probMain;
+            }
+            if(filler) {
+                let probFiller = (fillerCount/10) * (1/filler.outcomes.length);
+                for(let out of filler.outcomes) {
+                    let outF = calculateOutputFloat(avgFinal, out.min, out.max);
+                    let outC = getConditionInfo(outF);
+                    let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
+                    let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
+                    let val = (SELL_FEE === 15.0) ? (pBase / 1.15) : (pBase * (1 - (SELL_FEE / 100)));
+                    let isWin = (val - cost) > 0;
+                    details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: false });
+                    expVal += val * probFiller;
+                    if(isWin) totalWinProb += probFiller;
+                }
+            }
+            if(expVal === 0) continue;
+            let roi = (expVal / cost) * 100;
+
+            if(roi > MIN_ROI) {
+                let uKey = `${prefix}${mainSkin.name}_${mode}`;
+                if(!uniqueResults[uKey] || roi > uniqueResults[uKey].roi) {
+                    uniqueResults[uKey] = {
+                        id: uKey, roi: roi, mode: mode, main: mainSkin.name, cond: cond, rarity: mainSkin.rarity,
+                        filler: filler, cost: cost, exp: expVal, mainCount: mainCount, maxFloat: safeFloat, 
+                        space: (safeFloat - trueBottom), details: details, fillerFloat: fAssumedRaw, 
+                        col: mainSkin.col, winChance: totalWinProb * 100, isST: isST
+                    };
+                }
+            }
+        }
+    }
+
+    function renderResults() {
+        const container = document.getElementById('results-container');
+        const countBadge = document.getElementById('result-count');
+        if(!uniqueResults) return; 
+        let results = Object.values(uniqueResults).sort((a,b) => b.roi - a.roi);
+        countBadge.innerText = results.length;
+        container.innerHTML = "";
+        if(results.length === 0) {
+            container.innerHTML = '<div class="text-center p-5 border rounded" style="border-color: var(--border-color) !important;"><p class="text-grey mb-0">NO RESULTS FOUND.</p></div>';
+            return;
+        }
+
+        let html = "";
+        results.forEach((res, idx) => {
+            let isJackpot = res.roi > 130;
+            let statusClass = isJackpot ? 'status-jackpot' : 'status-profit';
+            let roiClass = isJackpot ? 'text-pink' : 'text-green';
+            let jackpotBadge = isJackpot ? '<span class="badge-jackpot">JACKPOT</span>' : '';
+            let stBadge = res.isST ? '<span class="badge-st">StatTrak™</span>' : '';
+            let rarityShort = res.rarity.split(" ")[0].toUpperCase();
+            let rarityClass = "rarity-" + res.rarity.split(" ")[0];
+            let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
+            let isSaved = savedTradeups.some(t => t.id === res.id);
+            let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave('${res.id}')">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
+
+            let fillerHtml = "";
+            if(res.filler) {
+                let cnt = 10 - res.mainCount;
+                fillerHtml = `<div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-secondary border-opacity-10" style="font-size:0.8rem;">
+                    <span class="text-grey">FILLER (${cnt}x)</span>
+                    <span class="text-white text-end" style="max-width:60%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${res.filler.name}</span>
+                </div>
+                <div class="d-flex justify-content-between" style="font-size:0.8rem;">
+                    <span class="text-grey">REQ FLOAT</span>
+                    <span class="text-pink">&lt; ${res.fillerFloat.toFixed(4)}</span>
+                </div>`;
+            }
+
+            let outcomesHtml = res.details.map(d => {
+                return `
+                <div class="outcome-row">
+                    <div style="flex:1;">
+                        <span class="${d.win ? 'tag-win' : 'tag-loss'}">${d.win ? 'WIN' : 'LOSS'}</span>
+                        <span style="color:#888;">${res.isST ? 'StatTrak™ ' : ''}${d.name} <span class="text-grey" style="font-size:0.75rem">${d.cond}</span></span>
+                    </div>
+                    <div class="text-end">
+                        <span class="text-grey me-2" style="font-size:0.75rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
+                        <span class="${d.win ? 'text-white' : 'text-grey'}">${d.val.toFixed(2)}€</span>
+                    </div>
+                </div>`;
+            }).join("");
+
+            html += `
+            <div class="result-card ${statusClass}">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div style="flex:1;">
+                        <div class="mb-1 d-flex align-items-center flex-wrap gap-1">
+                            <span class="text-grey me-1" style="font-size:0.8rem;">#${idx+1}</span>
+                            <span class="rarity-badge ${rarityClass}">${rarityShort}</span>
+                            <span class="badge-mode ms-1">${res.mode}</span>
+                            ${jackpotBadge}${stBadge}${saveBtnHtml}
+                        </div>
+                        <h5 class="mb-0 mt-2 text-white">${res.main}</h5>
+                        <p class="text-grey small mb-0">${res.col}</p>
+                    </div>
+                    <div class="text-end">
+                        <h3 class="${roiClass} mb-0">${res.roi.toFixed(2)}%</h3>
+                        <div class="text-grey" style="font-size:0.65rem; letter-spacing:1px; font-weight:600; margin-bottom:2px;">ROI</div>
+                        <div class="${oddsClass}" style="font-size:0.75rem; font-weight:600;">Odds: ${res.winChance.toFixed(1)}%</div>
+                    </div>
+                </div>
+                <div class="mt-3 p-3 rounded" style="background-color: var(--bg-input);">
+                    <div class="d-flex justify-content-between mb-1" style="font-size:0.8rem;">
+                        <span class="text-grey">MAIN (${res.mainCount}x)</span>
+                        <span class="text-white">${res.cond.replace('(','').replace(')','')}</span>
+                    </div>
+                    <div class="d-flex justify-content-between" style="font-size:0.8rem;">
+                        <span class="text-grey">MAX FLOAT</span>
+                        <span class="text-pink">&lt; ${res.maxFloat.toFixed(5)}</span>
+                    </div>
+                    ${fillerHtml}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3" style="font-size:0.8rem;">
+                    <div>
+                        <span class="text-grey">COST:</span> <span class="text-white fw-bold me-3">${res.cost.toFixed(2)}€</span>
+                        <span class="text-grey">EV:</span> <span class="text-green fw-bold">${res.exp.toFixed(2)}€</span>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <a class="expand-link" onclick="this.parentElement.nextElementSibling.style.display = this.parentElement.nextElementSibling.style.display==='block'?'none':'block'; return false;">
+                        VIEW OUTCOMES
+                    </a>
+                </div>
+                <div class="outcomes-container">
+                    ${outcomesHtml}
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function clearResults() {
+        document.getElementById('results-container').innerHTML = "";
+        document.getElementById('result-count').innerText = "0";
+        uniqueResults = {};
+    }
+</script>
+
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1b5ac9fbf9be4b04a5ba7a4739d5528f"}'></script>
+</body>
+</html>
