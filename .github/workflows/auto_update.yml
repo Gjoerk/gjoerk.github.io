@@ -1,21 +1,24 @@
 name: Täglicher Preis-Update Bot
 
-# Wann soll das Skript starten?
 on:
   schedule:
-    - cron: '0 4 * * *' # Jeden Tag um 04:00 Uhr nachts (Weltzeit)
-  workflow_dispatch: # Erlaubt es dir, das Update auf GitHub auch manuell per Knopfdruck zu starten
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+# GANZ WICHTIG: Das gibt dem Bot die Erlaubnis, die Datei hochzuladen!
+permissions:
+  contents: write
 
 jobs:
   update-prices:
-    runs-on: ubuntu-latest # Ein kleiner Linux-Server
+    runs-on: ubuntu-latest
 
     steps:
     - name: Repository herunterladen
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # Aktualisiert (Node.js Warnung behoben)
 
     - name: Python einrichten
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5 # Aktualisiert (Node.js Warnung behoben)
       with:
         python-version: '3.10'
 
@@ -26,7 +29,7 @@ jobs:
 
     - name: Python Skript ausführen
       env:
-        STEAMAPI_KEY: ${{ secrets.STEAMAPI_KEY }} # Holt den geheimen Key aus Schritt 2
+        STEAMAPI_KEY: ${{ secrets.STEAMAPI_KEY }}
       run: python price_update.py
 
     - name: Neue Preise auf GitHub speichern
@@ -34,6 +37,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Update Bot"
         git add prices_cache.json
-        # Verhindert einen Absturz, falls sich die Preise heute mal nicht geändert haben
-        git commit -m "🤖 Auto-Update: Neue Steam Preise geladen" || echo "Keine neuen Preise zum Hochladen."
-        git push
+        # Prüft, ob sich die Datei verändert hat. Wenn ja, wird sie hochgeladen. (Verhindert Fehler 128)
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-Update: Neue Steam Preise geladen" && git push)
