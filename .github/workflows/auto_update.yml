@@ -1,24 +1,23 @@
-name: Täglicher Preis-Update Bot
+name: Täglicher Daten-Update Bot
 
 on:
   schedule:
     - cron: '0 4 * * *'
   workflow_dispatch:
 
-# GANZ WICHTIG: Das gibt dem Bot die Erlaubnis, die Datei hochzuladen!
 permissions:
   contents: write
 
 jobs:
-  update-prices:
+  update-data:
     runs-on: ubuntu-latest
 
     steps:
     - name: Repository herunterladen
-      uses: actions/checkout@v4 # Aktualisiert (Node.js Warnung behoben)
+      uses: actions/checkout@v4
 
     - name: Python einrichten
-      uses: actions/setup-python@v5 # Aktualisiert (Node.js Warnung behoben)
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
@@ -27,15 +26,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
-    - name: Python Skript ausführen
+    - name: Datenbank aktualisieren (Skins)
+      run: python database_builder_api.py
+
+    - name: Preise aktualisieren (SteamAPIs)
       env:
         STEAMAPI_KEY: ${{ secrets.STEAMAPI_KEY }}
       run: python price_update.py
 
-    - name: Neue Preise auf GitHub speichern
+    - name: Neue Daten auf GitHub speichern
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Update Bot"
-        git add prices_cache.json
-        # Prüft, ob sich die Datei verändert hat. Wenn ja, wird sie hochgeladen. (Verhindert Fehler 128)
-        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-Update: Neue Steam Preise geladen" && git push)
+        git add prices_cache.json database.json
+        # Prüft, ob sich eine der beiden Dateien verändert hat. Wenn ja, werden sie hochgeladen.
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-Update: Neue Preise und Datenbank geladen" && git push)
