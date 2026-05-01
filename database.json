@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {
     "The Dead Hand Collection": [
         {
@@ -8694,8 +8694,8 @@
             "max": 0.8
         }
     ]
-=======
-{
+
+    {
     "The Dead Hand Collection": [
         {
             "name": "AK-47 | Crane Flight",
@@ -17390,5 +17390,4 @@
             "max": 0.8
         }
     ]
->>>>>>> 973658ed3fe07b25021ae7f6aba76798340c64f2
 }
