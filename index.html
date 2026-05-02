@@ -126,6 +126,30 @@
             color: #fff;
         }
 
+        /* INFO BUTTON */
+        .info-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--text-muted);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            font-family: serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .info-btn:hover {
+            color: var(--color-pink);
+            border-color: var(--color-pink);
+            box-shadow: 0 0 8px rgba(224, 86, 253, 0.4);
+        }
+
         /* --- BUY ME A COFFEE FLOATING BUTTON --- */
         .bmc-floating-button {
             position: fixed;
@@ -328,7 +352,10 @@
                     <strong>Error:</strong> Could not load database or prices. Please ensure JSON files are present.
                 </div>
 
-                <h6 class="text-white mb-4">ENGINE SETTINGS</h6>
+                <div class="d-flex align-items-center mb-4">
+                    <h6 class="text-white mb-0">ENGINE SETTINGS</h6>
+                    <button class="info-btn ms-2" data-bs-toggle="modal" data-bs-target="#settingsInfoModal" title="Explain Settings">i</button>
+                </div>
                 
                 <div class="row g-3 mb-3">
                     <div class="col-6">
@@ -446,6 +473,30 @@
     </div>
 </div>
 
+<div class="modal fade" id="settingsInfoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+                <h5 class="modal-title text-white fw-bold">Engine Settings Explained</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6;">
+                <p><strong class="text-pink">Budget (€):</strong> The maximum total cost you are willing to spend on the 10 input skins combined.</p>
+                
+                <p><strong class="text-pink">Min ROI (%):</strong> Return on Investment. <code>100%</code> means you break even. <code>110%</code> means you aim for a 10% average profit across all outcomes. The engine will only output trade-ups above this threshold.</p>
+                
+                <p><strong class="text-pink">Float Buffer:</strong> A safety margin for the floats. If an output skin needs a float < 0.15, and your buffer is <code>0.015</code>, the engine will only suggest input floats that result in an output of max <code>0.135</code>. This protects you against unavailable exact floats on the market.</p>
+                
+                <p><strong class="text-pink">Buy Factor:</strong> Multiplier for the input prices. Use <code>1.0</code> for direct market purchases. Use e.g. <code>0.9</code> if you use Buy Orders (buying at 90% of the normal price).</p>
+                
+                <p><strong class="text-pink">Sell Fee (%):</strong> The tax deducted when you sell the outcome skin. Steam takes 15% (enter <code>15.0</code>). Third-party sites usually take less (e.g. <code>5.0</code>).</p>
+                
+                <p><strong class="text-pink">Item Type & Rarities:</strong> Choose if you want to calculate StatTrak™ or normal items, and select the rarity tier of your inputs (the output will always be one tier higher).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     /* --- AUTO LOAD & SETTINGS --- */
     let savedTradeups = [];
@@ -465,14 +516,12 @@
     };
 
     function initSettings() {
-        // Dropdown "sort-results" zur Auto-Save Liste hinzugefügt
         const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor', 'sell-fee', 'sort-results'];
         fields.forEach(id => {
             const element = document.getElementById(id);
             const savedValue = localStorage.getItem(id);
             if (savedValue !== null) element.value = savedValue;
             
-            // Reagiert bei Input/Dropdown-Änderung und speichert es
             element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
             element.addEventListener('change', function() { localStorage.setItem(id, this.value); });
         });
@@ -907,7 +956,6 @@
         const countBadge = document.getElementById('result-count');
         if(!uniqueResults) return; 
         
-        // --- NEUE SORTIER-LOGIK ---
         let sortMethod = document.getElementById('sort-results').value;
         let results = Object.values(uniqueResults).sort((a, b) => {
             if (sortMethod === 'roi-desc') return b.roi - a.roi;
@@ -1021,6 +1069,8 @@
         uniqueResults = {};
     }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1b5ac9fbf9be4b04a5ba7a4739d5528f"}'></script>
 </body>
