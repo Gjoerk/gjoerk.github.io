@@ -66,7 +66,7 @@
             transition: all 0.2s;
         }
         
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: var(--color-pink) !important;
             background-color: #222 !important;
         }
@@ -413,9 +413,19 @@
         </div>
 
         <div class="col-lg-8">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-grey" style="font-size: 0.8rem; font-weight: 600;">RESULTS: <span id="result-count" class="text-white">0</span></span>
-                <button onclick="clearResults()" class="btn-outline">Clear</button>
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <span class="text-grey" style="font-size: 0.8rem; font-weight: 600; margin-top: 5px;">RESULTS: <span id="result-count" class="text-white">0</span></span>
+                <div class="d-flex gap-2">
+                    <select id="sort-results" class="form-select" style="width: auto; padding-top: 4px; padding-bottom: 4px; font-size: 0.75rem;" onchange="renderResults()">
+                        <option value="roi-desc" selected>Highest ROI</option>
+                        <option value="roi-asc">Lowest ROI</option>
+                        <option value="cost-asc">Lowest Cost</option>
+                        <option value="cost-desc">Highest Cost</option>
+                        <option value="buffer-asc">Lowest Float Buffer</option>
+                        <option value="buffer-desc">Highest Float Buffer</option>
+                    </select>
+                    <button onclick="clearResults()" class="btn-outline">Clear</button>
+                </div>
             </div>
             
             <div id="results-container">
@@ -455,12 +465,16 @@
     };
 
     function initSettings() {
-        const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor', 'sell-fee'];
+        // Dropdown "sort-results" zur Auto-Save Liste hinzugefügt
+        const fields = ['max-budget', 'min-roi', 'float-buffer', 'price-factor', 'sell-fee', 'sort-results'];
         fields.forEach(id => {
             const element = document.getElementById(id);
             const savedValue = localStorage.getItem(id);
             if (savedValue !== null) element.value = savedValue;
+            
+            // Reagiert bei Input/Dropdown-Änderung und speichert es
             element.addEventListener('input', function() { localStorage.setItem(id, this.value); });
+            element.addEventListener('change', function() { localStorage.setItem(id, this.value); });
         });
 
         const checkboxes = document.querySelectorAll('.config-checkbox');
@@ -892,7 +906,19 @@
         const container = document.getElementById('results-container');
         const countBadge = document.getElementById('result-count');
         if(!uniqueResults) return; 
-        let results = Object.values(uniqueResults).sort((a,b) => b.roi - a.roi);
+        
+        // --- NEUE SORTIER-LOGIK ---
+        let sortMethod = document.getElementById('sort-results').value;
+        let results = Object.values(uniqueResults).sort((a, b) => {
+            if (sortMethod === 'roi-desc') return b.roi - a.roi;
+            if (sortMethod === 'roi-asc') return a.roi - b.roi;
+            if (sortMethod === 'cost-asc') return a.cost - b.cost;
+            if (sortMethod === 'cost-desc') return b.cost - a.cost;
+            if (sortMethod === 'buffer-asc') return a.space - b.space; 
+            if (sortMethod === 'buffer-desc') return b.space - a.space;
+            return 0;
+        });
+        
         countBadge.innerText = results.length;
         container.innerHTML = "";
         if(results.length === 0) {
