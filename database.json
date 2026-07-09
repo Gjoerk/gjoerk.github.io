@@ -1,4 +1,108 @@
 {
+    "The Spy Tech Collection": [
+        {
+            "name": "AK-47 | AUTOEXEC",
+            "rarity": "Covert",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "AUG | Signal Scanner",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "AWP | Black Box",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "CZ75-Auto | Hydraulics",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "FAMAS | Corp Defense",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Glock-18 | Ghost Protocol",
+            "rarity": "Covert",
+            "min": 0.0,
+            "max": 0.9
+        },
+        {
+            "name": "M4A4 | Dark Operative",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "M4A1-S | Fatal Glitch",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MAC-10 | Video Cam",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MP7 | Base-2",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MP9 | Spy Prototype",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Nova | Smart Gun",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "R8 Revolver | Monarch",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "SCAR-20 | Arctic Camo Panels",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Tec-9 | Perimeter",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "USP-S | Spiral Glitch",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "XM1014 | Black Site",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        }
+    ],
     "The Dead Hand Collection": [
         {
             "name": "AK-47 | Crane Flight",
@@ -202,6 +306,110 @@
         },
         {
             "name": "XM1014 | Mockingbird",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        }
+    ],
+    "The Arabesque Collection": [
+        {
+            "name": "AK-47 | Consequence of the Jinn",
+            "rarity": "Covert",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "AUG | Lapis Lazuli",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "AWP | Sovereign Flame",
+            "rarity": "Covert",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "PP-Bizon | Traitor",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Desert Eagle | Eastern Enigma",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Dual Berettas | Mystic Conjunction",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "FAMAS | Snake Song",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Five-SeveN | Desert Seal",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Glock-18 | Ifrit Lattice",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "M4A4 | Falak",
+            "rarity": "Classified",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MAC-10 | Arabesque Mosaic",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "MP9 | Dune Asp",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Nova | Morning Sun",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "P250 | Lotus Imprint",
+            "rarity": "Restricted",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Sawed-Off | Lunar Wyrm",
+            "rarity": "Mil-Spec Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "SCAR-20 | Sirocco Script",
+            "rarity": "Industrial Grade",
+            "min": 0.0,
+            "max": 1.0
+        },
+        {
+            "name": "Tec-9 | Sultan",
             "rarity": "Mil-Spec Grade",
             "min": 0.0,
             "max": 1.0
