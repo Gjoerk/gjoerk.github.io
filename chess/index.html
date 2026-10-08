@@ -817,6 +817,42 @@ body { min-height: 100vh; min-height: 100dvh; }
 .gdots i.c-blunder { background: #FF1A0A; } .gdots i.c-mistake { background: #FF8000; } .gdots i.c-miss { background: #FF2D55; }
 .gdots i.c-brilliant { background: #00C2B8; } .gdots i.c-great { background: #1E7BFF; }
 
+/* ---------- boards: coordinates inside the squares, left edge on the header's line ---------- */
+.board-frame .ranks, .board-frame .files { display: none; }
+.board-frame { grid-template-columns: minmax(0, 1fr) 22px; grid-template-rows: auto; column-gap: 8px; }
+.board-frame #board { grid-column: 1; grid-row: 1; }
+.board-frame .evalbar { grid-column: 2; grid-row: 1; }
+.sq .cr, .sq .cf { position: absolute; font: 700 11px/1 var(--font-body); pointer-events: none; z-index: 1; color: #6f8eaa; }
+.sq.d .cr, .sq.d .cf { color: #eef3f7; }
+.sq .cr { left: 4%; top: 4%; } .sq .cf { right: 5%; bottom: 3%; }
+@media (min-width: 901px) {
+  body.training .wrap { max-width: 1080px; }
+  body.training .trainer { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); gap: 28px 36px; }
+  body.training .board-col { justify-items: start; }
+  body.training .board-frame { margin: 0; max-width: min(100%, calc(100vh - 150px)); }
+  body.training .ctrl-row { justify-content: flex-start; }
+}
+@media (max-width: 900px) {
+  body.training .board-frame { max-width: 100%; column-gap: 5px; grid-template-columns: minmax(0, 1fr) 10px; }
+  body.training .board-frame:has(.evalbar.off) { grid-template-columns: minmax(0, 1fr); }
+  body.training .board-frame:has(.evalbar.off) .evalbar { display: none; }
+  body.training .evalbar b { display: none; }
+}
+@media (max-width: 560px) {
+  body.training { padding-inline: 10px; }
+  .sq .cr, .sq .cf { font-size: 9px; }
+}
+/* feature boards are buttons now */
+button.feature-board { display: block; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; }
+button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offset: 6px; border-radius: 12px; }
+/* tool header on phones: back button, then a scrollable row of pills */
+@media (max-width: 700px) {
+  .tool-head { flex-wrap: wrap; gap: 10px; }
+  .tool-head .pills { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tool-head .pills::-webkit-scrollbar { display: none; }
+  .tool-head .pills button { flex: none; padding: 9px 13px; }
+}
+
 </style>
 
 <div class="wrap">
@@ -1181,6 +1217,9 @@ class Board {
       const f = FILES.indexOf(sq[0]), r = +sq[1] - 1;
       c.className = 'sq' + ((f + r) % 2 === 0 ? ' d' : '');
       c.dataset.sq = sq;
+      c.querySelectorAll('.cr, .cf').forEach(n => n.remove());
+      if (x === 0) c.insertAdjacentHTML('afterbegin', `<span class="cr" aria-hidden="true">${sq[1]}</span>`);
+      if (y === 7) c.insertAdjacentHTML('afterbegin', `<span class="cf" aria-hidden="true">${sq[0]}</span>`);
     });
     const w = this.orient === 'w';
     if (this.opts.ranks) this.opts.ranks.innerHTML = [...Array(8)].map((_, y) => `<span>${w ? 8 - y : y + 1}</span>`).join('');
@@ -1605,7 +1644,7 @@ function featureSections() {
   const pz = PUZZLES.length ? PUZZLES[Math.floor(PUZZLES.length / 2)] : null;
   const sec = (id, kicker, title, text, board, stats, buttons) => `
     <section class="feature" id="${id}">
-      <div class="feature-board"><div class="tilt">${board}</div></div>
+      <button type="button" class="feature-board" data-go="${id.replace('sec-', '')}" aria-label="Open ${kicker}"><div class="tilt">${board}</div></button>
       <p class="side-label">${kicker}</p>
       <h2>${title}</h2>
       <p class="sub">${text}</p>
@@ -1655,7 +1694,7 @@ function renderHome() {
     ${featureSections()}
     <section class="openings" id="openings">
       <div class="feature feature-open">
-        <div class="feature-board"><div class="tilt">${thumbBoard(OP.italian.sigFen, 'w', 'f1c4')}</div></div>
+        <button type="button" class="feature-board" id="openFeature" aria-label="Show the openings"><div class="tilt">${thumbBoard(OP.italian.sigFen, 'w', 'f1c4')}</div></button>
         <p class="side-label">Opening trainer</p>
       </div>
       <div class="sec-head"><h2>${OPENINGS.length === 16 ? 'Sixteen' : OPENINGS.length} openings. Every line explained.</h2><p class="sub">${learnedAll ? `${learnedAll} of ${ALL_LINES.length} lines learned so far.` : 'Pick one to learn its lines, or explore it move by move.'}</p></div>
@@ -1673,6 +1712,7 @@ function renderHome() {
   $('#heroBrowse').onclick = () => go({ name: 'puzzles' });
   if (current.scrollTo) { const t = $('#' + current.scrollTo); current.scrollTo = null; if (t) setTimeout(() => t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 50); }
   $$('[data-go]').forEach(b => b.onclick = () => go({ name: b.dataset.go }));
+  $('#openFeature') && ($('#openFeature').onclick = () => $('#openings .side')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }));
   Pawn.mount($('#stage'));
 }
 
