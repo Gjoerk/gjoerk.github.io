@@ -862,6 +862,13 @@ button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offs
 .back { border: 0; padding: 0 2px; height: auto; background: none; color: var(--fg-2); }
 .back:hover { background: none; color: var(--fg); }
 
+.pop-stats { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 4px 0 0; }
+.pop-stats div { min-width: 84px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, .03); }
+.pop-stats dt { font-size: 11px; color: var(--fg-3); letter-spacing: .04em; }
+.pop-stats dd { margin: 2px 0 0; font: 600 20px/1.1 var(--font-display); }
+.pop-card.good { border-color: rgba(111, 219, 159, .45); }
+.pop-card.good h3 { color: #9BE8BD; }
+
 </style>
 
 <div class="wrap">
@@ -1559,7 +1566,7 @@ function confetti() {
   c.hidden = false;
   const ctx = c.getContext('2d');
   const W = c.width = innerWidth * devicePixelRatio, H = c.height = innerHeight * devicePixelRatio;
-  const cols = ['#7a9bb6', '#dce6ed', '#ffffff', '#a6c4dc', '#e2c27a', '#4f6f8c'];
+  const cols = ['#9CCBFF', '#dce6ed', '#ffffff', '#a6c4dc', '#6FDB9F', '#5E8FE0'];
   const ps = Array.from({ length: 140 }, () => ({
     x: W / 2 + (Math.random() - 0.5) * W * 0.3, y: H * 0.35, vx: (Math.random() - 0.5) * 22 * devicePixelRatio,
     vy: (-Math.random() * 18 - 6) * devicePixelRatio, s: (5 + Math.random() * 7) * devicePixelRatio, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, c: cols[Math.floor(Math.random() * cols.length)],
@@ -2334,48 +2341,46 @@ const Trainer = {
     $('#restartBtn').onclick = () => { this.combo = 0; this.resetLine(); };
     $('#flipBtn').onclick = () => { this.board.setOrientation(this.board.orient === 'w' ? 'b' : 'w'); setEvalBar(this.game.fen(), this.board.orient); };
   },
+  /** Show a result card over the board. buttons: [[id, label, primary?, handler]] */
+  boardPop({ kicker, title, text, stats, buttons, tone }) {
+    $('#boardPop')?.remove();
+    const tally = stats ? `<dl class="pop-stats">${stats.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : '';
+    $('#board').insertAdjacentHTML('beforeend', `<div class="board-pop" id="boardPop" role="dialog" aria-labelledby="popTitle">
+      <div class="pop-card${tone ? ' ' + tone : ''}">${kicker ? `<p class="kicker">${esc(kicker)}</p>` : ''}<h3 id="popTitle">${title}</h3>
+        ${text ? `<p>${esc(text)}</p>` : ''}${tally}
+        <div class="pop-btns">${buttons.map(([id, label, primary]) => `<button class="btn ${primary ? 'sky' : ''}" id="${id}">${label}</button>`).join('')}</div></div></div>`);
+    for (const [id, , , fn] of buttons) $('#' + id).onclick = () => { $('#boardPop')?.remove(); fn(); };
+    $('#' + buttons[0][0]).focus({ preventScroll: true });
+  },
   renderCoach() {
     const box = $('#coachBox');
     const c = this.coach, d = this.doneState;
-    const tally = items => `<dl class="tally">${items.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+    const side = (t, x) => `<div class="coach"><h3 class="coach-title">${t}</h3><p class="coach-text">${x}</p></div>`;
     if (d && d.session) {
       const n = this.results.length, p = this.results.filter(r => r.perfect).length;
-      box.innerHTML = `<div class="coach good">
-        <h3 class="coach-title">Session complete</h3>
-        ${tally([['Lines', n], ['Perfect', p]])}
-        <div class="actions"><button class="btn primary" id="doneBack">Done</button></div></div>`;
-      $('#doneBack').onclick = () => go(this.session.back);
+      box.innerHTML = side('Session complete', 'Nice work. Your lines are scheduled for review.');
+      this.boardPop({ kicker: this.session.title, title: 'Session complete', tone: 'good', stats: [['Lines', n], ['Perfect', p]],
+        buttons: [['doneBack', 'Done', true, () => go(this.session.back)]] });
       return;
     }
     if (d && d.study) {
-      box.innerHTML = `<div class="coach"><h3 class="coach-title">Line watched</h3><p class="coach-text">Choose on the board: watch it again or play it from memory.</p></div>`;
-      $('#boardPop')?.remove();
-      $('#board').insertAdjacentHTML('beforeend', `<div class="board-pop" id="boardPop" role="dialog" aria-labelledby="popTitle">
-        <div class="pop-card"><p class="kicker">${esc(this.line.name)}</p><h3 id="popTitle">Now from memory</h3>
-          <p>Same line, no arrows. Can you play every move?</p>
-          <div class="pop-btns"><button class="btn sky" id="recallBtn">Test my memory</button><button class="btn" id="againBtn">Watch again</button></div></div></div>`);
-      $('#recallBtn').onclick = () => { $('#boardPop')?.remove(); this.phase = 'recall'; this.resetLine(); };
-      $('#againBtn').onclick = () => { $('#boardPop')?.remove(); this.resetLine(); };
-      $('#recallBtn').focus({ preventScroll: true });
+      box.innerHTML = side('Line watched', 'Choose on the board: watch it again or play it from memory.');
+      this.boardPop({ kicker: this.line.name, title: 'Now from memory', text: 'Same line, no arrows. Can you play every move?',
+        buttons: [['recallBtn', 'Test my memory', true, () => { this.phase = 'recall'; this.resetLine(); }], ['againBtn', 'Watch again', false, () => this.resetLine()]] });
       return;
     }
     if (d && d.retry) {
-      box.innerHTML = `<div class="coach gold">
-        <h3 class="coach-title">${d.okCount} of ${d.total} from memory</h3>
-        <p class="coach-text">Play it once without a mistake to lock it in.</p>
-        <div class="actions"><button class="btn primary" id="retryBtn">Try again</button></div></div>`;
-      $('#retryBtn').onclick = () => { this.attempt++; this.resetLine(); };
+      box.innerHTML = side(`${d.okCount} of ${d.total} from memory`, 'One more clean run locks the line in.');
+      this.boardPop({ kicker: this.line.name, title: `${d.okCount} of ${d.total} from memory`, text: 'Play it once without a mistake to lock it in.',
+        buttons: [['retryBtn', 'Try again', true, () => { this.attempt++; this.resetLine(); }], ['watchBtn', 'Watch again', false, () => { this.phase = 'study'; this.resetLine(); }]] });
       return;
     }
     if (d && d.st) {
       const last = this.idx + 1 >= this.session.items.length;
-      box.innerHTML = `<div class="coach ${d.perfect ? 'good' : 'gold'}">
-        <h3 class="coach-title">${d.perfect ? 'Perfect line' : 'Line complete'}</h3>
-        ${tally([['Correct', `${d.okCount}/${d.total}`], ['Mistakes', this.mistakes], ['Review', nextReviewText(d.st)]])}
-        <div class="actions"><button class="btn primary" id="nextBtn">${last ? 'Finish' : 'Next line'}</button><button class="btn" id="repeatBtn">Repeat</button></div></div>`;
-      $('#nextBtn').onclick = () => this.next();
-      $('#repeatBtn').onclick = () => { this.phase = 'recall'; this.resetLine(); };
-      $('#nextBtn').focus({ preventScroll: true });
+      box.innerHTML = side(d.perfect ? 'Perfect line' : 'Line complete', `Next review ${nextReviewText(d.st)}.`);
+      this.boardPop({ kicker: this.line.name, title: d.perfect ? 'Perfect line' : 'Line complete', tone: d.perfect ? 'good' : '',
+        stats: [['Correct', `${d.okCount}/${d.total}`], ['Mistakes', this.mistakes], ['Review', nextReviewText(d.st)]],
+        buttons: [['nextBtn', last ? 'Finish' : 'Next line', true, () => this.next()], ['repeatBtn', 'Repeat', false, () => { this.phase = 'recall'; this.resetLine(); }]] });
       return;
     }
     const mineLabel = { ok: '', hint: '', miss: '' };
@@ -3055,6 +3060,7 @@ const Puzzles = {
   },
   load(idx) {
     clearTimeout(this.timer);
+    $('#boardPop')?.remove();
     const [fen, moves, rating, themes] = PUZZLES[idx];
     this.idx = idx; this.rating = rating; this.themes = themes.split(' ');
     this.sol = moves.split(' ');
@@ -3186,6 +3192,11 @@ const Puzzles = {
           : `<button class="btn" id="pHint" ${this.state !== 'play' || this.hinted ? 'disabled' : ''}>Hint</button><button class="btn" id="pShow" ${this.state === 'intro' ? 'disabled' : ''}>Show solution</button><button class="btn" id="pSkip">Skip</button>`}</div></div>
       <dl class="bigstat"><div><dt>Solved</dt><dd>${P.solved}</dd></div><div><dt>Played</dt><dd>${P.played}</dd></div><div><dt>Success</dt><dd>${P.played ? Math.round(P.solved / P.played * 100) : 0}%</dd></div></dl>
       ${line.length ? `<section class="sect"><div class="sheet">${line.map((s, i) => `<div class="m ${i % 2 === 0 ? 'ok' : ''}">${esc(s)}</div>`).join('')}</div></section>` : ''}`;
+    if (done && !$('#boardPop')) {
+      Trainer.boardPop.call(this, { kicker: `Puzzle ${this.rating}`, title: esc(this.msg.t), text: this.msg.s, tone: this.msg.ok ? 'good' : '',
+        stats: this.delta != null ? [['Rating', P.rating], ['Change', (this.delta >= 0 ? '+' : '') + this.delta]] : null,
+        buttons: [['popNext', 'Next puzzle', true, () => this.load(this.pick())], ['popRetry', 'Retry', false, () => this.load(this.idx)]] });
+    }
     $('#pNext') && ($('#pNext').onclick = () => this.load(this.pick()));
     $('#pRetry') && ($('#pRetry').onclick = () => this.load(this.idx));
     $('#pHint') && ($('#pHint').onclick = () => this.hint());
