@@ -796,6 +796,24 @@ body { min-height: 100vh; min-height: 100dvh; }
 .varline button { white-space: nowrap; }
 .load-stage { -webkit-mask-image: radial-gradient(closest-side, #000 60%, transparent); mask-image: radial-gradient(closest-side, #000 60%, transparent); }
 
+/* back buttons line up with the header's left edge */
+#view > .back, .tool-head { margin-left: max(0px, calc((100% - 1080px) / 2)); }
+.tool-head { max-width: 1080px; }
+/* breathing room around the game filters */
+.lib-tools { margin: 14px 0 6px; }
+/* rating chart hover */
+.spark-wrap { position: relative; cursor: crosshair; }
+.spark-dot { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--sky); box-shadow: 0 0 0 3px rgba(156, 203, 255, .3); transform: translate(-50%, -50%); pointer-events: none; }
+.spark-tip { position: absolute; bottom: calc(100% + 6px); transform: translateX(-50%); display: grid; gap: 2px; padding: 8px 12px; border-radius: 12px; background: #16181d; border: 1px solid var(--line-2); box-shadow: 0 10px 24px rgba(0, 0, 0, .5); white-space: nowrap; pointer-events: none; font-size: 13px; z-index: 5; }
+.spark-tip b { font: 600 18px/1.1 var(--font-display); }
+.spark-tip span { color: var(--fg-3); font-size: 12px; }
+.spark-tip .up, .spark-tip .down { font-size: 13px; font-weight: 600; } .spark-tip .up { color: var(--good); } .spark-tip .down { color: var(--bad); }
+.spark-tip.right { transform: translateX(-100%); } .spark-tip.left { transform: none; }
+/* saturated dots on the evaluation graph */
+.gdots i { width: 10px; height: 10px; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0, 0, 0, .5); }
+.gdots i.c-blunder { background: #FF1A0A; } .gdots i.c-mistake { background: #FF8000; } .gdots i.c-miss { background: #FF2D55; }
+.gdots i.c-brilliant { background: #00C2B8; } .gdots i.c-great { background: #1E7BFF; }
+
 </style>
 
 <div class="wrap">
@@ -1223,11 +1241,21 @@ class Board {
     if (!this.drawnSvg) return;
     let html = '';
     for (const sq of this.userMarks) { const { x, y } = this.xy(sq); html += `<rect x="${x}" y="${y}" width="1" height="1" fill="rgba(235,70,60,.55)"/>`; }
+    const col = 'rgba(235,95,60,.85)', w = .17;
+    const head = (x2, y2, ux, uy) => { const hb = .44, bx = x2 - ux * hb, by = y2 - uy * hb, nx = -uy, ny = ux; return { bx, by, poly: `<polygon points="${x2},${y2} ${bx + nx * .26},${by + ny * .26} ${bx - nx * .26},${by - ny * .26}" fill="${col}"/>` }; };
     for (const a of this.userArrows) {
       const p = this.xy(a.from), q = this.xy(a.to);
-      const x1 = p.x + .5, y1 = p.y + .5, x2 = q.x + .5, y2 = q.y + .5, dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, hb = .44;
-      const bx = x2 - ux * hb, by = y2 - uy * hb, nx = -uy, ny = ux;
-      html += `<line x1="${x1 + ux * .2}" y1="${y1 + uy * .2}" x2="${bx}" y2="${by}" stroke="rgba(235,95,60,.85)" stroke-width=".17" stroke-linecap="round"/><polygon points="${x2},${y2} ${bx + nx * .26},${by + ny * .26} ${bx - nx * .26},${by - ny * .26}" fill="rgba(235,95,60,.85)"/>`;
+      const x1 = p.x + .5, y1 = p.y + .5, x2 = q.x + .5, y2 = q.y + .5, dx = x2 - x1, dy = y2 - y1;
+      if ((Math.abs(dx) === 1 && Math.abs(dy) === 2) || (Math.abs(dx) === 2 && Math.abs(dy) === 1)) {
+        // knight move: go two squares straight, then turn 90 degrees for the last square
+        const cx = Math.abs(dy) === 2 ? x1 : x2, cy = Math.abs(dy) === 2 ? y2 : y1;
+        const ux = Math.sign(x2 - cx), uy = Math.sign(y2 - cy), sx = Math.sign(cx - x1), sy = Math.sign(cy - y1);
+        const h = head(x2, y2, ux, uy);
+        html += `<path d="M${x1 + sx * .2} ${y1 + sy * .2} L${cx} ${cy} L${h.bx} ${h.by}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>${h.poly}`;
+        continue;
+      }
+      const L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, h = head(x2, y2, ux, uy);
+      html += `<line x1="${x1 + ux * .2}" y1="${y1 + uy * .2}" x2="${h.bx}" y2="${h.by}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>${h.poly}`;
     }
     this.drawnSvg.innerHTML = html;
   }
@@ -3339,15 +3367,17 @@ const Analysis = {
     const mine = games.map(g => ({ g, side: GameLib.side(g, me) })).map(x => ({ ...x, out: GameLib.outcome(x.g, x.side) }));
     const W = mine.filter(x => x.out === 'win').length, D = mine.filter(x => x.out === 'draw').length, L = mine.filter(x => x.out === 'loss').length, N = W + D + L || 1;
     // rating history from the Elo tags, oldest first
-    const hist = mine.filter(x => x.side).map(x => ({ r: x.side === 'w' ? x.g.welo : x.g.belo, c: GameLib.timeClass(x.g.tc) })).filter(x => x.r).reverse();
+    const hist = mine.filter(x => x.side).map(x => ({ r: x.side === 'w' ? x.g.welo : x.g.belo, c: GameLib.timeClass(x.g.tc), d: fmtDate(x.g.date), out: x.out, opp: x.side === 'w' ? x.g.black : x.g.white })).filter(x => x.r).reverse();
     const mainClass = Object.entries(hist.reduce((a, h) => (a[h.c] = (a[h.c] || 0) + 1, a), {})).sort((a, b) => b[1] - a[1])[0]?.[0];
-    const series = hist.filter(h => h.c === mainClass).map(h => h.r);
+    const sHist = hist.filter(h => h.c === mainClass), series = sHist.map(h => h.r);
     const latest = series[series.length - 1];
     let spark = '';
     if (series.length > 1) {
       const lo = Math.min(...series), hi = Math.max(...series), span = hi - lo || 1;
       const pts = series.map((r, i) => `${(i / (series.length - 1) * 300).toFixed(1)},${(58 - (r - lo) / span * 52).toFixed(1)}`);
-      spark = `<svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none" aria-label="Rating history"><path d="M0,64 L${pts.join(' L')} L300,64 Z" fill="rgba(156,203,255,.12)"/><polyline points="${pts.join(' ')}" fill="none" stroke="#9CCBFF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
+      spark = `<div class="spark-wrap" id="sparkWrap"><svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none" aria-label="Rating history"><path d="M0,64 L${pts.join(' L')} L300,64 Z" fill="rgba(156,203,255,.12)"/><polyline points="${pts.join(' ')}" fill="none" stroke="#9CCBFF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+        <i class="spark-dot" id="sparkDot" hidden></i><div class="spark-tip" id="sparkTip" hidden></div></div>`;
+      this.sparkData = sHist.map((h, i) => ({ ...h, x: i / (series.length - 1), y: (58 - (h.r - lo) / span * 52) / 64 }));
     }
     const ops = Object.entries(games.reduce((a, g) => { if (g.opening) { const k = g.opening.split(':')[0].split(',')[0].trim(); a[k] = (a[k] || 0) + 1; } return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 5);
     const f = this.filter || 'all';
@@ -3374,6 +3404,19 @@ const Analysis = {
           <span class="go" aria-hidden="true">Analyse →</span></button>`;
       }).join('') : '<p class="muted" style="padding:18px">No games in this filter.</p>'}</div>
       ${mine.length > 60 && shown.length === 60 ? '<p class="muted" style="text-align:center">Showing your 60 most recent games.</p>' : ''}`;
+    const sw = $('#sparkWrap');
+    if (sw) {
+      const D = this.sparkData, dot = $('#sparkDot'), tip = $('#sparkTip');
+      sw.onpointermove = e => {
+        const r = sw.getBoundingClientRect(), i = Math.round((e.clientX - r.left) / r.width * (D.length - 1)), p = D[Math.max(0, Math.min(D.length - 1, i))];
+        dot.hidden = tip.hidden = false;
+        dot.style.left = tip.style.left = (p.x * 100) + '%'; dot.style.top = (p.y * 100) + '%';
+        tip.classList.toggle('right', p.x > .8); tip.classList.toggle('left', p.x < .2);
+        const prev = D[D.indexOf(p) - 1], d = prev ? p.r - prev.r : 0;
+        tip.innerHTML = `<b>${p.r}</b>${prev ? ` <span class="${d >= 0 ? 'up' : 'down'}">${d >= 0 ? '+' : ''}${d}</span>` : ''}<span>${esc(p.d)}${p.out ? ' · ' + (p.out === 'win' ? 'Win' : p.out === 'loss' ? 'Loss' : 'Draw') : ''} vs ${esc(p.opp)}</span>`;
+      };
+      sw.onpointerleave = () => { dot.hidden = tip.hidden = true; };
+    }
     $('#whoSel').onchange = e => { GameLib.setMe(e.target.value); this.renderLibrary(GameLib.load()); };
     bindPills('gFilter', k => { this.filter = k; this.renderLibrary(GameLib.load()); });
     $('#libClear').onclick = () => {
