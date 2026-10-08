@@ -849,6 +849,19 @@ button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offs
   .tool-head .pills button { flex: none; padding: 9px 13px; }
 }
 
+/* "Now from memory" popup over the board */
+.board-pop { position: absolute; inset: 0; z-index: 30; display: grid; place-items: center; padding: 6%; background: rgba(8, 9, 10, .55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); animation: popfade .3s var(--ease); }
+.pop-card { display: grid; gap: 10px; justify-items: center; text-align: center; max-width: 360px; padding: 24px 26px; border-radius: 22px; background: rgba(17, 18, 22, .94); border: 1px solid rgba(156, 203, 255, .3); box-shadow: 0 24px 60px rgba(0, 0, 0, .6); animation: popin .35s var(--ease); }
+.pop-card h3 { margin: 0; font: 600 26px/1.15 var(--font-hero); letter-spacing: -.03em; }
+.pop-card p { margin: 0; color: var(--fg-2); }
+.pop-card .kicker { color: var(--sky); }
+.pop-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+@keyframes popfade { from { opacity: 0; } }
+@keyframes popin { from { transform: translateY(8px) scale(.97); } }
+/* back buttons: text only */
+.back { border: 0; padding: 0 2px; height: auto; background: none; color: var(--fg-2); }
+.back:hover { background: none; color: var(--fg); }
+
 </style>
 
 <div class="wrap">
@@ -862,7 +875,7 @@ button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offs
       </svg>
       <span class="wordmark"><b>Chess</b><span>Companion</span></span>
     </button>
-    <nav class="links" id="mainLinks" aria-label="Main"><button type="button" data-view="analysis" id="hdrAnalysis">Analysis</button><button type="button" data-view="puzzles" id="hdrPuzzles">Puzzles</button><button type="button" data-view="coords" id="hdrCoords">Coordinates</button><button type="button" data-view="home" id="hdrOpenings">Openings</button><button type="button" id="hdrReview">Review</button></nav>
+    <nav class="links" id="mainLinks" aria-label="Main"><button type="button" data-view="analysis" id="hdrAnalysis">Analysis</button><button type="button" data-view="puzzles" id="hdrPuzzles">Puzzles</button><button type="button" data-view="coords" id="hdrCoords">Coordinates</button><button type="button" data-view="home" id="hdrOpenings">Openings</button></nav>
     <div class="nav-r"><button class="burger" type="button" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mainLinks"><span></span><span></span><span></span></button></div>
   </header>
   <main id="view"></main>
@@ -1728,7 +1741,7 @@ function renderOpening(op) {
     const stage = rec ? Math.min(rec.stage, 5) : 0;
     const segs = [0, 1, 2, 3, 4].map(n => `<i${n < stage ? (stage >= 4 ? ' class="strong"' : ' class="on"') : ''}></i>`).join('');
     const label = { new: 'Not learned yet', due: 'Due now', learning: 'Review ' + dueLabel(l.id), strong: 'Strong · review ' + dueLabel(l.id) }[st];
-    return `<li><article class="card line-card">
+    return `<li><article class="card line-card" data-line="${l.id}" title="Learn this line">
       <div class="tilt">${thumbBoard(g.fen(), op.side, key[1])}</div>
       <div class="txt">
         <span class="move">${l.trap ? 'Trap' : 'Line'} ${String(i + 1).padStart(2, '0')} · ${esc(sanAt(k, key[0]))}</span>
@@ -1780,6 +1793,7 @@ function renderOpening(op) {
   $('#exploreBtn').onclick = () => Explorer.start(op);
   $('#analyzeBtn').onclick = () => Explorer.start(op, { free: true, load: true });
   $('#learnTrapsBtn') && ($('#learnTrapsBtn').onclick = () => Trainer.start({ title: op.name + ' traps', back: { name: 'opening', id: op.id }, items: trapsNew.map(l => ({ lineId: l.id, mode: 'learn' })) }));
+  $$('.line-card').forEach(c => c.onclick = e => { if (!e.target.closest('button')) Trainer.start({ title: op.name, back: { name: 'opening', id: op.id }, items: [{ lineId: c.dataset.line, mode: 'learn' }] }); });
   $$('[data-learn]').forEach(b => b.onclick = () => Trainer.start({ title: op.name, back: { name: 'opening', id: op.id }, items: [{ lineId: b.dataset.learn, mode: 'learn' }] }));
   $$('[data-drill]').forEach(b => b.onclick = () => Trainer.start({ title: op.name, back: { name: 'opening', id: op.id }, items: [{ lineId: b.dataset.drill, mode: 'drill' }] }));
 }
@@ -1970,6 +1984,7 @@ const Trainer = {
     this.resetLine();
   },
   resetLine() {
+    $('#boardPop')?.remove();
     clearTimeout(this.timer);
     this.game = new Chess();
     this.ply = 0;
@@ -2333,12 +2348,15 @@ const Trainer = {
       return;
     }
     if (d && d.study) {
-      box.innerHTML = `<div class="coach gold">
-        <h3 class="coach-title">Now from memory</h3>
-        <p class="coach-text">Same line, no arrows.</p>
-        <div class="actions"><button class="btn primary" id="recallBtn">Start</button><button class="btn" id="againBtn">Watch again</button></div></div>`;
-      $('#recallBtn').onclick = () => { this.phase = 'recall'; this.resetLine(); };
-      $('#againBtn').onclick = () => this.resetLine();
+      box.innerHTML = `<div class="coach"><h3 class="coach-title">Line watched</h3><p class="coach-text">Choose on the board: watch it again or play it from memory.</p></div>`;
+      $('#boardPop')?.remove();
+      $('#board').insertAdjacentHTML('beforeend', `<div class="board-pop" id="boardPop" role="dialog" aria-labelledby="popTitle">
+        <div class="pop-card"><p class="kicker">${esc(this.line.name)}</p><h3 id="popTitle">Now from memory</h3>
+          <p>Same line, no arrows. Can you play every move?</p>
+          <div class="pop-btns"><button class="btn sky" id="recallBtn">Test my memory</button><button class="btn" id="againBtn">Watch again</button></div></div></div>`);
+      $('#recallBtn').onclick = () => { $('#boardPop')?.remove(); this.phase = 'recall'; this.resetLine(); };
+      $('#againBtn').onclick = () => { $('#boardPop')?.remove(); this.resetLine(); };
+      $('#recallBtn').focus({ preventScroll: true });
       return;
     }
     if (d && d.retry) {
@@ -3770,7 +3788,6 @@ function jumpTo(id) {
   } else { go({ name: 'home', scrollTo: id }); }
 }
 $('#hdrOpenings').onclick = () => jumpTo('openings');
-$('#hdrReview').onclick = () => startReview();
 $('#hdrAnalysis').onclick = () => jumpTo('sec-analysis');
 $('#hdrPuzzles').onclick = () => jumpTo('sec-puzzles');
 $('#hdrCoords').onclick = () => jumpTo('sec-coords');
