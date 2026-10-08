@@ -3206,11 +3206,6 @@ const Puzzles = {
           : `<button class="btn" id="pHint" ${this.state !== 'play' || this.hinted ? 'disabled' : ''}>Hint</button><button class="btn" id="pShow" ${this.state === 'intro' ? 'disabled' : ''}>Show solution</button><button class="btn" id="pSkip">Skip</button>`}</div></div>
       <dl class="bigstat"><div><dt>Solved</dt><dd>${P.solved}</dd></div><div><dt>Played</dt><dd>${P.played}</dd></div><div><dt>Success</dt><dd>${P.played ? Math.round(P.solved / P.played * 100) : 0}%</dd></div></dl>
       ${line.length ? `<section class="sect"><div class="sheet">${line.map((s, i) => `<div class="m ${i % 2 === 0 ? 'ok' : ''}">${esc(s)}</div>`).join('')}</div></section>` : ''}`;
-    if (done && !$('#boardPop')) {
-      Trainer.boardPop.call(this, { kicker: `Puzzle ${this.rating}`, title: esc(this.msg.t), text: this.msg.s, tone: this.msg.ok ? 'good' : '',
-        stats: this.delta != null ? [['Rating', P.rating], ['Change', (this.delta >= 0 ? '+' : '') + this.delta]] : null,
-        buttons: [['popNext', 'Next puzzle', true, () => this.load(this.pick())], ['popRetry', 'Retry', false, () => this.load(this.idx)]] });
-    }
     $('#pNext') && ($('#pNext').onclick = () => this.load(this.pick()));
     $('#pRetry') && ($('#pRetry').onclick = () => this.load(this.idx));
     $('#pHint') && ($('#pHint').onclick = () => this.hint());
