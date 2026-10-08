@@ -1069,54 +1069,67 @@ const Sound = {
     src.connect(f).connect(g).connect(c.destination);
     src.start();
   },
-  /**
-   * A wooden piece set down on a board, made the way modal synthesis models a struck wooden bar:
-   * a sub-millisecond click excites a few short resonances (the piece) over a low, quick thump (the board).
-   * The buffers are rendered once, so every move sounds the same.
-   */
-  woodBuffer(kind) {
-    const c = this.ctx, sr = c.sampleRate, len = Math.floor(sr * 0.18), buf = c.createBuffer(1, len, sr), d = buf.getChannelData(0);
-    let seed = kind === 'capture' ? 7 : 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647 - 0.5;
-    const hit = (t0, base, gain) => {
-      // piece resonances: inharmonic partials of a short wooden bar, higher ones dying faster
-      const modes = [[1, 1, 0.034], [2.32, 0.55, 0.018], [4.25, 0.32, 0.010], [6.6, 0.16, 0.006]];
-      const board = [[base * 0.19, 0.9, 0.022]];
-      const n0 = Math.floor(t0 * sr);
-      for (let i = n0; i < len; i++) {
-        const t = (i - n0) / sr;
-        let v = 0;
-        for (const [r, a, tau] of modes) v += a * Math.sin(2 * Math.PI * base * r * t) * Math.exp(-t / tau);
-        for (const [f, a, tau] of board) v += a * Math.sin(2 * Math.PI * f * t) * Math.exp(-t / tau);
-        // the click itself: a very short burst of noise
-        if (t < 0.003) v += rnd() * 2.2 * (1 - t / 0.003) ** 2;
-        // ~0.4 ms attack so it snaps without a pop
-        d[i] += gain * v * Math.min(1, t / 0.0004);
-      }
-    };
-    if (kind === 'capture') { hit(0, 860, 0.5); hit(0.028, 1020, 0.42); }
-    else hit(0, 980, 0.5);
-    let peak = 0; for (let i = 0; i < len; i++) peak = Math.max(peak, Math.abs(d[i]));
-    for (let i = 0; i < len; i++) d[i] *= 0.92 / peak;
-    return buf;
-  },
+  // "Heavy wood": a weighted, felt-bottomed piece on a thick board. Four slightly different renders per sound, picked at random.
+  HEAVY: { move: { len: .32, vary: .05, room: { len: .25, decay: .06, mix: .28 },
+      hits: [{ at: 0, gain: 1, contact: .009, sharp: 2, click: .2, clickLp: 2200, res: [[540, 52, 13.20], [1220, 9, .8], [180, 30, 10.80]] }] }, capture: { len: .38, vary: .05, room: { len: .28, decay: .065, mix: .3 },
+      hits: [{ at: 0, gain: 1, contact: .01, sharp: 2, click: .22, clickLp: 2000, res: [[480, 52, 13.80], [1080, 9, .8], [160, 30, 12.00]] },
+             { at: .05, gain: .6, contact: .008, sharp: 2, click: .18, clickLp: 2400, res: [[620, 52, 12.00], [1400, 9, .7], [200, 30, 7.20]] }] } },
   wood(kind, vol) {
     const c = this.ctx; if (!c) return;
-    this.bufs = this.bufs || {};
-    const b = this.bufs[kind] || (this.bufs[kind] = this.woodBuffer(kind));
-    const src = c.createBufferSource(), g = c.createGain(), hp = c.createBiquadFilter();
-    hp.type = 'highpass'; hp.frequency.value = 90;
-    src.buffer = b; g.gain.value = vol;
-    src.connect(hp).connect(g).connect(c.destination); src.start();
+    this.vars = this.vars || {};
+    if (!this.vars[kind]) { this.vars[kind] = Promise.all([0, 1, 2, 3].map(v => renderHit(this.HEAVY[kind], v))).catch(() => null); }
+    this.vars[kind].then(list => {
+      if (!list) return;
+      const src = c.createBufferSource(), g = c.createGain();
+      src.buffer = list[Math.floor(Math.random() * list.length)]; g.gain.value = vol;
+      src.connect(g).connect(c.destination); src.start();
+    });
   },
   play(kind) {
     if (!S.settings.sound || !this.ensure()) return;
-    if (kind === 'move') this.wood('move', 0.55);
-    else if (kind === 'capture') this.wood('capture', 0.65);
+    if (kind === 'move') this.wood('move', 0.38);
+    else if (kind === 'capture') this.wood('capture', 0.44);
     else if (kind === 'good') { this.tone(660, 0.18, { vol: 0.045 }); this.tone(990, 0.26, { vol: 0.04, at: 0.08 }); }
     else if (kind === 'bad') { this.tone(247, 0.22, { vol: 0.06 }); this.tone(220, 0.26, { vol: 0.05, at: 0.08 }); }
     else if (kind === 'done') [523, 659, 784].forEach((f, i) => this.tone(f, 0.36, { vol: 0.045, at: i * 0.09 }));
   },
 };
+
+// ---------- move sound rendering ----------
+async function renderHit(spec, variant) {
+  const sr = 44100, len = Math.ceil(sr * spec.len);
+  const oc = new OfflineAudioContext(1, len, sr);
+  let seed = 101 + variant * 977; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const jit = x => x * (1 + (rnd() - .5) * spec.vary);                 // every hit a little different
+  const room = oc.createConvolver();                                   // tiny room: decaying noise impulse response
+  const irLen = Math.floor(sr * spec.room.len), ir = oc.createBuffer(2, irLen, sr);
+  for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < irLen; i++) d[i] = (rnd() * 2 - 1) * Math.exp(-i / (sr * spec.room.decay)); }
+  room.buffer = ir;
+  const dry = oc.createGain(), wet = oc.createGain(), out = oc.createGain();
+  dry.gain.value = 1; wet.gain.value = spec.room.mix; out.gain.value = 1;
+  room.connect(wet).connect(out); dry.connect(out); out.connect(oc.destination);
+  for (const h of spec.hits) {
+    const t0 = h.at + (h.at ? (rnd() - .5) * .006 : 0);
+    // excitation: a few milliseconds of noise with a sharp front
+    const exLen = Math.floor(sr * h.contact), ex = oc.createBuffer(1, exLen, sr), ed = ex.getChannelData(0);
+    for (let i = 0; i < exLen; i++) ed[i] = (rnd() * 2 - 1) * Math.pow(1 - i / exLen, h.sharp);
+    for (const [f, q, g] of h.res) {
+      const src = oc.createBufferSource(); src.buffer = ex;
+      const bp = oc.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = jit(f); bp.Q.value = q;
+      const gg = oc.createGain(); gg.gain.value = g * h.gain;
+      src.connect(bp).connect(gg); gg.connect(dry); gg.connect(room); src.start(t0);
+    }
+    // the contact click itself, softened by a low-pass
+    const cs = oc.createBufferSource(); cs.buffer = ex;
+    const lp = oc.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = jit(h.clickLp);
+    const cg = oc.createGain(); cg.gain.value = h.click * h.gain;
+    cs.connect(lp).connect(cg); cg.connect(dry); cg.connect(room); cs.start(t0);
+  }
+  const buf = await oc.startRendering(), d = buf.getChannelData(0);
+  let pk = 0; for (let i = 0; i < d.length; i++) pk = Math.max(pk, Math.abs(d[i]));
+  for (let i = 0; i < d.length; i++) d[i] *= .9 / pk;
+  return buf;
+}
 
 // ---------- board ----------
 class Board {
