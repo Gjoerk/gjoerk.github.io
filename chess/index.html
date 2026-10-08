@@ -869,6 +869,11 @@ button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offs
 .pop-card.good { border-color: rgba(111, 219, 159, .45); }
 .pop-card.good h3 { color: #9BE8BD; }
 
+/* each piece and the board get their own compositing layers, so a sliding piece never repaints the squares */
+.pieces { contain: layout paint; }
+.pc { backface-visibility: hidden; transition-timing-function: cubic-bezier(.25, .8, .25, 1); }
+.board { contain: layout; }
+
 </style>
 
 <div class="wrap">
@@ -1095,7 +1100,11 @@ function weakList() {
 const Sound = {
   ctx: null,
   ensure() {
-    if (!this.ctx) { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (!this.ctx) {
+      try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+      // render the move sounds now, so the first move does not stall while they are built
+      setTimeout(() => ['move', 'capture'].forEach(k => { this.vars = this.vars || {}; if (!this.vars[k]) this.vars[k] = Promise.all([0, 1, 2, 3].map(v => renderHit(this.HEAVY[k], v))).catch(() => null); }), 0);
+    }
     if (this.ctx.state === 'suspended') this.ctx.resume();
     return this.ctx;
   },
@@ -1253,7 +1262,7 @@ class Board {
   place(el, sq, instant) {
     const { x, y } = this.xy(sq);
     if (instant) el.style.transition = 'none';
-    el.style.transform = `translate(${x * 100}%, ${y * 100}%)`;
+    el.style.transform = `translate3d(${x * 100}%, ${y * 100}%, 0)`;
     if (instant) { void el.offsetWidth; el.style.transition = ''; }
   }
   makePiece(code, sq) {
@@ -2094,7 +2103,7 @@ const Trainer = {
       this.lastMine = this.phase === 'study' ? null : { ply: this.ply, san: exp[0], c: exp[2], r };
       this.ply++;
       this.locked = true;
-      this.renderPanel();
+      setTimeout(() => { if (this.active) this.renderPanel(); }, reduceMotion ? 0 : 210);
       this.timer = setTimeout(() => this.advance(), this.phase === 'study' ? 500 : 350);
       return;
     }
@@ -2492,8 +2501,13 @@ const Explorer = {
     this.last = { san: mv.san, ply: this.ply0 + this.cursor - 1, entry: before && before.get(u), color: mv.color, from: mv.from, to: mv.to };
     this.board.setPosition(this.game, { move: mv, dragged });
     Sound.play(mv.captured ? 'capture' : 'move');
-    this.render();
+    this.renderSoon();
     if (this.auto && this.game.turn() !== this.user && this.cursor === this.moves.length) this.autoReply();
+  },
+  /** Rebuild the panel once the piece has finished sliding, so phones animate the move smoothly. */
+  renderSoon() {
+    clearTimeout(this.rTimer);
+    this.rTimer = setTimeout(() => { if (this.active) this.render(); }, reduceMotion ? 0 : 210);
   },
   stepTo(n) {
     n = Math.max(0, Math.min(this.moves.length, n));
