@@ -937,9 +937,30 @@ button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offs
 .pc { backface-visibility: hidden; transition-timing-function: cubic-bezier(.25, .8, .25, 1); }
 .board { contain: layout; }
 
+
+/* ---------- full-width header bar: logo on the page's left edge, links on the right ---------- */
+.gnav { position: sticky; top: 0; width: auto; margin: 0 calc(50% - 50dvw); max-width: none; height: calc(64px + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 24px 0; border-radius: 0; gap: 24px;
+  border: 0; border-bottom: 1px solid rgba(255, 255, 255, .07);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .01)), rgba(10, 11, 14, .55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 10px 30px rgba(0, 0, 0, .25); }
+.gnav::before { display: none; }
+.gnav .links { gap: 2px; }
+.links button { border-radius: 8px; padding: 9px 14px; }
+.burger { border-radius: 8px; }
+.brand .logo-mark { width: 36px; height: 36px; }
+.wordmark { font-size: 20px; }
+body.training { --navh: 84px; }
+@media (min-width: 861px) { .gnav .nav-r { display: none; } .gnav { padding-right: 14px; } }
+@media (max-width: 860px) {
+  .gnav .links { top: calc(100% + 6px); left: 12px; right: 12px; border-radius: 14px; }
+  .gnav .links button { border-radius: 8px; }
+}
+@media (max-width: 560px) {
+  .gnav { padding: env(safe-area-inset-top, 0px) 8px 0 16px; height: calc(58px + env(safe-area-inset-top, 0px)); top: 0; }
+  .brand .logo-mark { width: 32px; height: 32px; } .wordmark { font-size: 18px; }
+}
 </style>
 
-<div class="wrap">
   <header class="gnav">
     <button class="brand" id="brand" aria-label="Chess Companion home">
       <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
@@ -953,6 +974,7 @@ button.feature-board:focus-visible { outline: 2px solid var(--sky); outline-offs
     <nav class="links" id="mainLinks" aria-label="Main"><button type="button" data-view="analysis" id="hdrAnalysis">Analysis</button><button type="button" data-view="puzzles" id="hdrPuzzles">Puzzles</button><button type="button" data-view="coords" id="hdrCoords">Coordinates</button><button type="button" data-view="home" id="hdrOpenings">Openings</button><button type="button" data-view="stats" id="hdrStats">Stats</button></nav>
     <div class="nav-r"><button class="burger" type="button" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mainLinks"><span></span><span></span><span></span></button></div>
   </header>
+<div class="wrap">
   <main id="view"></main>
 </div>
 <canvas id="confetti" hidden></canvas>
