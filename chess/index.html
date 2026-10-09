@@ -600,6 +600,42 @@ body.training .gnav { margin-bottom: 0; }
 .stats-list { display: grid; gap: 2px; margin-top: 10px; }
 .stats-list .line-row { display: flex; gap: 14px; align-items: baseline; padding: 10px 4px; border-bottom: 1px solid var(--line); }
 .stats-list .st { margin-left: auto; color: var(--gold); font-size: 13px; }
+
+/* ---------- board as large as the window allows ----------
+   --navh: space taken by the sticky header above the board. --side: width of the side column.
+   The board is the largest square that fits both the height left under the header and the width left beside the side column. */
+body.training { --navh: 96px; --side: 360px; --gap: 32px; --ev: 30px; }
+body.training .side-col { display: grid; gap: 16px; align-content: start; min-width: 0; }
+body.training .side-col .tool-head { margin: 0; max-width: none; flex-wrap: wrap; gap: 10px; }
+body.training .side-col .ctrl-row { justify-content: flex-start; }
+body.training .side-col .board-ctrl { justify-content: flex-start; }
+@media (min-width: 901px) {
+  body.training .wrap { max-width: none; }
+  body.training .trainer {
+    display: grid; align-items: start; justify-content: center;
+    grid-template-columns: auto minmax(280px, var(--side)); gap: var(--gap);
+    margin-top: 16px;
+  }
+  body.training .board-col { display: block; }
+  body.training .board-frame {
+    --bs: max(280px, min(calc(100dvh - var(--navh) - 28px), calc(100vw - 48px - var(--side) - var(--gap) - var(--ev))));
+    width: calc(var(--bs) + var(--ev)); max-width: none; margin: 0;
+    grid-template-columns: var(--bs) 22px; column-gap: 8px;
+  }
+  body.training .board-frame:has(.evalbar.off) .evalbar { visibility: hidden; }
+  body.training .side-col { position: sticky; top: var(--navh); max-height: calc(100dvh - var(--navh) - 16px); overflow-y: auto; padding-right: 4px; scrollbar-width: thin; }
+}
+@media (min-width: 1400px) { body.training { --side: 400px; --gap: 40px; } }
+@media (max-width: 900px) {
+  /* Phones and narrow windows: back and mode buttons above the board, the rest below it. */
+  body.training .trainer { display: flex; flex-direction: column; gap: 14px; }
+  body.training .side-col { display: contents; }
+  body.training .side-col .tool-head { order: -1; }
+  body.training .board-col { order: 0; width: 100%; align-self: stretch; }
+  body.training .side-col .ctrl-row { order: 1; }
+  body.training .side-col .panel { order: 2; }
+  body.training .board-frame { width: 100%; max-width: min(100%, calc(100dvh - 120px)); margin-inline: auto; }
+}
 @media (prefers-reduced-motion: reduce) { #view > * { animation: none; } }
 
 /* ---------- cards: progress bars on one level ---------- */
@@ -2255,16 +2291,18 @@ function trainerShell() {
   document.body.classList.add('training');
   scrollTo({ top: 0 });
   $('#view').innerHTML = `
-    <button class="back" id="backBtn">← <span id="backLabel">Back</span></button>
     <section class="trainer">
       <div class="board-col">
         <div class="board-frame">
           <div class="ranks" id="ranks" aria-hidden="true"></div><div id="board"></div><div class="evalbar" id="evalbar" title="Engine evaluation"><i style="height:50%"></i><b class="w">0.0</b></div>
           <div class="files" id="files" aria-hidden="true"></div>
         </div>
-        <div class="ctrl-row"><div class="board-ctrl" id="boardCtrl"></div><div class="stats" id="stats"></div></div>
       </div>
-      <aside class="panel" id="panel"></aside>
+      <div class="side-col">
+        <div class="tool-head"><button class="back" id="backBtn">← <span id="backLabel">Back</span></button></div>
+        <div class="ctrl-row"><div class="board-ctrl" id="boardCtrl"></div><div class="stats" id="stats"></div></div>
+        <aside class="panel" id="panel"></aside>
+      </div>
     </section>`;
   renderStats();
 }
@@ -3403,17 +3441,20 @@ function bindPills(id, fn) { const el = $('#' + id); if (el) el.onclick = e => {
 function toolShell(backLabel, opts = {}) {
   document.body.classList.add('training');
   scrollTo({ top: 0 });
+  // The board takes the largest square that fits; everything else lives in the side column.
   $('#view').innerHTML = `
-    <div class="tool-head"><button class="back" id="backBtn">← ${esc(backLabel)}</button>${opts.head || ''}</div>
     <section class="trainer">
       <div class="board-col">
         <div class="board-frame${opts.nolabels ? ' nolabels' : ''}" id="frame">
           <div class="ranks" id="ranks" aria-hidden="true"></div><div id="board"></div><div class="evalbar${opts.evalbar ? '' : ' off'}" id="evalbar"><i style="height:50%"></i><b class="w">0.0</b></div>
           <div class="files" id="files" aria-hidden="true"></div>
         </div>
-        <div class="ctrl-row"><div class="board-ctrl" id="boardCtrl"></div><div class="stats" id="stats"></div></div>
       </div>
-      <aside class="panel" id="panel"></aside>
+      <div class="side-col">
+        <div class="tool-head"><button class="back" id="backBtn">← ${esc(backLabel)}</button>${opts.head || ''}</div>
+        <div class="ctrl-row"><div class="board-ctrl" id="boardCtrl"></div><div class="stats" id="stats"></div></div>
+        <aside class="panel" id="panel"></aside>
+      </div>
     </section>`;
   $('#backBtn').onclick = () => go({ name: 'home' });
   renderStats();
@@ -4359,4 +4400,6 @@ cloud.init();
 
 
 </script>
+
+
 </body></html>
