@@ -1430,7 +1430,8 @@ class Board {
     if (this.opts.canPick(sq)) {
       const already = this.sel === sq;
       this.select(sq);
-      this.drag = { sq, el: this.pieces.get(sq), moved: false, x0: e.clientX, y0: e.clientY, already };
+      // a finger wobbles a few pixels on every tap; only treat it as a drag once it really travels
+      this.drag = { sq, el: this.pieces.get(sq), moved: false, x0: e.clientX, y0: e.clientY, already, slop: e.pointerType === 'mouse' ? 4 : 14 };
       try { this.el.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
       e.preventDefault();
     } else this.clearSel();
@@ -1438,7 +1439,7 @@ class Board {
   onPMove(e) {
     const d = this.drag;
     if (!d || !d.el) return;
-    if (!d.moved && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 4) return;
+    if (!d.moved && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < d.slop) return;
     d.moved = true;
     d.el.classList.add('drag');
     const r = this.el.getBoundingClientRect(), s = r.width / 8;
@@ -1469,7 +1470,8 @@ class Board {
       this.opts.onMove(from, sq, true);
     } else {
       d.el.classList.remove('drag');
-      this.place(d.el, d.sq);
+      // dropped back on its own square: snap home at once instead of sliding, and keep it selected like a tap
+      this.place(d.el, d.sq, sq === d.sq);
       if (sq !== d.sq) this.clearSel();
     }
   }
