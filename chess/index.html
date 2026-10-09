@@ -630,7 +630,8 @@ body.training .side-col .board-ctrl { justify-content: flex-start; }
   /* Phones and narrow windows: back and mode buttons above the board, the rest below it. */
   body.training .trainer { display: flex; flex-direction: column; gap: 14px; }
   body.training .side-col { display: contents; }
-  body.training .side-col .tool-head { order: -1; }
+  body.training .side-col .tool-head { order: -1; min-width: 0; max-width: 100%; }
+  body.training .side-col .tool-head .pills { max-width: 100%; }
   body.training .board-col { order: 0; width: 100%; align-self: stretch; }
   body.training .side-col .ctrl-row { order: 1; }
   body.training .side-col .panel { order: 2; }
@@ -887,10 +888,7 @@ body { min-height: 100vh; min-height: 100dvh; }
 .sq.d .cr, .sq.d .cf { color: #eef3f7; }
 .sq .cr { left: 4%; top: 4%; } .sq .cf { right: 5%; bottom: 3%; }
 @media (min-width: 901px) {
-  body.training .wrap { max-width: 1080px; }
-  body.training .trainer { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); gap: 28px 36px; }
   body.training .board-col { justify-items: start; }
-  body.training .board-frame { margin: 0; max-width: min(100%, calc(100vh - 150px)); }
   body.training .ctrl-row { justify-content: flex-start; }
 }
 @media (max-width: 900px) {
