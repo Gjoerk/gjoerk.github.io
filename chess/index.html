@@ -4050,21 +4050,24 @@ const Analysis = {
     const games = GameLib.load();
     const depth = S.settings.anDepth || 12;
     const upIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4m0 0-4 4m4-4 4 4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg>';
+    // with a game list, the paste box sits above it so it is reachable without scrolling past every game
+    const paste = `<details class="paste" ${this.lastText ? 'open' : ''}><summary>${games.length ? 'Paste a single game' : 'Or paste a single game'}</summary>
+          <div class="pcard an-input"><textarea id="anText" placeholder="1. e4 e5 2. Nf3 Nc6 3. Bc4 … or a full PGN">${esc(this.lastText || '')}</textarea>
+            <div class="row-btns"><button class="btn sky" id="anGo">Analyse this game</button><button class="btn" id="anSample">Try a famous game</button></div></div></details>`;
     $('#view').innerHTML = `
       <div class="tool-head"><button class="back" id="backBtn">← Home</button></div>
       <div class="lib-wrap">
         <div class="an-hero"><span class="kicker">Game analysis</span><h1>${games.length ? 'Your games' : 'Analyse your games'}</h1>
           <p class="sub">${games.length ? 'Pick a game to see every move graded, from Brilliant to Blunder.' : 'Import your games from chess.com or Lichess, then let Stockfish grade every move. Your games stay in this browser.'}</p></div>
         ${msg ? `<div class="pcard state-bad"><p>${esc(msg)}</p></div>` : ''}
+        ${games.length ? paste : ''}
         <div id="libBox"></div>
         <label class="drop" id="drop">${upIcon}<b>${games.length ? 'Import more games' : 'Drop your PGN file here'}</b><span class="muted">or click to choose a .pgn file. One game or a whole archive both work.</span>
           <input type="file" id="pgnFile" accept=".pgn,.txt,application/x-chess-pgn,text/plain" multiple aria-label="Choose PGN file"></label>
         ${games.length ? '' : `<div class="how">
           <div class="pcard"><h3>From chess.com</h3><ol><li>Open your profile and go to <b>Games</b> (the game archive).</li><li>Tick the games you want, or select all.</li><li>Press <b>Download</b> to get a .pgn file.</li><li>Drop that file here.</li></ol></div>
           <div class="pcard"><h3>From Lichess</h3><ol><li>Open your profile.</li><li>Choose <b>Export games</b>.</li><li>Download the .pgn file.</li><li>Drop that file here.</li></ol></div></div>`}
-        <details class="paste" ${this.lastText ? 'open' : ''}><summary>Or paste a single game</summary>
-          <div class="pcard an-input"><textarea id="anText" placeholder="1. e4 e5 2. Nf3 Nc6 3. Bc4 … or a full PGN">${esc(this.lastText || '')}</textarea>
-            <div class="row-btns"><button class="btn sky" id="anGo">Analyse this game</button><button class="btn" id="anSample">Try a famous game</button></div></div></details>
+        ${games.length ? '' : paste}
         <div class="row-btns" style="justify-content:center;align-items:center">${pillsHTML('anDepth', [['12', 'Fast'], ['16', 'Deep']], String(depth))}<span class="muted">${depth > 12 ? 'Deep: slower, sharper grades' : 'Fast: about a second per move'}</span></div>
       </div>`;
     $('#backBtn').onclick = () => go({ name: 'home' });
