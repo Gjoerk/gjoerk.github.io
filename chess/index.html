@@ -630,7 +630,7 @@ body.training .side-col .board-ctrl { justify-content: flex-start; }
   /* Phones and narrow windows: back and mode buttons above the board, the rest below it. */
   body.training .trainer { display: flex; flex-direction: column; gap: 14px; }
   body.training .side-col { display: contents; }
-  body.training .side-col .tool-head { order: -1; min-width: 0; max-width: 100%; }
+  body.training .side-col .tool-head { order: -1; min-width: 0; max-width: 100%; width: 100%; }
   body.training .side-col .tool-head .pills { max-width: 100%; }
   body.training .board-col { order: 0; width: 100%; align-self: stretch; }
   body.training .side-col .ctrl-row { order: 1; }
@@ -959,6 +959,22 @@ body.training { --navh: 84px; }
   .gnav { padding: env(safe-area-inset-top, 0px) 8px 0 16px; height: calc(58px + env(safe-area-inset-top, 0px)); top: 0; }
   .brand .logo-mark { width: 32px; height: 32px; } .wordmark { font-size: 18px; }
 }
+
+/* ---------- puzzle difficulty picker ---------- */
+.lvl { container-type: inline-size; display: grid; gap: 6px; width: 100%; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, .025); }
+.tool-head .lvl { flex: 1 0 100%; }
+.lvl-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.lvl button { display: grid; gap: 3px; justify-items: center; text-align: center; padding: 9px 2px; border: 0; border-radius: 9px; background: transparent; color: var(--fg-2); cursor: pointer; transition: background .2s, color .2s; min-width: 0; }
+.lvl button:hover { background: rgba(255, 255, 255, .06); color: var(--fg); }
+.lvl .lvl-auto { grid-auto-flow: column; justify-content: space-between; align-items: baseline; padding: 11px 14px; background: rgba(255, 255, 255, .03); }
+.lvl .lvl-name { font: 600 13px/1.15 var(--font-body); letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.lvl .lvl-sub { font: 500 11px/1 var(--font-body); color: var(--fg-3); white-space: nowrap; }
+.lvl button[aria-pressed="true"] { background: var(--sky); color: var(--sky-ink); }
+.lvl button[aria-pressed="true"] .lvl-sub { color: var(--sky-ink); opacity: .7; }
+.lvl button:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+/* the four tiles share the picker's width, so their text scales with it */
+.lvl-row .lvl-name { font-size: clamp(10.5px, 3.45cqi, 13px); }
+.lvl-row .lvl-sub { font-size: clamp(9.5px, 2.9cqi, 11px); }
 </style>
 
   <header class="gnav">
@@ -3644,15 +3660,24 @@ const Coords = {
 // ======================= puzzles =======================
 const P_LEVELS = [['auto', 'Matched to you'], ['b', 'Beginner'], ['i', 'Intermediate'], ['a', 'Advanced'], ['e', 'Expert']];
 const P_RANGE = { b: [0, 1000], i: [1000, 1500], a: [1500, 2000], e: [2000, 4000] };
+const P_RANGE_LABEL = { b: 'Under 1000', i: '1000–1500', a: '1500–2000', e: '2000+' };
 const THEME_NAME = { advantage: 'Win material', oneMove: 'One move', short: 'Short', long: 'Long' };
 const themeName = t => THEME_NAME[t] || (t.startsWith('mateIn') ? 'Mate in ' + t.slice(6) : t);
 const Puzzles = {
+  // difficulty picker: "matched to you" on its own row, then the four fixed levels as equal tiles
+  levelHTML() {
+    const cur = S.puzzle.level, on = k => `aria-pressed="${k === cur}"`;
+    return `<div class="lvl" role="group" id="pLevel" aria-label="Puzzle difficulty">
+      <button type="button" class="lvl-auto" data-k="auto" ${on('auto')}><span class="lvl-name">Matched to you</span><span class="lvl-sub">Around ${Math.round(S.puzzle.rating)}</span></button>
+      <div class="lvl-row">${P_LEVELS.slice(1).map(([k, label]) => `<button type="button" data-k="${k}" ${on(k)}><span class="lvl-name">${label}</span><span class="lvl-sub">${P_RANGE_LABEL[k]}</span></button>`).join('')}</div>
+    </div>`;
+  },
   active: false,
   start() {
     this.stop();
     this.active = true;
     S.puzzle = S.puzzle || { rating: 1200, played: 0, solved: 0, seen: {}, level: 'auto' };
-    toolShell('Home', { head: pillsHTML('pLevel', P_LEVELS, S.puzzle.level) });
+    toolShell('Home', { head: this.levelHTML() });
     bindPills('pLevel', k => { S.puzzle.level = k; save(); this.start(); });
     this.board = new Board($('#board'), { canPick: sq => this.canPick(sq), onMove: (f, t, d) => this.userMove(f, t, d), ranks: $('#ranks'), files: $('#files') });
     this.keyHandler = e => {
