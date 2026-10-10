@@ -340,6 +340,7 @@
                     <span style="color: var(--color-pink); font-weight: 800; letter-spacing: 0.5px;">ATTENTION:</span> 
                     Prices are updated daily and may vary from live market data. 
                     Always <strong>double-check</strong> current prices on your marketplace before buying skins.
+                    <span id="prices-updated"></span>
                 </div>
             </div>
         </div>
@@ -552,21 +553,11 @@
             if (!response.ok) throw new Error("404 Not Found");
             const raw = await response.json();
             prices = {};
-            let items = Array.isArray(raw) ? raw : (raw.items || raw);
-            if (!Array.isArray(items) && raw["AK-47 | Slate (Factory New)"]) {
-                for(let k in raw) {
-                    let p = raw[k];
-                    if(typeof p==='object' && p.steam) prices[k] = p.steam.last_24h || p.steam.last_7d || 0;
-                    else if(typeof p==='number') prices[k] = p;
-                }
-            } else {
-                for(let item of items) {
-                    let n = item.market_hash_name || item.market_name;
-                    let p = item.min_price || item.price;
-                    if(n && p) { prices[n] = parseFloat(p); }
-                }
+            for(let k in raw) {
+                if(typeof raw[k] === 'number' && raw[k] > 0) prices[k] = raw[k];
             }
-            pricesLoaded = true;
+            showPricesUpdated(raw._updated);
+            pricesLoaded = Object.keys(prices).length > 0;
         } catch (error) {
             document.getElementById('file-error-msg').classList.remove('d-none');
         }
@@ -576,6 +567,21 @@
             btn.disabled = false;
             btn.innerText = "Start Engine";
         }
+    }
+
+    function showPricesUpdated(stamp) {
+        let d = stamp ? new Date(stamp) : null;
+        if(!d || isNaN(d)) return;
+        let hours = Math.max(0, Math.round((Date.now() - d.getTime()) / 3600000));
+        let ago = hours < 1 ? 'less than an hour ago' : hours < 48 ? `${hours}h ago` : `${Math.round(hours / 24)} days ago`;
+        let el = document.getElementById('prices-updated');
+        el.innerText = `Prices last updated ${ago}.`;
+        if(hours > 48) el.style.color = '#ff4081';
+    }
+
+    // Safe to embed a string as a JS argument inside a double-quoted HTML attribute
+    function jsAttr(str) {
+        return JSON.stringify(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
     }
 
     /* --- SAVED ITEMS LOGIC --- */
@@ -625,7 +631,7 @@
         }
         
         let displayList = showAllSaved ? savedTradeups : savedTradeups.slice(0, 5);
-        displayList.forEach(t => {
+        displayList.forEach((t, i) => {
             let isJackpot = t.roi > 130;
             let roiClass = isJackpot ? 'text-pink' : 'text-green';
             let stBadge = t.isST ? '<span class="badge-st">StatTrak™</span>' : '';
@@ -652,6 +658,7 @@
                         <span style="color:#888;">${t.isST ? 'StatTrak™ ' : ''}${d.name} <span class="text-grey" style="font-size:0.65rem">${d.cond}</span></span>
                     </div>
                     <div class="text-end">
+                        ${d.prob !== undefined ? `<span class="text-grey me-2" style="font-size:0.65rem;">${(d.prob * 100).toFixed(1)}%</span>` : ''}
                         <span class="text-grey me-2" style="font-size:0.65rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
                         <span class="${d.win ? 'text-white' : 'text-grey'}">${d.val.toFixed(2)}€</span>
                     </div>
@@ -660,18 +667,18 @@
 
             container.innerHTML += `
                 <div class="mb-2" style="background-color: var(--bg-input); border: 1px solid var(--border-color); border-radius: 6px;">
-                    <div class="p-2 d-flex justify-content-between align-items-center saved-item-header" style="cursor: pointer; border-radius: 6px;" onclick="toggleSavedDetails('details-${t.id}', 'chev-${t.id}')">
+                    <div class="p-2 d-flex justify-content-between align-items-center saved-item-header" style="cursor: pointer; border-radius: 6px;" onclick="toggleSavedDetails('saved-details-${i}', 'saved-chev-${i}')">
                         <div class="text-truncate text-white" style="max-width: 65%; font-size: 0.8rem;" title="${t.main}">
-                            <span id="chev-${t.id}" class="chevron-icon">▶</span>
+                            <span id="saved-chev-${i}" class="chevron-icon">▶</span>
                             ${t.main} <span class="badge-mode ms-1" style="font-size: 0.6rem;">${t.mode}</span>${stBadge}
                         </div>
                         <div class="text-end ${roiClass}" style="font-weight: 600; font-size: 0.8rem;">
                             ${t.roi.toFixed(1)}% 
-                            <span style="color:#ff4081; margin-left: 8px; font-size: 1rem;" onclick="event.stopPropagation(); toggleSave('${t.id}')">×</span>
+                            <span style="color:#ff4081; margin-left: 8px; font-size: 1rem;" onclick="event.stopPropagation(); toggleSave(${jsAttr(t.id)})">×</span>
                         </div>
                     </div>
                     
-                    <div id="details-${t.id}" class="d-none border-top" style="border-color: var(--border-color) !important; padding: 12px; background-color: #111; border-radius: 0 0 6px 6px;">
+                    <div id="saved-details-${i}" class="d-none border-top" style="border-color: var(--border-color) !important; padding: 12px; background-color: #111; border-radius: 0 0 6px 6px;">
                         <div class="d-flex justify-content-between mb-1" style="font-size:0.75rem;">
                             <span class="text-grey">MAIN (${t.mainCount}x)</span>
                             <span class="text-white">${t.cond.replace('(','').replace(')','')}</span>
@@ -714,6 +721,8 @@
     let cheapestFillers = {};
     let uniqueResults = {};
     const RARITY_ORDER = ["Consumer Grade", "Industrial Grade", "Mil-Spec Grade", "Restricted", "Classified", "Covert"];
+    const CONDITIONS = ["(Factory New)", "(Minimal Wear)", "(Field-Tested)", "(Well-Worn)", "(Battle-Scarred)"];
+    const FILLER_CANDIDATES = 5; // cheapest fillers tried per type/rarity/condition
     const to32Bit = (val) => Math.fround(val);
 
     function getTradeFloat(realFloat, minCap, maxCap) {
@@ -751,6 +760,17 @@
         return [0.45, 1.00];
     }
 
+    // A better condition selling for under 10% of the next worse one is a broken
+    // or illiquid Steam price (e.g. FN 0.27 vs MW 14.90), not a real buy.
+    function isSuspiciousInputPrice(baseName, cond) {
+        let p = prices[`${baseName} ${cond}`];
+        for(let j = CONDITIONS.indexOf(cond) + 1; j < CONDITIONS.length; j++) {
+            let worse = prices[`${baseName} ${CONDITIONS[j]}`];
+            if(worse) return p < worse * 0.1;
+        }
+        return false;
+    }
+
     /* --- ALGORITHM --- */
     function findBestFillers() {
         cheapestFillers = {};
@@ -761,24 +781,25 @@
                     for(let isST of [false, true]) {
                         let prefix = isST ? "StatTrak™ " : "";
                         let name = `${prefix}${s.name} ${c}`;
-                        if(prices[name]) {
+                        if(prices[name] && !isSuspiciousInputPrice(`${prefix}${s.name}`, c)) {
                             let p = prices[name];
                             let key = `${isST ? 'ST' : 'NORM'}_${r}_${c}`;
-                            
-                            if(!cheapestFillers[key] || p < cheapestFillers[key].price) {
-                                let rIdx = RARITY_ORDER.indexOf(r);
-                                if (rIdx < RARITY_ORDER.length - 1) {
-                                    let nextR = RARITY_ORDER[rIdx+1];
-                                    let outs = database[col].filter(x => x.rarity === nextR);
-                                    if(outs.length > 0) {
-                                        cheapestFillers[key] = { name: s.name, cond: c, price: p, min: s.min, max: s.max, outcomes: outs, col: col, isST: isST };
-                                    }
+                            let rIdx = RARITY_ORDER.indexOf(r);
+                            if (rIdx < RARITY_ORDER.length - 1) {
+                                let nextR = RARITY_ORDER[rIdx+1];
+                                let outs = database[col].filter(x => x.rarity === nextR);
+                                if(outs.length > 0) {
+                                    if(!cheapestFillers[key]) cheapestFillers[key] = [];
+                                    cheapestFillers[key].push({ name: s.name, cond: c, price: p, min: s.min, max: s.max, outcomes: outs, col: col, isST: isST });
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+        for(let key in cheapestFillers) {
+            cheapestFillers[key] = cheapestFillers[key].sort((a, b) => a.price - b.price).slice(0, FILLER_CANDIDATES);
         }
     }
 
@@ -837,10 +858,10 @@
                             
                             for(let cond of ["(Factory New)", "(Minimal Wear)"]) {
                                 let fKey = `${isST ? 'ST' : 'NORM'}_${rarity}_${cond}`;
-                                if(cheapestFillers[fKey]) {
-                                    runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
-                                    runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
-                                    runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, cheapestFillers[fKey], MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                for(let filler of (cheapestFillers[fKey] || [])) {
+                                    runSimulation("5x+5x", inputSkin, possibleOutputs, reqAvgTrade, 5, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                    runSimulation("3x+7x", inputSkin, possibleOutputs, reqAvgTrade, 3, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
+                                    runSimulation("1x+9x", inputSkin, possibleOutputs, reqAvgTrade, 1, filler, MAX_COST, MIN_ROI, BUFFER, BUY_FACTOR, SELL_FEE, isST);
                                 }
                             }
                         }
@@ -857,7 +878,7 @@
 
         for(let cond of ["(Factory New)", "(Minimal Wear)", "(Field-Tested)"]) {
             let pNameMain = `${prefix}${mainSkin.name} ${cond}`;
-            if(!prices[pNameMain]) continue; 
+            if(!prices[pNameMain] || isSuspiciousInputPrice(`${prefix}${mainSkin.name}`, cond)) continue;
             
             let mainPrice = prices[pNameMain] * BUY_FACTOR;
             let fillerTradeFloat = 0.0, fillerPrice = 0.0, fAssumedRaw = 0.0;
@@ -907,33 +928,24 @@
             let avgFinal = to32Bit(((tMainFinal * mainCount) + (fillerTradeFloat * fillerCount))/10.0);
             
             let totalWinProb = 0;
-            let probMain = (mainCount/10) * (1/mainOuts.length);
-            
-            for(let out of mainOuts) {
-                let outF = calculateOutputFloat(avgFinal, out.min, out.max);
-                let outC = getConditionInfo(outF);
-                let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
-                let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
-                let val = (SELL_FEE === 15.0) ? (pBase / 1.15) : (pBase * (1 - (SELL_FEE / 100)));
-                let isWin = (val - cost) > 0;
-                details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: true });
-                expVal += val * probMain;
-                if(isWin) totalWinProb += probMain;
-            }
-            if(filler) {
-                let probFiller = (fillerCount/10) * (1/filler.outcomes.length);
-                for(let out of filler.outcomes) {
+            // A filler from the main skin's own collection adds to the same outcomes instead of listing them twice
+            const addOutcomes = (outs, prob, isMain) => {
+                for(let out of outs) {
                     let outF = calculateOutputFloat(avgFinal, out.min, out.max);
                     let outC = getConditionInfo(outF);
                     let pNameOut = `${prefix}${out.name} ${getLongConditionName(outC)}`;
                     let pBase = prices[pNameOut] || prices[`${prefix}${out.name} (Minimal Wear)`] || 0;
                     let val = (SELL_FEE === 15.0) ? (pBase / 1.15) : (pBase * (1 - (SELL_FEE / 100)));
                     let isWin = (val - cost) > 0;
-                    details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: false });
-                    expVal += val * probFiller;
-                    if(isWin) totalWinProb += probFiller;
+                    let existing = details.find(d => d.name === out.name);
+                    if(existing) existing.prob += prob;
+                    else details.push({ name: out.name, cond: outC, float: outF, val: val, win: isWin, isMain: isMain, prob: prob });
+                    expVal += val * prob;
+                    if(isWin) totalWinProb += prob;
                 }
-            }
+            };
+            addOutcomes(mainOuts, (mainCount/10) * (1/mainOuts.length), true);
+            if(filler) addOutcomes(filler.outcomes, (fillerCount/10) * (1/filler.outcomes.length), false);
             if(expVal === 0) continue;
             let roi = (expVal / cost) * 100;
 
@@ -985,7 +997,7 @@
             let rarityClass = "rarity-" + res.rarity.split(" ")[0];
             let oddsClass = res.winChance > 50 ? 'text-green' : (res.winChance > 20 ? 'text-white' : 'text-muted');
             let isSaved = savedTradeups.some(t => t.id === res.id);
-            let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave('${res.id}')">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
+            let saveBtnHtml = `<button class="btn-outline py-0 px-2 ms-2" style="font-size: 0.65rem;" onclick="toggleSave(${jsAttr(res.id)})">${isSaved ? '★ SAVED' : '☆ SAVE'}</button>`;
 
             let fillerHtml = "";
             if(res.filler) {
@@ -1008,6 +1020,7 @@
                         <span style="color:#888;">${res.isST ? 'StatTrak™ ' : ''}${d.name} <span class="text-grey" style="font-size:0.75rem">${d.cond}</span></span>
                     </div>
                     <div class="text-end">
+                        <span class="text-grey me-2" style="font-size:0.75rem;">${(d.prob * 100).toFixed(1)}%</span>
                         <span class="text-grey me-2" style="font-size:0.75rem; font-family:monospace;">F:${d.float.toFixed(4)}</span>
                         <span class="${d.win ? 'text-white' : 'text-grey'}">${d.val.toFixed(2)}€</span>
                     </div>

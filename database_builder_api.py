@@ -1,6 +1,6 @@
 import requests
 import json
-import time
+import sys
 
 # URL zur "Raw" Datei auf GitHub (Englisch)
 GITHUB_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/skins.json"
@@ -17,10 +17,9 @@ def fetch_from_github():
     print(f"🚀 Lade skins.json von ByMykel/CSGO-API herunter...")
     
     try:
-        response = requests.get(GITHUB_URL)
+        response = requests.get(GITHUB_URL, timeout=60)
         if response.status_code != 200:
-            print(f"❌ Fehler beim Download: Status {response.status_code}")
-            return
+            sys.exit(f"❌ Fehler beim Download: Status {response.status_code}")
         
         # Die Datei ist riesig, das Parsen kann kurz dauern
         data = response.json()
@@ -99,6 +98,10 @@ def fetch_from_github():
             if len(skins) > 1:
                 final_db[col] = skins
 
+        # Kaputte/leere Quelle -> alte Datenbank behalten statt überschreiben
+        if len(final_db) < 50:
+            sys.exit(f"❌ Nur {len(final_db)} Collections gefunden - database.json wird nicht überschrieben.")
+
         # Speichern
         print(f"💾 Speichere {count_processed} Skins aus {len(final_db)} Collections in '{OUTPUT_FILE}'...")
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
@@ -107,7 +110,7 @@ def fetch_from_github():
         print("✅ Fertig! Deine Datenbank ist jetzt auf dem neuesten Stand.")
 
     except Exception as e:
-        print(f"❌ Kritischer Fehler: {e}")
+        sys.exit(f"❌ Kritischer Fehler: {e}")
 
 if __name__ == "__main__":
     fetch_from_github()
