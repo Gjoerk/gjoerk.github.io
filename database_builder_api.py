@@ -88,6 +88,13 @@ def fetch_from_github():
                 "min": float(min_float),
                 "max": float(max_float)
             }
+
+            # IDs für den SkinSearch-Link (Waffen-Defindex + Paint Kit)
+            weapon_id = item.get('weapon', {}).get('weapon_id')
+            paint_index = item.get('paint_index')
+            if weapon_id is not None and paint_index is not None:
+                skin_entry["weapon_id"] = int(weapon_id)
+                skin_entry["paint_id"] = int(paint_index)
             
             all_skins_by_collection[col_name].append(skin_entry)
             count_processed += 1
