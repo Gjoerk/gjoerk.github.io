@@ -17,7 +17,7 @@ def relevant_names():
     names = set()
     for skins in db.values():
         for s in skins:
-            for prefix in ["", "StatTrak™ "]:
+            for prefix in ["", "StatTrak™ ", "Souvenir "]:
                 for cond in CONDITIONS:
                     names.add(f"{prefix}{s['name']} ({cond})")
     return names
