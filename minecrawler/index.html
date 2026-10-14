@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Minecrawler</title>
+<meta name="description" content="Minecrawler: a roguelike Minesweeper. Descend ten floors of mines with hearts, gold, items and relics, in a Windows 95 window.">
+<meta name="theme-color" content="#008080">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'><rect width='16' height='16' fill='%23c0c0c0'/><rect x='4' y='4' width='8' height='8' fill='black'/><rect x='7' y='2' width='2' height='12' fill='black'/><rect x='2' y='7' width='12' height='2' fill='black'/><rect x='5' y='5' width='2' height='2' fill='white'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap">
+<style>
+:root {
+  --face: #c0c0c0; --hi: #ffffff; --lo: #808080; --dk: #0a0a0a; --hi2: #dfdfdf;
+  --desk: #008080; --title1: #000080; --title2: #1084d0;
+  --raised: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--lo), inset 2px 2px var(--hi2);
+  --pressed: inset -1px -1px var(--hi), inset 1px 1px var(--dk), inset -2px -2px var(--hi2), inset 2px 2px var(--lo);
+  --field: inset -1px -1px var(--hi), inset 1px 1px var(--lo), inset -2px -2px var(--hi2), inset 2px 2px var(--dk);
+  --ui: Tahoma, "MS Sans Serif", "Segoe UI", Geneva, Verdana, sans-serif;
+  --pixel: "Silkscreen", "Courier New", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--desk); color: #000; font: 11px/1.3 var(--ui);
+  overflow: hidden; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+button { font: inherit; color: inherit; }
+img.px, canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+img.px { width: 16px; height: 16px; display: block; }
+[hidden] { display: none !important; }
+
+#desktop { position: fixed; inset: 0 0 calc(28px * var(--tz, 1) + env(safe-area-inset-bottom, 0px)) 0; display: grid; place-items: center; overflow: auto; }
+
+/* ---------- window ---------- */
+.win { background: var(--face); box-shadow: var(--raised); padding: 3px; }
+.titlebar {
+  display: flex; align-items: center; gap: 3px; height: 18px; padding: 0 2px 0 3px;
+  background: linear-gradient(90deg, var(--title1), var(--title2)); color: #fff; font-weight: bold;
+}
+.titlebar.inactive { background: linear-gradient(90deg, #808080, #b5b5b5); }
+.titlebar .ttl { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px; }
+.titlebar img.px { width: 16px; height: 16px; }
+.tb-btn {
+  width: 16px; height: 14px; padding: 0; border: 0; background: var(--face); box-shadow: var(--raised);
+  display: grid; place-items: center; font: bold 9px/1 var(--ui); color: #000; cursor: pointer;
+}
+.tb-btn:active { box-shadow: var(--pressed); }
+.tb-btn + .tb-btn.close { margin-left: 2px; }
+.menubar { display: flex; height: 19px; align-items: stretch; position: relative; }
+.menubar > .m { padding: 2px 6px; cursor: default; position: relative; }
+.menubar > .m.open, .menubar > .m:hover { background: var(--title1); color: #fff; }
+.menubar u { text-decoration: underline; }
+.dropdown {
+  position: absolute; top: 100%; left: 0; z-index: 50; background: var(--face); box-shadow: var(--raised);
+  padding: 3px; min-width: 160px; color: #000;
+}
+.dropdown .it { display: flex; justify-content: space-between; gap: 18px; padding: 3px 18px 3px 20px; white-space: nowrap; position: relative; }
+.dropdown .it:hover { background: var(--title1); color: #fff; }
+.dropdown .it.check::before { content: "✓"; position: absolute; left: 6px; }
+.dropdown .it.disabled { color: var(--lo); text-shadow: 1px 1px var(--hi); pointer-events: none; }
+.dropdown hr { border: 0; border-top: 1px solid var(--lo); border-bottom: 1px solid var(--hi); margin: 3px 1px; }
+
+.game { min-width: 216px; padding: 6px; display: flex; flex-direction: column; gap: 6px; border-left: 3px solid var(--hi); border-top: 3px solid var(--hi); }
+.sunk { border: 2px solid; border-color: var(--lo) var(--hi) var(--hi) var(--lo); }
+.sunk3 { border: 3px solid; border-color: var(--lo) var(--hi) var(--hi) var(--lo); }
+.top { display: flex; align-items: center; justify-content: space-between; padding: 4px 5px; }
+.led { display: flex; border: 1px solid; border-color: var(--lo) var(--hi) var(--hi) var(--lo); background: #000; }
+.led canvas { display: block; width: 13px; height: 23px; }
+.led.blink { animation: blink .5s steps(1) infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+.facebtn {
+  width: 26px; height: 26px; padding: 0; border: 1px solid var(--lo); background: var(--face); box-shadow: var(--raised);
+  display: grid; place-items: center; cursor: pointer;
+}
+.facebtn:active { box-shadow: var(--pressed); }
+.facebtn:active canvas { transform: translate(1px, 1px); }
+.facebtn canvas { width: 17px; height: 17px; display: block; }
+.facewrap #crown { position: absolute; left: 50%; top: -9px; transform: translateX(-50%); pointer-events: none; }
+.facewrap #crown img.px { filter: drop-shadow(0 1px 0 #000); }
+.facewrap { position: relative; display: grid; place-items: center; }
+
+.hud { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 3px 5px; min-height: 28px; }
+.hearts { display: flex; align-items: center; gap: 0; min-width: 0; flex-wrap: wrap; }
+.hearts img.px { width: 16px; height: 16px; margin-right: -2px; }
+.hearts img.break { animation: heartbreak .6s steps(6) both; }
+@keyframes heartbreak { 0%{transform:translate(0,0)} 20%{transform:translate(-2px,-1px)} 40%{transform:translate(2px,1px)} 60%{transform:translate(-1px,0) scale(1.2)} 80%{transform:translate(1px,-1px)} 100%{transform:none} }
+.hearts img.gain { animation: heartgain .5s steps(5) both; }
+@keyframes heartgain { 0%{transform:scale(.2)} 60%{transform:scale(1.4)} 100%{transform:none} }
+.gold { display: flex; align-items: center; gap: 2px; font-weight: bold; font-variant-numeric: tabular-nums; }
+.gold.bump span { animation: bump .3s steps(3); }
+@keyframes bump { 50% { color: #a06000; } }
+.spacer { flex: 1; }
+.slots { display: flex; gap: 2px; }
+.slot {
+  width: 22px; height: 22px; padding: 0; border: 0; background: var(--face); box-shadow: var(--raised);
+  display: grid; place-items: center; position: relative; cursor: pointer;
+}
+.slot:active, .slot.on { box-shadow: var(--pressed); background: #d8d8d8; }
+.slot.on { background-image: repeating-conic-gradient(#c0c0c0 0 25%, #fff 0 50%); background-size: 2px 2px; }
+.slot.empty { box-shadow: var(--field); cursor: default; }
+.slot .k { position: absolute; right: 1px; bottom: 0; font: 8px/1 var(--pixel); color: #000; text-shadow: 1px 0 #fff, 0 1px #fff; }
+.btn {
+  border: 0; background: var(--face); box-shadow: var(--raised); padding: 4px 10px; min-width: 75px; min-height: 23px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+}
+.btn:active:not(:disabled), .btn.on { box-shadow: var(--pressed); }
+.btn.on { background-image: repeating-conic-gradient(#c0c0c0 0 25%, #fff 0 50%); background-size: 2px 2px; }
+.btn:focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+.btn:disabled { color: var(--lo); text-shadow: 1px 1px var(--hi); cursor: default; }
+.btn:disabled img { opacity: .45; }
+.btn.small { min-width: 0; padding: 2px 5px; min-height: 22px; }
+.descend { animation: glow 1s steps(2) infinite; }
+@keyframes glow { 50% { background-color: #e8e8a0; } }
+
+.fieldwrap { align-self: center; position: relative; }
+.field { position: relative; display: block; line-height: 0; }
+.field canvas#board { display: block; cursor: default; touch-action: none; }
+.field.target canvas#board { cursor: crosshair; }
+.shake { animation: shake .35s steps(7); }
+.shake.big { animation: shakebig .45s steps(9); }
+@keyframes shake { 0%,100%{transform:none} 15%{transform:translate(-2px,1px)} 30%{transform:translate(2px,-1px)} 45%{transform:translate(-1px,-2px)} 60%{transform:translate(2px,1px)} 75%{transform:translate(-1px,1px)} }
+@keyframes shakebig { 0%,100%{transform:none} 10%{transform:translate(-4px,2px)} 20%{transform:translate(4px,-2px)} 30%{transform:translate(-3px,-3px)} 40%{transform:translate(3px,2px)} 55%{transform:translate(-2px,2px)} 70%{transform:translate(2px,-1px)} 85%{transform:translate(-1px,1px)} }
+.fx { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.float {
+  position: absolute; display: flex; align-items: center; gap: 1px; transform: translate(-50%, -50%);
+  font: 700 8px/1 var(--pixel); color: #fff; white-space: nowrap;
+  text-shadow: 1px 0 #000, -1px 0 #000, 0 1px #000, 0 -1px #000, 1px 1px #000;
+  animation: floatup 1s steps(14) forwards;
+}
+.float img.px { width: 12px; height: 12px; }
+.float.gold { color: #ffe040; } .float.bad { color: #ff5050; } .float.good { color: #60ff70; } .float.info { color: #a0e0ff; }
+@keyframes floatup { 0%{opacity:0; margin-top:4px} 12%{opacity:1; margin-top:0} 75%{opacity:1} 100%{opacity:0; margin-top:-18px} }
+.banner {
+  position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none;
+  font-family: var(--pixel); color: #fff; z-index: 3;
+}
+.banner .b-in { background: rgba(0,0,128,.88); padding: 6px 10px 7px; box-shadow: 0 0 0 1px #fff, 0 0 0 2px #000; animation: banner 2.1s steps(18) forwards; }
+.banner .b1 { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+.banner .b2 { font-size: 8px; color: #ffe040; margin-top: 3px; }
+@keyframes banner { 0%{transform:translateX(-140%)} 14%,82%{transform:none; opacity:1} 100%{transform:translateX(140%); opacity:0} }
+
+.relics { width: 0; min-width: 100%; display: flex; flex-wrap: wrap; gap: 1px; padding: 2px 3px; min-height: 22px; align-items: center; }
+.relics .none { color: var(--lo); padding-left: 2px; }
+.relic { padding: 1px; cursor: help; }
+.relic:hover { background: #fff; outline: 1px dotted #000; }
+.relic.new { animation: heartgain .5s steps(5) both; }
+.statusbar { display: flex; gap: 2px; margin-top: 2px; width: 0; min-width: 100%; }
+.statusbar > div { box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--lo); padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 18px; }
+.statusbar .msg { flex: 1; min-width: 0; }
+.statusbar .depth { flex: none; cursor: help; }
+
+/* ---------- dialogs ---------- */
+#dlgLayer { position: fixed; inset: 0 0 calc(28px * var(--tz, 1)) 0; z-index: 40; display: grid; place-items: center; pointer-events: none; }
+#dlgLayer > .dlg { pointer-events: auto; grid-area: 1 / 1; }
+#dlgLayer.modal { pointer-events: auto; background: repeating-conic-gradient(rgba(0,0,0,.18) 0 25%, transparent 0 50%) 0 0 / 2px 2px; }
+.dlg { zoom: var(--dz, 1); width: min(340px, calc(100vw / var(--dz, 1) - 16px)); max-height: calc((100vh - 40px * var(--tz,1)) / var(--dz, 1) - 8px); display: flex; flex-direction: column; animation: pop .14s steps(3); }
+.dlg.still { animation: none; }
+.dlg.wide { width: min(400px, calc(100vw / var(--dz, 1) - 16px)); }
+@keyframes pop { 0% { transform: scale(.7); opacity: .2 } 100% { transform: none } }
+.dlg .body { padding: 10px 10px 8px; overflow: auto; }
+.dlg .row { display: flex; gap: 10px; align-items: flex-start; }
+.dlg img.px.big { width: 32px; height: 32px; flex: none; }
+.dlg td img.px, .dlg .help-list img.px, .dlg p img.px { display: inline-block; vertical-align: middle; }
+.dlg p.pill { display: flex; flex-wrap: wrap; }
+.dlg p { margin: 0 0 8px; }
+.dlg h3 { margin: 0 0 6px; font-size: 11px; }
+.dlg .btns { display: flex; justify-content: center; gap: 6px; padding: 4px 10px 10px; flex-wrap: wrap; }
+.dlg table { border-collapse: collapse; width: 100%; }
+.dlg td, .dlg th { padding: 2px 4px; text-align: left; white-space: nowrap; }
+.dlg th { font-weight: normal; color: var(--lo); }
+.dlg td.r, .dlg th.r { text-align: right; }
+.inset { background: #fff; box-shadow: var(--field); padding: 6px; margin-bottom: 8px; }
+.choices { display: grid; gap: 4px; }
+.choice {
+  display: flex; align-items: center; gap: 8px; text-align: left; padding: 5px 8px; border: 0; background: var(--face);
+  box-shadow: var(--raised); cursor: pointer; width: 100%; min-height: 40px;
+}
+.choice:active:not(:disabled) { box-shadow: var(--pressed); }
+.choice:focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+.choice:disabled { color: var(--lo); cursor: default; text-shadow: 1px 1px var(--hi); }
+.choice:disabled img { opacity: .4; filter: grayscale(1); }
+.choice img.px { width: 32px; height: 32px; flex: none; }
+.choice .t { font-weight: bold; }
+.choice .d { color: #333; }
+.choice:disabled .d { color: var(--lo); }
+.choice .price { margin-left: auto; font-weight: bold; display: flex; align-items: center; gap: 2px; white-space: nowrap; }
+.choice .price img.px, .choice .pill img.px { width: 16px; height: 16px; }
+.choice .pill { display: inline-flex; vertical-align: middle; }
+.choice.sel { box-shadow: var(--pressed); background-image: repeating-conic-gradient(#c0c0c0 0 25%, #fff 0 50%); background-size: 2px 2px; }
+.choice .col { flex: 1; min-width: 0; }
+.doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 6px; }
+.doorbtn { flex-direction: column; text-align: center; padding: 8px 4px; gap: 3px; min-height: 0; }
+.doorbtn .stack { position: relative; width: 48px; height: 48px; }
+.doorbtn .stack img.px { width: 48px; height: 48px; }
+.doorbtn .stack img.px.ico { position: absolute; width: 24px; height: 24px; left: 12px; top: -4px; filter: drop-shadow(1px 1px 0 #000); }
+.doorbtn:hover .stack img.px.ico { animation: hop .5s steps(4) infinite alternate; }
+@keyframes hop { to { top: -8px; } }
+.pill { display: inline-flex; align-items: center; gap: 2px; font-weight: bold; }
+.pill img.px { width: 16px; height: 16px; }
+.muted { color: #555; }
+.big-score { font: 700 16px/1 var(--pixel); }
+.wobble { animation: wobble .5s steps(5) 2; }
+@keyframes wobble { 25%{transform:rotate(-12deg)} 75%{transform:rotate(12deg)} }
+.groove { border: 0; border-top: 1px solid var(--lo); border-bottom: 1px solid var(--hi); margin: 8px 0; }
+.help-list { margin: 0 0 8px; padding-left: 16px; } .help-list li { margin-bottom: 3px; }
+.kv { display: grid; grid-template-columns: 20px 1fr; gap: 4px 6px; align-items: center; margin-bottom: 8px; }
+
+/* ---------- taskbar ---------- */
+#taskbar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: calc(28px * var(--tz, 1) + env(safe-area-inset-bottom, 0px)); z-index: 60;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+#taskbar .tb-in { zoom: var(--tz, 1); height: 28px; display: flex; align-items: center; gap: 4px; padding: 2px; background: var(--face); box-shadow: inset 0 1px var(--hi2), inset 0 2px var(--hi); }
+#startBtn { font-weight: bold; min-width: 0; padding: 2px 5px; height: 22px; }
+#startBtn img.px { width: 16px; height: 16px; }
+.taskbtn { min-width: 0; width: 150px; justify-content: flex-start; height: 22px; padding: 2px 6px; overflow: hidden; white-space: nowrap; }
+.taskbtn img.px { width: 16px; height: 16px; flex: none; }
+.tray { margin-left: auto; box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--lo); padding: 3px 8px; height: 22px; display: flex; align-items: center; gap: 4px; }
+#startMenu { position: fixed; left: 2px; bottom: calc(28px * var(--tz, 1)); zoom: var(--tz, 1); z-index: 61; display: flex; background: var(--face); box-shadow: var(--raised); padding: 3px; }
+#startMenu .side { width: 22px; background: linear-gradient(0deg, var(--title1), var(--title2)); color: #c0c0c0; font: bold 16px/1 var(--ui); writing-mode: vertical-rl; transform: rotate(180deg); padding: 6px 2px; }
+#startMenu .side b { color: #fff; }
+#startMenu .items { min-width: 160px; }
+#startMenu .it { display: flex; align-items: center; gap: 8px; padding: 5px 16px 5px 6px; }
+#startMenu .it:hover { background: var(--title1); color: #fff; }
+#startMenu .it img.px { width: 24px; height: 24px; }
+#startMenu hr { border: 0; border-top: 1px solid var(--lo); border-bottom: 1px solid var(--hi); margin: 2px; }
+</style>
+</head>
+<body>
+<div id="desktop">
+  <div id="zoomer">
+    <div class="win" id="win">
+      <div class="titlebar" id="titlebar">
+        <span id="titleIcon"></span><span class="ttl">Minecrawler</span>
+        <button class="tb-btn" id="minBtn" title="Minimize" aria-label="Minimize">_</button>
+        <button class="tb-btn" id="maxBtn" title="Maximize" aria-label="Maximize">□</button>
+        <button class="tb-btn close" id="closeBtn" title="Close" aria-label="Close">✕</button>
+      </div>
+      <div class="menubar" id="menubar">
+        <div class="m" data-menu="game"><u>G</u>ame</div>
+        <div class="m" data-menu="help"><u>H</u>elp</div>
+      </div>
+      <div class="game">
+        <div class="top sunk">
+          <div class="led" id="ledMines" title="Mines left"></div>
+          <div class="facewrap"><button class="facebtn" id="faceBtn" aria-label="New run"><canvas id="face" width="17" height="17"></canvas></button><span id="crown" hidden></span></div>
+          <div class="led" id="ledTime" title="Time"></div>
+        </div>
+        <div class="hud sunk">
+          <div class="hearts" id="hearts"></div>
+          <div class="gold" id="gold" title="Gold"></div>
+          <div class="spacer"></div>
+          <button class="btn small descend" id="descendBtn" hidden title="Take the stairs"></button>
+          <div class="slots" id="slots"></div>
+          <button class="slot" id="flagBtn" title="Flag mode (F): taps place flags" aria-label="Flag mode"></button>
+        </div>
+        <div class="fieldwrap">
+          <div class="field sunk3" id="field">
+            <canvas id="board" width="144" height="144"></canvas>
+            <div class="fx" id="fx"></div>
+            <div class="banner" id="banner"></div>
+          </div>
+        </div>
+        <div class="relics sunk" id="relics"></div>
+      </div>
+      <div class="statusbar">
+        <div class="msg" id="status">Welcome to Minecrawler.</div>
+        <div class="depth" id="depthInfo">Depth –</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dlgLayer"></div>
+<div id="taskbar"><div class="tb-in">
+  <button class="btn" id="startBtn"></button>
+  <button class="btn taskbtn on" id="taskBtn"></button>
+  <div class="tray"><span id="soundIcon" title="Sound"></span><span id="clock">12:00</span></div>
+</div></div>
+<div id="startMenu" hidden></div>
+<script src="sprites.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
