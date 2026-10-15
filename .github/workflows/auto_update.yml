@@ -11,6 +11,9 @@ permissions:
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tradeup
 
     steps:
     - name: Repository herunterladen

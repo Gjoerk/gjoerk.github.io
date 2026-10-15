@@ -5,6 +5,9 @@
 :: aber dann funktioniert die Aufgabenplanung später evtl. nicht.
 cd /d "C:\Users\Gabriel\Documents\TRADEUPENGINE"
 
+:: Die TradeUpEngine-Dateien liegen im Unterordner "tradeup".
+cd tradeup
+
 :: --- 1. LOKALE ARBEIT SICHERN ---
 :: Das verhindert den "Overwritten"-Fehler. Wir speichern deine index.html erst ab.
 echo Siche lokalen Stand...
