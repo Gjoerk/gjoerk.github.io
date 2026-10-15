@@ -82,6 +82,7 @@
   }
   .card .icon img { width: 28px; height: 28px; image-rendering: auto; }
   .card .icon img.pixel { image-rendering: pixelated; }
+  .card .icon svg { width: 24px; height: 24px; color: var(--blue); }
   .card h3 { margin: 0 0 4px; font-size: 1.0625rem; }
   .card h3 .arrow { display: inline-block; color: var(--blue); transition: transform .15s ease; }
   .card:hover h3 .arrow { transform: translateX(3px); }
@@ -124,14 +125,14 @@
   <header>
     <img src="logo.png" width="252" height="111" alt="GS logo">
     <h1>Gabriel Schwarz</h1>
-    <p>Things I build: tools, plug-ins and games.</p>
+    <p>Things I build: tools, plug-ins, games, music and 3D prints.</p>
   </header>
 
   <section aria-labelledby="open-h">
     <h2 id="open-h">Projects</h2>
     <div class="grid">
       <a class="card" href="/tastecherry/">
-        <span class="icon"><img src="/tastecherry/assets/img/favicon.svg" alt=""></span>
+        <span class="icon"><img src="icons/tastecherry.svg" alt=""></span>
         <span>
           <h3>tastecherry <span class="arrow" aria-hidden="true">→</span></h3>
           <p>Websites with taste, at fixed prices. AI builds it, I make it good.</p>
@@ -156,6 +157,26 @@
         <span>
           <h3>Minecrawler <span class="arrow" aria-hidden="true">→</span></h3>
           <p>A roguelike Minesweeper: ten floors of mines, items and relics in a Windows 95 window.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="elsewhere-h">
+    <h2 id="elsewhere-h">Elsewhere</h2>
+    <div class="grid">
+      <a class="card" href="https://makerworld.com/en/@gjoerk" target="_blank" rel="noopener">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg></span>
+        <span>
+          <h3>MakerWorld <span class="arrow" aria-hidden="true">↗</span></h3>
+          <p>3D print models I designed. @gjoerk</p>
+        </span>
+      </a>
+      <a class="card" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 10v4M7 7v10M11 4v16M15 8v8M19 6v12M23 11v2"/></svg></span>
+        <span>
+          <h3>SoundCloud <span class="arrow" aria-hidden="true">↗</span></h3>
+          <p>Music I make. @swrz</p>
         </span>
       </a>
     </div>
