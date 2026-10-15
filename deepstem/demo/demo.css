@@ -73,7 +73,6 @@
 .dsd .tr{height:60px;display:flex;align-items:center;gap:10px;padding:0 14px;flex:none}
 .dsd .play{width:40px;height:40px;border-radius:50%}
 .dsd .play .ic{width:18px;height:18px}
-.dsd .play.isplay .ic{transform:translateX(2px)}
 .dsd .back{width:34px;height:34px;border-radius:50%}
 .dsd .back .ic{width:15px;height:15px}
 .dsd .time{font:500 17px "Chakra Petch",monospace;margin-left:4px;white-space:nowrap}
