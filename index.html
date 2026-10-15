@@ -4,22 +4,260 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gabriel Schwarz</title>
+<meta name="description" content="Projects by Gabriel Schwarz: DeepStem, Chess Companion, Minecrawler and more.">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#f5f8fc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#06152b" media="(prefers-color-scheme: dark)">
 <style>
-  body { margin: 0; padding: 48px 16px; font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #faf9f5; color: #141413; }
-  main { max-width: 480px; margin: 0 auto; }
-  a { color: inherit; }
-  @media (prefers-color-scheme: dark) { body { background: #141413; color: #faf9f5; } }
+  :root {
+    --blue: #2da3ea;
+    --blue-2: #4295d2;
+    --navy: #00234b;
+    --bg: #f5f8fc;
+    --card: #ffffff;
+    --card-hover: #ffffff;
+    --border: #dbe6f2;
+    --text: #00234b;
+    --muted: #51667f;
+    --ring: rgba(45, 163, 234, .35);
+    --shadow: 0 1px 2px rgba(0, 35, 75, .06), 0 8px 24px rgba(0, 35, 75, .06);
+    --shadow-hover: 0 2px 4px rgba(0, 35, 75, .08), 0 16px 40px rgba(0, 35, 75, .12);
+    --error: #c83a3a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #06152b;
+      --card: #0b2140;
+      --card-hover: #0f2a50;
+      --border: #17345c;
+      --text: #e8f1fb;
+      --muted: #8fa6c1;
+      --ring: rgba(45, 163, 234, .45);
+      --shadow: none;
+      --shadow-hover: 0 12px 32px rgba(0, 0, 0, .35);
+      --error: #ff7b7b;
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 880px; margin: 0 auto; padding: 72px 16px 48px; }
+
+  header { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; margin-bottom: 64px; }
+  header img { width: 120px; height: auto; }
+  h1 { margin: 0; font-size: clamp(2rem, 6vw, 2.75rem); line-height: 1.1; letter-spacing: -.02em; }
+  header p { margin: 0; color: var(--muted); font-size: 1.125rem; max-width: 34em; }
+
+  section { margin-bottom: 56px; }
+  h2 {
+    display: flex; align-items: center; gap: 10px;
+    margin: 0 0 16px; font-size: .8125rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em; color: var(--muted);
+  }
+  h2 svg { width: 14px; height: 14px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .card {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); color: inherit; text-decoration: none;
+    box-shadow: var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); border-color: var(--blue); background: var(--card-hover); }
+  .card:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+  .card .icon {
+    flex: none; width: 44px; height: 44px; border-radius: 10px;
+    display: grid; place-items: center; overflow: hidden;
+    background: var(--bg); border: 1px solid var(--border);
+  }
+  .card .icon img { width: 28px; height: 28px; image-rendering: auto; }
+  .card .icon img.pixel { image-rendering: pixelated; }
+  .card h3 { margin: 0 0 4px; font-size: 1.0625rem; }
+  .card h3 .arrow { display: inline-block; color: var(--blue); transition: transform .15s ease; }
+  .card:hover h3 .arrow { transform: translateX(3px); }
+  .card p { margin: 0; color: var(--muted); font-size: .9375rem; }
+
+  .lock {
+    padding: 28px; border: 1px dashed var(--border); border-radius: 16px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px;
+  }
+  .lock p { margin: 0; color: var(--muted); flex: 1 1 220px; }
+  .lock form { display: flex; gap: 8px; flex: 1 1 280px; min-width: 0; }
+  .lock input {
+    flex: 1; min-width: 0; padding: 10px 14px; font: inherit; color: var(--text);
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .lock input:focus { outline: 3px solid var(--ring); outline-offset: 0; border-color: var(--blue); }
+  .lock input.wrong { border-color: var(--error); animation: shake .3s; }
+  .lock button {
+    padding: 10px 18px; font: inherit; font-weight: 600; color: #fff;
+    background: var(--blue); border: 0; border-radius: 10px; cursor: pointer;
+  }
+  .lock button:hover { background: var(--blue-2); }
+  .lock button:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+  .lock .msg { flex-basis: 100%; margin: -8px 0 0; font-size: .875rem; color: var(--error); }
+  .lock .msg:empty { display: none; }
+  @media (max-width: 480px) { .lock { padding: 20px; } }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+  .relock {
+    margin-top: 12px; padding: 0; font: inherit; font-size: .875rem;
+    color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline;
+  }
+
+  footer { color: var(--muted); font-size: .875rem; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 </head>
 <body>
 <main>
-  <h1>Gabriel Schwarz</h1>
-  <ul>
-    <li><a href="/tradeup/">TradeUpEngine</a></li>
-    <li><a href="/deepstem/">DeepStem</a></li>
-    <li><a href="/chess/">Chess Companion</a></li>
-    <li><a href="/minecrawler/">Minecrawler</a></li>
-  </ul>
+  <header>
+    <img src="logo.png" width="252" height="111" alt="GS logo">
+    <h1>Gabriel Schwarz</h1>
+    <p>Things I build: tools, plug-ins and games.</p>
+  </header>
+
+  <section aria-labelledby="open-h">
+    <h2 id="open-h">Projects</h2>
+    <div class="grid">
+      <a class="card" href="/deepstem/">
+        <span class="icon"><img src="/deepstem/favicon.svg" alt=""></span>
+        <span>
+          <h3>DeepStem <span class="arrow" aria-hidden="true">→</span></h3>
+          <p>A free VST3 plug-in that splits any song into stems, right in your DAW.</p>
+        </span>
+      </a>
+      <a class="card" href="/chess/">
+        <span class="icon"><img src="/chess/favicon.png" alt=""></span>
+        <span>
+          <h3>Chess Companion <span class="arrow" aria-hidden="true">→</span></h3>
+          <p>Analyse your games, solve rated puzzles, train coordinates and learn openings.</p>
+        </span>
+      </a>
+      <a class="card" href="/minecrawler/">
+        <span class="icon"><img class="pixel" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23c0c0c0'/%3E%3Crect x='4' y='4' width='8' height='8' fill='black'/%3E%3Crect x='7' y='2' width='2' height='12' fill='black'/%3E%3Crect x='2' y='7' width='12' height='2' fill='black'/%3E%3Crect x='5' y='5' width='2' height='2' fill='white'/%3E%3C/svg%3E"></span>
+        <span>
+          <h3>Minecrawler <span class="arrow" aria-hidden="true">→</span></h3>
+          <p>A roguelike Minesweeper: ten floors of mines, items and relics in a Windows 95 window.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="secret-h">
+    <h2 id="secret-h">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      Secret projects
+    </h2>
+    <div id="secret-locked" class="lock">
+      <p>Not ready for the public yet. Got the password?</p>
+      <form id="secret-form" autocomplete="off">
+        <label for="secret-pw" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Password</label>
+        <input id="secret-pw" type="password" placeholder="Password" required>
+        <button type="submit">Unlock</button>
+      </form>
+      <p class="msg" id="secret-msg" role="status" aria-live="polite"></p>
+    </div>
+    <div id="secret-open" hidden>
+      <div class="grid" id="secret-grid"></div>
+      <button class="relock" id="secret-relock" type="button">Lock again</button>
+    </div>
+  </section>
+
+  <footer>© Gabriel Schwarz</footer>
 </main>
+
+<script>
+// The secret project list is stored AES-GCM encrypted in secret.json and only
+// decrypted in the browser with the password (see tools/encrypt_secret.py).
+(function () {
+  const KEY = 'gs-secret-pw';
+  const form = document.getElementById('secret-form');
+  const input = document.getElementById('secret-pw');
+  const msg = document.getElementById('secret-msg');
+  const locked = document.getElementById('secret-locked');
+  const open = document.getElementById('secret-open');
+  const grid = document.getElementById('secret-grid');
+  let payload = null;
+
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+  async function decrypt(password) {
+    if (!payload) {
+      const r = await fetch('secret.json', { cache: 'no-cache' });
+      if (!r.ok) throw new Error('missing');
+      payload = await r.json();
+    }
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', hash: 'SHA-256', salt: b64(payload.salt), iterations: payload.iterations },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(payload.iv) }, key, b64(payload.data));
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+
+  function el(tag, attrs, children) {
+    const e = document.createElement(tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    for (const c of children || []) e.append(c);
+    return e;
+  }
+
+  function render(projects) {
+    grid.replaceChildren(...projects.map(p => el('a', { class: 'card', href: p.href }, [
+      el('span', { class: 'icon' }, [el('img', { src: p.icon, alt: '' })]),
+      el('span', {}, [
+        el('h3', {}, [p.name + ' ', el('span', { class: 'arrow', 'aria-hidden': 'true' }, ['→'])]),
+        el('p', {}, [p.description])
+      ])
+    ])));
+    locked.hidden = true;
+    open.hidden = false;
+  }
+
+  async function unlock(password, quiet) {
+    try {
+      render(await decrypt(password));
+      try { sessionStorage.setItem(KEY, password); } catch (e) {}
+      return true;
+    } catch (e) {
+      if (!quiet) {
+        msg.textContent = e.message === 'missing' ? 'Could not load the secret list.' : 'Wrong password.';
+        input.classList.remove('wrong'); void input.offsetWidth; input.classList.add('wrong');
+        input.select();
+      }
+      return false;
+    }
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    msg.textContent = '';
+    unlock(input.value, false);
+  });
+
+  document.getElementById('secret-relock').addEventListener('click', () => {
+    try { sessionStorage.removeItem(KEY); } catch (e) {}
+    grid.replaceChildren();
+    input.value = '';
+    open.hidden = true;
+    locked.hidden = false;
+  });
+
+  let saved = null;
+  try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlock(saved, true);
+})();
+</script>
 </body>
 </html>
