@@ -234,14 +234,15 @@
   function paintLane(lane) {
     const g = lane.ctx;
     if (!g) return;
-    const { w, h } = lane, c = STEM[lane.id].color;
+    // While another stem is soloed this lane is drawn in grey.
+    const { w, h } = lane, c = lane.muted ? "#4b5563" : STEM[lane.id].color;
     const split = (position() / length()) * w;
     g.clearRect(0, 0, w, h);
     const grad = g.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, c); grad.addColorStop(0.5, c + "cc"); grad.addColorStop(1, c);
     g.fillStyle = grad;
-    g.save(); g.beginPath(); g.rect(0, 0, split, h); g.clip(); g.globalAlpha = 1; g.fill(lane.path); g.restore();
-    g.save(); g.beginPath(); g.rect(split, 0, w - split, h); g.clip(); g.globalAlpha = 0.32; g.fill(lane.path); g.restore();
+    g.save(); g.beginPath(); g.rect(0, 0, split, h); g.clip(); g.globalAlpha = lane.muted ? 0.55 : 1; g.fill(lane.path); g.restore();
+    g.save(); g.beginPath(); g.rect(split, 0, w - split, h); g.clip(); g.globalAlpha = lane.muted ? 0.2 : 0.32; g.fill(lane.path); g.restore();
     g.fillStyle = "rgba(255,255,255,.18)";
     g.fillRect(0, Math.round(h / 2), w, 1);
   }
@@ -298,10 +299,14 @@
   }
 
   function renderSolo() {
+    const any = lanes.some((l) => S.solo[l.id]);
     for (const l of lanes) {
       const on = !!S.solo[l.id];
       l.solo.classList.toggle("on", on);
       l.solo.style.background = on ? STEM[l.id].color : "";
+      l.muted = any && !on;
+      l.el.classList.toggle("muted", l.muted);
+      paintLane(l);
     }
   }
 
