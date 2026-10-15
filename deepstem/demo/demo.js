@@ -476,10 +476,15 @@
   new ResizeObserver(() => { if (S.mode === "stems") { lanes.forEach(drawLane); renderRuler(); renderPlayhead(); } }).observe(R.lanes);
 
   // ---------- start ----------
+  // Open with the stems already separated; fetch and decode the audio in the background
+  // (the AudioContext stays suspended until the first click on play).
   fetch(BASE + "peaks.json").then((r) => r.json()).then((m) => {
     S.meta = m;
+    S.hadStems = true;
     R.fdet.textContent = `${fmt(m.duration, false)} · 44.1 kHz · stereo`;
-    show("ready");
-    status("", "Ready · press Separate");
+    show("stems");
+    buildLanes();
+    status("ok", "Pre-separated with DeepStem · press play, solo stems, switch models");
+    loadModel(modelId()).catch(() => {});
   });
 })();

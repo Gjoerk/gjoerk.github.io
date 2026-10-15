@@ -1,5 +1,5 @@
 /* DeepStem web demo: a working replica of the plug-in UI (780 x 620, scaled to fit). */
-.dsd-wrap{position:relative;width:100%;max-width:980px;margin:56px auto 0}
+.dsd-wrap{position:relative;width:100%;max-width:780px;margin:56px auto 0}
 .dsd-scale{transform-origin:top left;width:780px;height:620px}
 .dsd{--bg:#080b10;--text:#eaf2fa;--soft:#c9d6e3;--muted:#8fa0b2;--dim:#7f90a3;--faint:#6f8195;--accent:#00d4ff;--a1:#6feaff;--a2:#00bfea;--on:#04131a;
   position:relative;width:780px;height:620px;overflow:hidden;background:var(--bg);color:var(--text);border-radius:14px;
