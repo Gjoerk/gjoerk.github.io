@@ -8,7 +8,10 @@
 <meta property="og:title" content="DeepStem — stem separation in your DAW">
 <meta property="og:description" content="Split any song into vocals, drums, bass and other. Free VST3 for Windows and macOS.">
 <meta property="og:image" content="https://tradeupengine.com/deepstem/deepstem-og.png">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<link rel="stylesheet" href="demo/demo.css?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;600&family=Chakra+Petch:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -43,7 +46,7 @@ h1 span{color:var(--accent)}
 .btn.primary strong,.btn.primary small{color:var(--on)}
 .btn.primary small{opacity:.75}
 .note{margin-top:14px;font-size:13px;color:var(--faint)}
-.shot{margin:56px auto 0;max-width:980px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4)}
+.shot{margin:0 auto;max-width:980px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4)}
 .shot img{display:block;width:100%;height:auto}
 section{padding:84px 0 0}
 h2{font:600 clamp(24px,3.4vw,34px)/1.2 Unbounded,sans-serif;margin:0 0 10px}
@@ -85,7 +88,7 @@ footer{margin-top:90px;padding:28px 0 40px;border-top:1px solid var(--line);colo
   </nav>
 
   <header class="hero">
-    <span class="badge"><i></i>Free beta · <span class="num">v2.0.1</span></span>
+    <span class="badge"><i></i>Free beta · <span class="num">v2.0.2</span></span>
     <h1>Split any song into <span>stems</span>, right in your DAW</h1>
     <p class="lead">DeepStem separates vocals, drums, bass and everything else with AI. It runs entirely on your computer, with no uploads, no account and no subscription.</p>
     <div class="dl" id="downloads">
@@ -96,7 +99,11 @@ footer{margin-top:90px;padding:28px 0 40px;border-top:1px solid var(--line);colo
     </div>
     <p class="note">Windows without an installer: <a href="https://github.com/Gjoerk/gjoerk.github.io/releases/latest/download/DeepStem-Windows-VST3.zip">portable VST3 ZIP</a> (<span class="num">129 MB</span>)</p>
     <p class="note">VST3 plug-in and standalone app · works in FL Studio, Ableton Live, Cubase, Studio One, Reaper, Bitwig and other VST3 hosts</p>
-    <div class="shot"><img src="deepstem-screenshot.webp" width="1560" height="1240" alt="The DeepStem plug-in showing a song split into vocals, drums, bass and other, each with its own waveform"></div>
+    <div class="dsd-wrap" id="dsd-root" data-base="demo/">
+      <noscript><div class="shot"><img src="deepstem-screenshot.webp" width="1560" height="1240" alt="The DeepStem plug-in showing a song split into vocals, drums, bass and other, each with its own waveform"></div></noscript>
+    </div>
+    <p class="dsd-hint">Try it: press <strong>Separate</strong>, then play. Solo stems with <strong>S</strong> (right-click for just that one), click a waveform to jump, and switch models to compare.</p>
+    <p class="dsd-credit">Demo song: “Troublemaker” by <a href="https://www.joshwoodward.com/">Josh Woodward</a>, licensed <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY 3.0 US</a> (<a href="https://commons.wikimedia.org/wiki/File:Josh_Woodward_-_Here_Today_-_04_-_Troublemaker.ogg">source</a>). This 30-second excerpt was split into stems with DeepStem; the stems are derived from the original recording.</p>
   </header>
 
   <section id="features">
@@ -106,7 +113,7 @@ footer{margin-top:90px;padding:28px 0 40px;border-top:1px solid var(--line);colo
       <div class="card"><h3><span class="dot" style="background:#00d4ff"></span>2 or 4 stems</h3><p>Vocals and instrumental for karaoke, sampling and remixes, or vocals, drums, bass and other.</p></div>
       <div class="card"><h3><span class="dot" style="background:#ffc400"></span>Preview in sync</h3><p>All stems play together through the plug-in. Solo one, click a waveform to jump.</p></div>
       <div class="card"><h3><span class="dot" style="background:#a060ff"></span>Drag into your DAW</h3><p>Every stem has a handle. Drag it straight into your timeline as a 24-bit WAV or FLAC.</p></div>
-      <div class="card"><h3><span class="dot" style="background:#00e676"></span>Three quality modes</h3><p>Standard for speed, High for smoother results, Ultra for our best-sounding model.</p></div>
+      <div class="card"><h3><span class="dot" style="background:#00e676"></span>Three models</h3><p>Prism, Prism+ and Fusion. Every song is different, so if one model doesn’t nail it, try another.</p></div>
       <div class="card"><h3><span class="dot" style="background:#ff4fa3"></span>Private and offline</h3><p>Your music never leaves your computer. No internet connection needed after installing.</p></div>
       <div class="card"><h3><span class="dot" style="background:#6feaff"></span>Remembers your work</h3><p>Stems come back when you reopen your project, so you can keep working where you left off.</p></div>
     </div>
@@ -144,17 +151,18 @@ footer{margin-top:90px;padding:28px 0 40px;border-top:1px solid var(--line);colo
     <p class="sub">The same steps in the plug-in and in the standalone app.</p>
     <ol class="steps">
       <li><strong>Drop a song</strong> onto the window, or press <em>Choose file</em>. WAV, AIFF, FLAC, MP3 and OGG work everywhere; M4A/AAC on macOS.</li>
-      <li><strong>Pick 2 or 4 stems</strong>, a format (WAV or FLAC) and a quality: <em>Standard</em> is fastest, <em>High</em> and <em>Ultra</em> take longer.</li>
+      <li><strong>Pick 2 or 4 stems</strong>, a format (WAV or FLAC) and a model: <em>Prism</em> is fast and crisp, <em>Prism+</em> is smoother but slower, <em>Fusion</em> is often more natural on dense mixes.</li>
       <li><strong>Press Separate.</strong> A progress bar shows the time left, measured on your computer.</li>
-      <li><strong>Preview</strong> with play, solo stems with <kbd>S</kbd>, and click any waveform to jump there.</li>
+      <li><strong>Preview</strong> with play, solo stems with <kbd>S</kbd> (right-click <kbd>S</kbd> to hear only that stem), and click any waveform to jump there.</li>
       <li><strong>Drag a stem’s handle into your project</strong>, or open the output folder at the bottom right. Stems are saved in <code>Music/DeepStem Stems/&lt;song&gt;</code>.</li>
     </ol>
   </section>
 
   <section id="faq">
     <h2>FAQ</h2>
-    <details><summary>How long does a song take?</summary><p>It depends on your computer. As a rough guide, a 3½-minute song takes about 1½ minutes on Standard on an Apple M1, and longer on older laptops. High and Ultra are slower. DeepStem shows the real time left while it works.</p></details>
+    <details><summary>How long does a song take?</summary><p>It depends on your computer. As a rough guide, a 3½-minute song takes about 1½ minutes with Prism on an Apple M1, and longer on older laptops. Prism+ and Fusion are slower. DeepStem shows the real time left while it works.</p></details>
     <details><summary>Why does Windows or my browser warn about the download?</summary><p>Windows SmartScreen and Defender warn about programs from publishers they don’t know yet. DeepStem’s beta installer isn’t code-signed, so it gets this warning even though it’s clean. A signed version is coming. Until then you can click through the warning as described above, or use the portable ZIP, which contains just the plug-in and needs no installer.</p></details>
+    <details><summary>Which model should I use?</summary><p>Start with <strong>Prism</strong>: it’s the fastest. Songs separate differently, so if vocals bleed into the instrumental or the drums sound thin, try <strong>Fusion</strong>, a different model that often sounds more natural on dense mixes, or <strong>Prism+</strong>, which smooths the transitions of Prism.</p></details>
     <details><summary>Does it need the internet?</summary><p>No. Everything runs on your computer and your audio is never uploaded.</p></details>
     <details><summary>Which DAWs does it work in?</summary><p>Any DAW that loads VST3 plug-ins: FL Studio, Ableton Live, Cubase, Studio One, Reaper, Bitwig and more. For Logic Pro, GarageBand or no DAW at all, use the standalone DeepStem app.</p></details>
     <details><summary>I don’t see DeepStem in my DAW</summary><p>Rescan your plug-ins and look under instruments, not effects. Check the plug-in is in your VST3 folder: <code>C:\Program Files\Common Files\VST3</code> on Windows, <code>/Library/Audio/Plug-Ins/VST3</code> on macOS.</p></details>
@@ -173,9 +181,11 @@ footer{margin-top:90px;padding:28px 0 40px;border-top:1px solid var(--line);colo
 
   <footer>
     <span>© <span class="num">2026</span> DeepStem · free beta</span>
-    <span>VST is a registered trademark of Steinberg Media Technologies GmbH.</span>
+    <span><a href="https://buymeacoffee.com/gabrielschq">Buy me a coffee</a> · VST is a registered trademark of Steinberg Media Technologies GmbH.</span>
   </footer>
 </div>
+<script src="demo/icons.js?v=2"></script>
+<script src="demo/demo.js?v=2"></script>
 <script>
   // Highlight the download for this visitor's OS and open the matching install tab.
   const isMac = /Mac/i.test(navigator.platform || navigator.userAgent) && !/iPhone|iPad/i.test(navigator.userAgent);
