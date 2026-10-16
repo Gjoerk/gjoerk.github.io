@@ -298,7 +298,30 @@ function vinyl() {
   return { group: g, spin: 0, sway: true, tick };
 }
 
-const MODELS = { cherries, stems, pawn, mine, vase, vinyl };
+// nyon.space: a ringed planet with a small moon in orbit.
+function planet() {
+  const R = 0.62;
+  const prof = [];
+  for (let i = 0; i <= 40; i++) { const a = -Math.PI / 2 + (Math.PI * i) / 40; prof.push([R * Math.cos(a), R * Math.sin(a)]); }
+  const { lines, occ } = lathe(prof, { rings: 11, meridians: 16 });
+  for (const r of [0.86, 0.94, 1.0, 1.12]) lines.ring(r, 0, 96);
+  const body = wire(lines, [occ]);
+  body.rotation.z = 0.42;
+  const moonProf = [];
+  for (let i = 0; i <= 16; i++) { const a = -Math.PI / 2 + (Math.PI * i) / 16; moonProf.push([0.09 * Math.cos(a), 0.09 * Math.sin(a)]); }
+  const m = lathe(moonProf, { rings: 4, meridians: 8 });
+  const moon = wire(m.lines, [m.occ]);
+  const g = new THREE.Group();
+  g.add(body, moon);
+  const tick = (t, h) => {
+    const a = t * (0.5 + 0.8 * h);
+    moon.position.set(Math.cos(a) * 1.3, Math.sin(a) * 0.35, Math.sin(a) * 1.3);
+  };
+  tick(0, 0);
+  return { group: g, spin: 0.3, tick, fit: 1.75 };
+}
+
+const MODELS = { cherries, stems, pawn, mine, vase, vinyl, planet };
 
 // ---------- one small renderer per row ----------
 

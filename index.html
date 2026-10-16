@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gabriel Schwarz</title>
-<meta name="description" content="Projects by Gabriel Schwarz: tastecherry, DeepStem, Chess Companion, Minecrawler and more.">
+<meta name="description" content="Projects by Gabriel Schwarz: tastecherry, DeepStem, Chess Companion, Minecrawler, nyon.space and more.">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=2">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
@@ -304,7 +304,8 @@
     transition: transform 2.4s cubic-bezier(.16, 1, .3, 1);
   }
   .ix-bg::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .15); }
-  .ix-row.out .ix-bg { background: radial-gradient(closest-side, #1b5f8f, #071a2b); }
+  /* rows without a screenshot: a blue glow behind the model instead */
+  .ix-row.glow .ix-bg { grid-area: model; background: radial-gradient(closest-side, #1b5f8f, #071a2b); }
 
   .ix-row::before {
     content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 135%; z-index: -2;
@@ -353,6 +354,7 @@
     .ix-row { grid-template-columns: 1fr clamp(84px, 20vw, 150px); grid-template-areas: "type model" "name name" "desc desc"; gap: 10px; padding: 28px var(--pad); }
     .ix-model { align-self: start; margin: -14px -8px 0 0; }
     .ix-bg { position: absolute; inset: 0; margin: 0; -webkit-mask-image: none; mask-image: none; }
+    .ix-row.glow .ix-bg { grid-area: auto; background: radial-gradient(150px circle at calc(100% - 70px) 60px, #1b5f8f, transparent); }
     .ix-bg img { filter: brightness(.45) saturate(1.05); }
     .ix-bg::after { background: rgba(0, 0, 0, .3); }
     .ix-name span { font-size: min(12vw, 17.5cqi); }
@@ -420,9 +422,17 @@
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-bg" aria-hidden="true"><img src="img/projects/minecrawler.webp" alt="" loading="lazy"></span>
     </a>
+    <a class="ix-row glow" href="https://nyon.space" target="_blank" rel="noopener">
+      <span class="ix-bg" aria-hidden="true"></span>
+      <span class="ix-name"><span>nyon.space</span></span>
+      <span class="ix-desc">A game of mine.</span>
+      <span class="ix-type">Game</span>
+      <span class="ix-model" data-model="planet" aria-hidden="true"></span>
+      <span class="ix-arrow" aria-hidden="true">↗</span>
+    </a>
   </section>
   <section id="elsewhere"><div class="sec-head"><span>Elsewhere</span></div>
-    <a class="ix-row out" href="https://makerworld.com/en/@gjoerk" target="_blank" rel="noopener">
+    <a class="ix-row out glow" href="https://makerworld.com/en/@gjoerk" target="_blank" rel="noopener">
       <span class="ix-bg" aria-hidden="true"></span>
       <span class="ix-name"><span>MakerWorld</span></span>
       <span class="ix-desc">@gjoerk</span>
@@ -430,7 +440,7 @@
       <span class="ix-model" data-model="vase" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">↗</span>
     </a>
-    <a class="ix-row out" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
+    <a class="ix-row out glow" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
       <span class="ix-bg" aria-hidden="true"></span>
       <span class="ix-name"><span>SoundCloud</span></span>
       <span class="ix-desc">@swrz</span>
