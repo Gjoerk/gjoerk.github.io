@@ -228,44 +228,47 @@
     color: #6d6d6d; font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
   }
   /* ---------- projects and elsewhere: index rows ----------
-     Layers inside each row, back to front: the screenshot on the right half
-     (.ix-bg), a black cover that slides off to the left on hover with a soft,
-     blurred leading edge (::before), the grid lines (::after), then the text. */
+     Columns: text | screenshot | wireframe model | arrow.
+     Layers inside each row, back to front: the screenshot (.ix-bg), a black
+     cover that slides off to the left on hover with a soft, blurred leading
+     edge (::before), the grid lines (::after), then the text and the model. */
   .ix-row {
     position: relative; z-index: 1; isolation: isolate; overflow: hidden;
-    /* text on the black left half, the screenshot on the right half */
+    --py: clamp(28px, 2.8vw, 56px);
     display: grid; align-items: start; gap: 12px 32px;
-    grid-template-columns: minmax(0, 44%) clamp(150px, 15vw, 270px) 1fr 28px;
-    grid-template-areas: "type model . arrow" "name model . arrow" "desc model . arrow";
-    padding: clamp(28px, 2.8vw, 56px) var(--pad); border-bottom: 1px solid var(--line);
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr) clamp(150px, 15vw, 270px) 28px;
+    grid-template-areas: "type shot model arrow" "name shot model arrow" "desc shot model arrow";
+    padding: var(--py) var(--pad); border-bottom: 1px solid var(--line);
     color: var(--ink); text-decoration: none;
   }
+  /* the screenshot fills the middle column from the row's top edge to its bottom
+     edge and fades out at both sides */
   .ix-bg {
-    position: absolute; top: 0; bottom: 0; right: 0; left: 48%; z-index: -3; overflow: hidden; background: #0b2236;
-    /* fades into the black on its left edge */
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%); mask-image: linear-gradient(90deg, transparent, #000 22%);
+    grid-area: shot; align-self: stretch; position: relative; z-index: -3; overflow: hidden;
+    margin: calc(-1 * var(--py)) -32px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
   }
   .ix-bg img {
-    width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block;
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block;
     filter: brightness(.72) saturate(1.05); transform: scale(1.08);
-    transition: transform 1.4s cubic-bezier(.2, .7, .1, 1);
+    transition: transform 2.4s cubic-bezier(.16, 1, .3, 1);
   }
-  /* darker towards the right, where the small text sits */
-  .ix-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .1)); }
-  .ix-row.out .ix-bg { background: radial-gradient(120% 160% at 100% 50%, #1b5f8f, #071a2b 70%); }
+  .ix-bg::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .15); }
+  .ix-row.out .ix-bg { background: radial-gradient(closest-side, #1b5f8f, #071a2b); }
 
   .ix-row::before {
     content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 135%; z-index: -2;
     background: linear-gradient(270deg, transparent, rgba(0, 0, 0, .85) 14%, #000 26%);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    transition: transform .9s cubic-bezier(.16, 1, .3, 1); will-change: transform;
+    transition: transform 2s cubic-bezier(.3, .4, .2, 1); will-change: transform;
   }
   .ix-row::after {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
     background-size: calc((100% - 2 * var(--pad)) / 12) 100%;
     background-position: var(--pad) 0;
-    transition: opacity .8s;
+    transition: opacity 1.4s;
   }
 
   /* the name scales with its own column (cqi), so it never runs into the text beside it */
@@ -300,7 +303,7 @@
   @media (max-width: 1000px) {
     .ix-row { grid-template-columns: 1fr clamp(84px, 20vw, 150px); grid-template-areas: "type model" "name name" "desc desc"; gap: 10px; padding: 28px var(--pad); }
     .ix-model { align-self: start; margin: -14px -8px 0 0; }
-    .ix-bg { left: 0; -webkit-mask-image: none; mask-image: none; }
+    .ix-bg { position: absolute; inset: 0; margin: 0; -webkit-mask-image: none; mask-image: none; }
     .ix-bg img { filter: brightness(.45) saturate(1.05); }
     .ix-bg::after { background: rgba(0, 0, 0, .3); }
     .ix-name span { font-size: min(12vw, 17.5cqi); }
