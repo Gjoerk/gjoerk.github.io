@@ -91,7 +91,7 @@
     padding-top: 14px; padding-bottom: 14px;
     background-color: rgba(10, 12, 16, .38);
     background-image: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .015));
-    -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(170%); backdrop-filter: blur(14px) saturate(170%);
     border-bottom-color: rgba(255, 255, 255, .1);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .09), 0 12px 32px -14px rgba(0, 0, 0, .7);
   }
@@ -104,7 +104,7 @@
   /* soft glass that fades out below the bar */
   .bar::after {
     content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 44px; pointer-events: none;
-    -webkit-backdrop-filter: blur(10px) saturate(150%); backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(5px) saturate(140%); backdrop-filter: blur(5px) saturate(140%);
     -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent);
     opacity: 0; transition: opacity .6s;
   }
@@ -112,38 +112,17 @@
   @keyframes bar-sheen { to { background-position: -200% 0; } }
 
   /* ---------- bottom edge: content rises out of frosted glass ---------- */
-  .edge { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: 120px; pointer-events: none; opacity: 0; transition: opacity .7s, height .7s cubic-bezier(.16, 1, .3, 1); }
+  .edge { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: 70px; pointer-events: none; opacity: 0; transition: opacity .7s, height .7s cubic-bezier(.16, 1, .3, 1); }
   .edge i { position: absolute; inset: 0; }
   .edge i:nth-child(1) { -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px); -webkit-mask-image: linear-gradient(transparent 0%, #000 15%, #000 30%, transparent 45%); mask-image: linear-gradient(transparent 0%, #000 15%, #000 30%, transparent 45%); }
-  .edge i:nth-child(2) { -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); -webkit-mask-image: linear-gradient(transparent 15%, #000 30%, #000 45%, transparent 60%); mask-image: linear-gradient(transparent 15%, #000 30%, #000 45%, transparent 60%); }
-  .edge i:nth-child(3) { -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px); -webkit-mask-image: linear-gradient(transparent 30%, #000 45%, #000 60%, transparent 75%); mask-image: linear-gradient(transparent 30%, #000 45%, #000 60%, transparent 75%); }
-  .edge i:nth-child(4) { -webkit-backdrop-filter: blur(14px) saturate(150%); backdrop-filter: blur(14px) saturate(150%); -webkit-mask-image: linear-gradient(transparent 45%, #000 60%, #000 75%, transparent 90%); mask-image: linear-gradient(transparent 45%, #000 60%, #000 75%, transparent 90%); }
-  .edge i:nth-child(5) { -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%); -webkit-mask-image: linear-gradient(transparent 60%, #000 78%); mask-image: linear-gradient(transparent 60%, #000 78%); }
-  .edge i:nth-child(6) { background: linear-gradient(transparent, rgba(0, 0, 0, .55)); }
+  .edge i:nth-child(2) { -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); -webkit-mask-image: linear-gradient(transparent 15%, #000 30%, #000 45%, transparent 60%); mask-image: linear-gradient(transparent 15%, #000 30%, #000 45%, transparent 60%); }
+  .edge i:nth-child(3) { -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); -webkit-mask-image: linear-gradient(transparent 30%, #000 45%, #000 60%, transparent 75%); mask-image: linear-gradient(transparent 30%, #000 45%, #000 60%, transparent 75%); }
+  .edge i:nth-child(4) { -webkit-backdrop-filter: blur(5px) saturate(140%); backdrop-filter: blur(5px) saturate(140%); -webkit-mask-image: linear-gradient(transparent 45%, #000 60%, #000 75%, transparent 90%); mask-image: linear-gradient(transparent 45%, #000 60%, #000 75%, transparent 90%); }
+  .edge i:nth-child(5) { -webkit-backdrop-filter: blur(8px) saturate(150%); backdrop-filter: blur(8px) saturate(150%); -webkit-mask-image: linear-gradient(transparent 60%, #000 78%); mask-image: linear-gradient(transparent 60%, #000 78%); }
+  .edge i:nth-child(6) { background: linear-gradient(transparent, rgba(0, 0, 0, .35)); }
   html.scrolled .edge { opacity: 1; }
-  html.scrolling .edge { height: 170px; }
+  html.scrolling .edge { height: 96px; }
   html.at-end .edge { opacity: 0; }
-
-  /* ---------- floating liquid-glass pill: section, progress, back to top ---------- */
-  .pill {
-    position: fixed; left: 50%; bottom: 22px; z-index: 45;
-    display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 18px; border-radius: 999px;
-    color: #f2f2f2; font: 600 11px/1 Archivo, system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .04) 55%, rgba(255, 255, 255, .08)), rgba(22, 26, 34, .32);
-    -webkit-backdrop-filter: blur(18px) saturate(190%) brightness(1.12); backdrop-filter: blur(18px) saturate(190%) brightness(1.12);
-    border: 1px solid rgba(255, 255, 255, .16);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -1px 1px rgba(255, 255, 255, .08), inset 0 0 22px rgba(124, 200, 245, .08), 0 14px 40px -12px rgba(0, 0, 0, .85);
-    opacity: 0; transform: translate(-50%, 160%) scale(.9); filter: blur(8px);
-    transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1), filter .7s cubic-bezier(.16, 1, .3, 1);
-  }
-  html.scrolled .pill { opacity: 1; transform: translate(-50%, 0); filter: none; }
-  /* a liquid squish while the page moves */
-  html.scrolled.scrolling .pill { transform: translate(-50%, 0) scale(1.06, .94); transition-duration: .35s; }
-  .pill-label { min-width: 9.5em; white-space: nowrap; }
-  .pill-track { position: relative; width: clamp(60px, 14vw, 140px); height: 2px; border-radius: 2px; background: rgba(255, 255, 255, .16); overflow: hidden; }
-  .pill-track i { position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--prog, 0)); background: linear-gradient(90deg, #7cc8f5, var(--blue)); }
-  .pill a { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: inherit; text-decoration: none; font-size: 14px; letter-spacing: 0; background: rgba(255, 255, 255, .1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3); transition: background .3s; }
-  .pill a:hover { background: var(--blue); }
 
   section[id] { scroll-margin-top: 64px; }
 
@@ -253,9 +232,9 @@
   }
 
   /* scrolling: sections blur in as they arrive, the hero name blurs out as it leaves */
-  .rv { opacity: 0; filter: blur(26px); transform: translateY(80px) scale(.97); transition: opacity 1.3s cubic-bezier(.16, 1, .3, 1), filter 1.3s cubic-bezier(.16, 1, .3, 1), transform 1.3s cubic-bezier(.16, 1, .3, 1); transition-delay: var(--rv-d, 0ms); }
+  .rv { opacity: 0; filter: blur(8px); transform: translateY(40px) scale(.99); transition: opacity 1.3s cubic-bezier(.16, 1, .3, 1), filter 1.3s cubic-bezier(.16, 1, .3, 1), transform 1.3s cubic-bezier(.16, 1, .3, 1); transition-delay: var(--rv-d, 0ms); }
   .rv.in { opacity: 1; filter: none; transform: none; }
-  .hero h1, .hero .bottom { filter: blur(calc(var(--sp, 0) * 30px)); opacity: calc(1 - var(--sp, 0) * .9); transform: translateY(calc(var(--sp, 0) * 110px)) scale(calc(1 - var(--sp, 0) * .04)); }
+  .hero h1, .hero .bottom { filter: blur(calc(var(--sp, 0) * 10px)); opacity: calc(1 - var(--sp, 0) * .8); transform: translateY(calc(var(--sp, 0) * 80px)) scale(calc(1 - var(--sp, 0) * .03)); }
 
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
   /* ---------- below the hero ---------- */
@@ -393,7 +372,6 @@
   <nav><a href="#projects">Projects</a><a href="#elsewhere">Elsewhere</a><a href="#secret">Secret</a></nav>
 </div>
 <div class="edge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-<div class="pill"><span class="pill-label" aria-live="polite">Projects</span><span class="pill-track" aria-hidden="true"><i></i></span><a href="#" aria-label="Back to top">↑</a></div>
 
 <header class="hero">
 
@@ -615,18 +593,10 @@
 (function () {
   const root = document.documentElement;
   let idle, queued = false;
-  const label = document.querySelector('.pill-label');
-  const sections = [...document.querySelectorAll('section[id]')].map(el => [el, el.querySelector('.sec-head span').textContent]);
   const update = () => {
     queued = false;
-    const max = root.scrollHeight - innerHeight;
     root.classList.toggle('scrolled', scrollY > 24);
-    root.classList.toggle('at-end', scrollY >= max - 80);
-    root.style.setProperty('--prog', max > 0 ? (scrollY / max).toFixed(4) : 0);
-    // the section whose top has passed the middle of the screen
-    let name = 'Gabriel Schwarz';
-    for (const [el, n] of sections) if (el.getBoundingClientRect().top < innerHeight / 2) name = n;
-    if (label.textContent !== name) label.textContent = name;
+    root.classList.toggle('at-end', scrollY >= root.scrollHeight - innerHeight - 80);
   };
   addEventListener('scroll', () => {
     root.classList.add('scrolling');
@@ -653,7 +623,7 @@
   let queued = false;
   const update = () => {
     queued = false;
-    const p = Math.min(Math.max(scrollY / (hero.offsetHeight * .75), 0), 1);
+    const h = hero.offsetHeight, p = Math.min(Math.max((scrollY - h * .3) / (h * .7), 0), 1);
     hero.style.setProperty('--sp', p.toFixed(3));
   };
   addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
