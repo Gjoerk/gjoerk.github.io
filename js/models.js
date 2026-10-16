@@ -93,7 +93,7 @@ function pawn() {
   arc(0, cy, r, -Math.acos(0.058 / r), D, 22);
   const h = P[P.length - 1][1];
   const { lines, occ } = lathe(shift(P, -h / 2, 2.25), { rings: 20, meridians: 18 });
-  return { group: wire(lines, [occ]), spin: 0.45 };
+  return { group: wire(lines, [occ]), spin: 0.45, fit: 1.7 };
 }
 
 // tastecherry: the pair of cherries with stems and a leaf from that site.
@@ -328,8 +328,9 @@ function core() {
   const g = new THREE.Group();
   g.add(body, shield, ...anomalies);
   g.rotation.x = 0.55;
-  const tick = (t, h) => {
-    shield.rotation.y = -t * (0.8 + 1.2 * h);
+  // the shield's angle builds up frame by frame, so a hover only changes its speed
+  const tick = (t, h, dt) => {
+    shield.rotation.y -= dt * (0.8 + 0.5 * h);
     for (const o of anomalies) {
       const { dir, off } = o.userData;
       const u = (t * 0.28 + off) % 1;                 // 0: far out, 1: at the core
