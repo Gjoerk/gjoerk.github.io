@@ -44,7 +44,7 @@
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
   body {
     margin: 0;
     min-height: 100vh;
@@ -182,7 +182,7 @@
     color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline;
   }
 
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
   /* ---------- below the hero ---------- */
   body { background: #000; }
   .below {
@@ -225,20 +225,32 @@
   /* ---------- projects and elsewhere: index rows ---------- */
   .ix-row {
     position: relative; z-index: 1; isolation: isolate; overflow: hidden;
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30ch) 14ch 32px; align-items: center; gap: 32px;
-    padding: 26px var(--pad); border-bottom: 1px solid var(--line);
+    display: grid; align-items: center; gap: 0 28px;
+    grid-template-columns: minmax(0, 1fr) clamp(170px, 16vw, 250px) minmax(0, 24ch) 12ch 28px;
+    grid-template-areas: "name thumb desc type arrow";
+    padding: 24px var(--pad); border-bottom: 1px solid var(--line);
     color: var(--ink); text-decoration: none; transition: color .35s .05s;
   }
   .ix-row::before {
     content: ""; position: absolute; inset: 0; z-index: -1; background: var(--blue);
     clip-path: inset(0 100% 0 0); transition: clip-path .6s cubic-bezier(.7, 0, .2, 1);
   }
-  .ix-name { font-weight: 900; font-stretch: 62%; text-transform: uppercase; font-size: clamp(48px, 9vw, 140px); line-height: .82; letter-spacing: -.01em; }
-  .ix-desc { font-size: 15px; line-height: 1.45; color: var(--dim); transition: color .35s .05s; }
-  .ix-type { font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #6d6d6d; text-align: right; transition: color .35s .05s; }
-  .ix-arrow { font-size: 28px; line-height: 1; text-align: right; transition: transform .4s cubic-bezier(.2, .7, .1, 1); }
+  /* the name scales with its own column (cqi), so it never runs into the screenshot */
+  .ix-name { grid-area: name; container-type: inline-size; font-weight: 900; font-stretch: 62%; text-transform: uppercase; line-height: .82; letter-spacing: -.01em; }
+  .ix-name span { display: block; font-size: min(120px, 7.2vw, 17.5cqi); }
+  .ix-desc { grid-area: desc; font-size: 15px; line-height: 1.45; color: var(--dim); transition: color .35s .05s; }
+  .ix-type { grid-area: type; font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #6d6d6d; text-align: right; transition: color .35s .05s; }
+  .ix-arrow { grid-area: arrow; font-size: 28px; line-height: 1; text-align: right; transition: transform .4s cubic-bezier(.2, .7, .1, 1); }
   .ix-row.out .ix-name { color: transparent; -webkit-text-stroke: 1.5px var(--ink); transition: -webkit-text-stroke-color .35s .05s; }
-  .ix-thumb { display: none; }
+
+  /* screenshot: grey and dimmed until hovered, then the colour wipes in with the row */
+  .ix-thumb { grid-area: thumb; position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid #262626; transition: border-color .35s .05s; }
+  .ix-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .9s cubic-bezier(.2, .7, .1, 1); }
+  .ix-thumb::after {
+    content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .45);
+    -webkit-backdrop-filter: grayscale(1); backdrop-filter: grayscale(1);
+    clip-path: inset(0 0 0 0); transition: clip-path .6s cubic-bezier(.7, 0, .2, 1);
+  }
 
   @media (hover: hover) {
     .ix-row:hover { color: #000; }
@@ -246,25 +258,29 @@
     .ix-row:hover .ix-desc, .ix-row:hover .ix-type { color: rgba(0, 0, 0, .75); }
     .ix-row:hover .ix-arrow { transform: translateX(8px); }
     .ix-row.out:hover .ix-name { -webkit-text-stroke-color: #000; }
+    .ix-row:hover .ix-thumb { border-color: #000; }
+    .ix-row:hover .ix-thumb::after { clip-path: inset(0 0 0 100%); }
+    .ix-row:hover .ix-thumb img { transform: scale(1.05); }
   }
 
-  /* preview that follows the cursor */
-  .ix-float {
-    position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none;
-    width: clamp(260px, 26vw, 420px); aspect-ratio: 16 / 10; overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, .9); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .8);
-    opacity: 0; transition: opacity .25s;
-  }
-  .ix-float.show { opacity: 1; }
-  .ix-float img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-
-  @media (max-width: 720px) {
-    .ix-row { grid-template-columns: 1fr; gap: 10px; padding: 22px var(--pad); }
-    .ix-name { font-size: 14vw; }
-    .ix-type { order: -1; text-align: left; }
+  /* tablets: type, name and description stacked beside the screenshot */
+  @media (max-width: 1000px) {
+    .ix-row {
+      grid-template-columns: minmax(0, 1fr) clamp(170px, 30vw, 260px);
+      grid-template-areas: "type thumb" "name thumb" "desc thumb";
+      gap: 10px 24px; align-items: start;
+    }
+    .ix-type { text-align: left; }
+    .ix-name span { font-size: min(12vw, 17.5cqi); }
     .ix-arrow { display: none; }
-    .ix-thumb { display: block; grid-column: 1 / -1; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); }
-    .ix-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .ix-thumb { align-self: center; }
+  }
+
+  /* phones: everything in one column, screenshot in colour */
+  @media (max-width: 600px) {
+    .ix-row { grid-template-columns: 1fr; grid-template-areas: "type" "name" "desc" "thumb"; padding: 22px var(--pad); }
+    .ix-name span { font-size: min(14vw, 17.5cqi); }
+    .ix-thumb::after { display: none; }
   }
 </style>
 </head>
@@ -288,29 +304,29 @@
 
 <div class="below">
   <section id="projects"><div class="sec-head"><span>Projects</span></div>
-    <a class="ix-row" href="/tastecherry/" data-img="img/projects/tastecherry.webp">
-      <span class="ix-name">tastecherry</span>
+    <a class="ix-row" href="/tastecherry/">
+      <span class="ix-name"><span>tastecherry</span></span>
       <span class="ix-desc">Websites with taste, at fixed prices. AI builds it, I make it good.</span>
       <span class="ix-type">Web studio</span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-thumb"><img src="img/projects/tastecherry.webp" alt="" loading="lazy"></span>
     </a>
-    <a class="ix-row" href="/deepstem/" data-img="img/projects/deepstem.webp">
-      <span class="ix-name">DeepStem</span>
+    <a class="ix-row" href="/deepstem/">
+      <span class="ix-name"><span>DeepStem</span></span>
       <span class="ix-desc">Splits any song into vocals, drums, bass and more, right inside your DAW.</span>
       <span class="ix-type">VST3 plug-in</span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-thumb"><img src="img/projects/deepstem.webp" alt="" loading="lazy"></span>
     </a>
-    <a class="ix-row" href="/chess/" data-img="img/projects/chess.webp">
-      <span class="ix-name">Chess Companion</span>
+    <a class="ix-row" href="/chess/">
+      <span class="ix-name"><span>Chess Companion</span></span>
       <span class="ix-desc">Analyse your games, solve rated puzzles, train coordinates and learn openings.</span>
       <span class="ix-type">Web app</span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-thumb"><img src="img/projects/chess.webp" alt="" loading="lazy"></span>
     </a>
-    <a class="ix-row" href="/minecrawler/" data-img="img/projects/minecrawler.webp">
-      <span class="ix-name">Minecrawler</span>
+    <a class="ix-row" href="/minecrawler/">
+      <span class="ix-name"><span>Minecrawler</span></span>
       <span class="ix-desc">A roguelike Minesweeper: ten floors of mines, items and relics in a Windows 95 window.</span>
       <span class="ix-type">Browser game</span>
       <span class="ix-arrow" aria-hidden="true">→</span>
@@ -319,19 +335,19 @@
   </section>
   <section id="elsewhere"><div class="sec-head"><span>Elsewhere</span></div>
     <a class="ix-row out" href="https://makerworld.com/en/@gjoerk" target="_blank" rel="noopener">
-      <span class="ix-name">MakerWorld</span>
+      <span class="ix-name"><span>MakerWorld</span></span>
       <span class="ix-desc">@gjoerk</span>
       <span class="ix-type">3D prints</span>
       <span class="ix-arrow" aria-hidden="true">↗</span>
     </a>
     <a class="ix-row out" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
-      <span class="ix-name">SoundCloud</span>
+      <span class="ix-name"><span>SoundCloud</span></span>
       <span class="ix-desc">@swrz</span>
       <span class="ix-type">Music</span>
       <span class="ix-arrow" aria-hidden="true">↗</span>
     </a>
   </section>
-  <div class="ix-float" aria-hidden="true"><img alt=""></div>
+
 
   <section id="secret" aria-labelledby="secret-h">
     <div class="sec-head"><span>Secret</span></div>
@@ -468,32 +484,6 @@
   const clock = document.getElementById('clock');
   const tick = () => clock.textContent = new Date().toLocaleTimeString([], { hour12: false });
   tick(); setInterval(tick, 1000);
-})();
-</script>
-<script>
-// Projects: a preview of the hovered project follows the cursor
-(function () {
-  const fl = document.querySelector('.ix-float'), im = fl.querySelector('img');
-  let x = 0, y = 0, tx = 0, ty = 0, on = false;
-  document.querySelectorAll('.ix-row[data-img]').forEach(r => {
-    new Image().src = r.dataset.img;   // preload, so the first hover is not empty
-    r.addEventListener('pointerenter', e => {
-      if (e.pointerType !== 'mouse') return;
-      im.src = r.dataset.img; fl.classList.add('show');
-      if (!on) { x = tx; y = ty; on = true; }
-    });
-    r.addEventListener('pointerleave', () => { fl.classList.remove('show'); on = false; });
-  });
-  addEventListener('pointermove', e => {
-    const w = fl.offsetWidth, h = fl.offsetHeight;
-    tx = e.clientX + 28 + w > innerWidth ? e.clientX - 28 - w : e.clientX + 28;
-    ty = Math.min(Math.max(e.clientY - h / 2, 12), innerHeight - h - 12);
-  });
-  (function loop() {
-    x += (tx - x) * .16; y += (ty - y) * .16;
-    fl.style.transform = `translate(${x}px, ${y}px)`;
-    requestAnimationFrame(loop);
-  })();
 })();
 </script>
 </body>
