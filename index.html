@@ -52,7 +52,6 @@
     color: var(--text);
     font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
-  main { max-width: 880px; margin: 0 auto; padding: 72px 16px 48px; }
 
   /* ---------- hero ---------- */
   .hero {
@@ -131,13 +130,6 @@
     .hero h1 .l2, .hero h1 .l2 .fx { -webkit-text-stroke-width: 1.2px; }
   }
 
-  section { margin-bottom: 56px; }
-  h2 {
-    display: flex; align-items: center; gap: 10px;
-    margin: 0 0 16px; font-size: .8125rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .1em; color: var(--muted);
-  }
-  h2 svg { width: 14px; height: 14px; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
   .card {
@@ -190,8 +182,90 @@
     color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline;
   }
 
-  footer { color: var(--muted); font-size: .875rem; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  /* ---------- below the hero ---------- */
+  body { background: #000; }
+  .below {
+    --pad: clamp(16px, 3vw, 40px);
+    --line: #1c1c1c;
+    --ink: #f2f2f2;
+    --dim: #8a8a8a;
+    /* re-point the old card / lock variables at the dark palette */
+    --bg: #000; --card: #000; --card-hover: #0a0a0a; --border: #1c1c1c;
+    --text: #f2f2f2; --muted: #8a8a8a; --shadow: none; --shadow-hover: none;
+    --ring: rgba(45, 163, 234, .45); --error: #ff7b7b;
+    position: relative; color: var(--ink); background-color: #000;
+    font-family: Archivo, system-ui, sans-serif;
+    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+    background-size: calc((100% - 2 * var(--pad)) / 12) 100%;
+    background-position: var(--pad) 0;
+  }
+  .below::after { content: ""; position: absolute; top: 0; bottom: 0; right: var(--pad); width: 1px; background: var(--line); pointer-events: none; }
+  .sec-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 96px var(--pad) 14px; border-bottom: 1px solid var(--line);
+    font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .sec-head span + span { color: var(--dim); font-weight: 500; }
+
+  /* secret: keeps its markup, gets the dark square look */
+  #secret .lock { margin: 24px var(--pad) 0; border: 1px solid var(--line); border-radius: 0; background: #000; }
+  #secret .lock input, #secret .lock button { border-radius: 0; }
+  #secret .lock button { color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 13px; }
+  #secret-open { padding: 24px var(--pad) 0; }
+  #secret .card { border-radius: 0; background: #000; }
+  #secret .card:hover { transform: none; }
+  #secret .card .icon { border-radius: 0; }
+  #secret .relock { color: var(--dim); }
+
+  .below footer {
+    margin-top: 120px; padding: 20px var(--pad) 28px; border-top: 1px solid var(--line);
+    color: #6d6d6d; font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  }
+  /* ---------- projects and elsewhere: index rows ---------- */
+  .ix-row {
+    position: relative; z-index: 1; isolation: isolate; overflow: hidden;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30ch) 14ch 32px; align-items: center; gap: 32px;
+    padding: 26px var(--pad); border-bottom: 1px solid var(--line);
+    color: var(--ink); text-decoration: none; transition: color .35s .05s;
+  }
+  .ix-row::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; background: var(--blue);
+    clip-path: inset(0 100% 0 0); transition: clip-path .6s cubic-bezier(.7, 0, .2, 1);
+  }
+  .ix-name { font-weight: 900; font-stretch: 62%; text-transform: uppercase; font-size: clamp(48px, 9vw, 140px); line-height: .82; letter-spacing: -.01em; }
+  .ix-desc { font-size: 15px; line-height: 1.45; color: var(--dim); transition: color .35s .05s; }
+  .ix-type { font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #6d6d6d; text-align: right; transition: color .35s .05s; }
+  .ix-arrow { font-size: 28px; line-height: 1; text-align: right; transition: transform .4s cubic-bezier(.2, .7, .1, 1); }
+  .ix-row.out .ix-name { color: transparent; -webkit-text-stroke: 1.5px var(--ink); transition: -webkit-text-stroke-color .35s .05s; }
+  .ix-thumb { display: none; }
+
+  @media (hover: hover) {
+    .ix-row:hover { color: #000; }
+    .ix-row:hover::before { clip-path: inset(0 0 0 0); }
+    .ix-row:hover .ix-desc, .ix-row:hover .ix-type { color: rgba(0, 0, 0, .75); }
+    .ix-row:hover .ix-arrow { transform: translateX(8px); }
+    .ix-row.out:hover .ix-name { -webkit-text-stroke-color: #000; }
+  }
+
+  /* preview that follows the cursor */
+  .ix-float {
+    position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none;
+    width: clamp(260px, 26vw, 420px); aspect-ratio: 16 / 10; overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, .9); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .8);
+    opacity: 0; transition: opacity .25s;
+  }
+  .ix-float.show { opacity: 1; }
+  .ix-float img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+  @media (max-width: 720px) {
+    .ix-row { grid-template-columns: 1fr; gap: 10px; padding: 22px var(--pad); }
+    .ix-name { font-size: 14vw; }
+    .ix-type { order: -1; text-align: left; }
+    .ix-arrow { display: none; }
+    .ix-thumb { display: block; grid-column: 1 / -1; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); }
+    .ix-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  }
 </style>
 </head>
 <body>
@@ -212,67 +286,55 @@
   </div>
 </header>
 
-<main>
-
-  <section id="projects" aria-labelledby="open-h">
-    <h2 id="open-h">Projects</h2>
-    <div class="grid">
-      <a class="card" href="/tastecherry/">
-        <span class="icon"><img src="icons/tastecherry.svg" alt=""></span>
-        <span>
-          <h3>tastecherry <span class="arrow" aria-hidden="true">→</span></h3>
-          <p>Websites with taste, at fixed prices. AI builds it, I make it good.</p>
-        </span>
-      </a>
-      <a class="card" href="/deepstem/">
-        <span class="icon"><img src="/deepstem/favicon.svg" alt=""></span>
-        <span>
-          <h3>DeepStem <span class="arrow" aria-hidden="true">→</span></h3>
-          <p>A free VST3 plug-in that splits any song into stems, right in your DAW.</p>
-        </span>
-      </a>
-      <a class="card" href="/chess/">
-        <span class="icon"><img src="/chess/favicon.png" alt=""></span>
-        <span>
-          <h3>Chess Companion <span class="arrow" aria-hidden="true">→</span></h3>
-          <p>Analyse your games, solve rated puzzles, train coordinates and learn openings.</p>
-        </span>
-      </a>
-      <a class="card" href="/minecrawler/">
-        <span class="icon"><img class="pixel" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23c0c0c0'/%3E%3Crect x='4' y='4' width='8' height='8' fill='black'/%3E%3Crect x='7' y='2' width='2' height='12' fill='black'/%3E%3Crect x='2' y='7' width='12' height='2' fill='black'/%3E%3Crect x='5' y='5' width='2' height='2' fill='white'/%3E%3C/svg%3E"></span>
-        <span>
-          <h3>Minecrawler <span class="arrow" aria-hidden="true">→</span></h3>
-          <p>A roguelike Minesweeper: ten floors of mines, items and relics in a Windows 95 window.</p>
-        </span>
-      </a>
-    </div>
+<div class="below">
+  <section id="projects"><div class="sec-head"><span>Projects</span></div>
+    <a class="ix-row" href="/tastecherry/" data-img="img/projects/tastecherry.webp">
+      <span class="ix-name">tastecherry</span>
+      <span class="ix-desc">Websites with taste, at fixed prices. AI builds it, I make it good.</span>
+      <span class="ix-type">Web studio</span>
+      <span class="ix-arrow" aria-hidden="true">→</span>
+      <span class="ix-thumb"><img src="img/projects/tastecherry.webp" alt="" loading="lazy"></span>
+    </a>
+    <a class="ix-row" href="/deepstem/" data-img="img/projects/deepstem.webp">
+      <span class="ix-name">DeepStem</span>
+      <span class="ix-desc">Splits any song into vocals, drums, bass and more, right inside your DAW.</span>
+      <span class="ix-type">VST3 plug-in</span>
+      <span class="ix-arrow" aria-hidden="true">→</span>
+      <span class="ix-thumb"><img src="img/projects/deepstem.webp" alt="" loading="lazy"></span>
+    </a>
+    <a class="ix-row" href="/chess/" data-img="img/projects/chess.webp">
+      <span class="ix-name">Chess Companion</span>
+      <span class="ix-desc">Analyse your games, solve rated puzzles, train coordinates and learn openings.</span>
+      <span class="ix-type">Web app</span>
+      <span class="ix-arrow" aria-hidden="true">→</span>
+      <span class="ix-thumb"><img src="img/projects/chess.webp" alt="" loading="lazy"></span>
+    </a>
+    <a class="ix-row" href="/minecrawler/" data-img="img/projects/minecrawler.webp">
+      <span class="ix-name">Minecrawler</span>
+      <span class="ix-desc">A roguelike Minesweeper: ten floors of mines, items and relics in a Windows 95 window.</span>
+      <span class="ix-type">Browser game</span>
+      <span class="ix-arrow" aria-hidden="true">→</span>
+      <span class="ix-thumb"><img src="img/projects/minecrawler.webp" alt="" loading="lazy"></span>
+    </a>
   </section>
-
-  <section id="elsewhere" aria-labelledby="elsewhere-h">
-    <h2 id="elsewhere-h">Elsewhere</h2>
-    <div class="grid">
-      <a class="card" href="https://makerworld.com/en/@gjoerk" target="_blank" rel="noopener">
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg></span>
-        <span>
-          <h3>MakerWorld <span class="arrow" aria-hidden="true">↗</span></h3>
-          <p>3D print models I designed. @gjoerk</p>
-        </span>
-      </a>
-      <a class="card" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 10v4M7 7v10M11 4v16M15 8v8M19 6v12M23 11v2"/></svg></span>
-        <span>
-          <h3>SoundCloud <span class="arrow" aria-hidden="true">↗</span></h3>
-          <p>Music I make. @swrz</p>
-        </span>
-      </a>
-    </div>
+  <section id="elsewhere"><div class="sec-head"><span>Elsewhere</span></div>
+    <a class="ix-row out" href="https://makerworld.com/en/@gjoerk" target="_blank" rel="noopener">
+      <span class="ix-name">MakerWorld</span>
+      <span class="ix-desc">@gjoerk</span>
+      <span class="ix-type">3D prints</span>
+      <span class="ix-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="ix-row out" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
+      <span class="ix-name">SoundCloud</span>
+      <span class="ix-desc">@swrz</span>
+      <span class="ix-type">Music</span>
+      <span class="ix-arrow" aria-hidden="true">↗</span>
+    </a>
   </section>
+  <div class="ix-float" aria-hidden="true"><img alt=""></div>
 
   <section id="secret" aria-labelledby="secret-h">
-    <h2 id="secret-h">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-      Secret projects
-    </h2>
+    <div class="sec-head"><span>Secret</span></div>
     <div id="secret-locked" class="lock">
       <p>Not ready for the public yet. Got the password?</p>
       <form id="secret-form" autocomplete="off">
@@ -289,7 +351,7 @@
   </section>
 
   <footer>© Gabriel Schwarz</footer>
-</main>
+</div>
 
 <script>
 // The secret project list is stored AES-GCM encrypted in secret.json and only
@@ -406,6 +468,32 @@
   const clock = document.getElementById('clock');
   const tick = () => clock.textContent = new Date().toLocaleTimeString([], { hour12: false });
   tick(); setInterval(tick, 1000);
+})();
+</script>
+<script>
+// Projects: a preview of the hovered project follows the cursor
+(function () {
+  const fl = document.querySelector('.ix-float'), im = fl.querySelector('img');
+  let x = 0, y = 0, tx = 0, ty = 0, on = false;
+  document.querySelectorAll('.ix-row[data-img]').forEach(r => {
+    new Image().src = r.dataset.img;   // preload, so the first hover is not empty
+    r.addEventListener('pointerenter', e => {
+      if (e.pointerType !== 'mouse') return;
+      im.src = r.dataset.img; fl.classList.add('show');
+      if (!on) { x = tx; y = ty; on = true; }
+    });
+    r.addEventListener('pointerleave', () => { fl.classList.remove('show'); on = false; });
+  });
+  addEventListener('pointermove', e => {
+    const w = fl.offsetWidth, h = fl.offsetHeight;
+    tx = e.clientX + 28 + w > innerWidth ? e.clientX - 28 - w : e.clientX + 28;
+    ty = Math.min(Math.max(e.clientY - h / 2, 12), innerHeight - h - 12);
+  });
+  (function loop() {
+    x += (tx - x) * .16; y += (ty - y) * .16;
+    fl.style.transform = `translate(${x}px, ${y}px)`;
+    requestAnimationFrame(loop);
+  })();
 })();
 </script>
 </body>
