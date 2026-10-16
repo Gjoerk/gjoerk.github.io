@@ -305,7 +305,15 @@
   }
   .ix-bg::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .15); }
   /* rows without a screenshot: a blue glow behind the model instead */
-  .ix-row.glow .ix-bg { grid-area: model; background: radial-gradient(closest-side, #1b5f8f, #071a2b); }
+  .ix-row.glow .ix-bg {
+    grid-area: auto; grid-column: 2 / -1; grid-row: 1 / -1; margin-right: calc(-1 * var(--pad));
+    -webkit-mask-image: none; mask-image: none;
+    /* centred on the model; many stops so the light eases out instead of ending in a rim */
+    --gx: calc(var(--pad) + 60px + clamp(150px, 15vw, 270px) / 2);
+    background: radial-gradient(ellipse 72% 135% at calc(100% - var(--gx)) 50%,
+      rgba(31, 108, 163, .95) 0%, rgba(27, 95, 143, .82) 14%, rgba(22, 78, 118, .62) 28%, rgba(16, 58, 90, .42) 42%,
+      rgba(11, 40, 63, .25) 56%, rgba(7, 25, 40, .12) 70%, rgba(4, 13, 21, .04) 84%, transparent 100%);
+  }
 
   .ix-row::before {
     content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 135%; z-index: -2;
@@ -354,7 +362,9 @@
     .ix-row { grid-template-columns: 1fr clamp(84px, 20vw, 150px); grid-template-areas: "type model" "name name" "desc desc"; gap: 10px; padding: 28px var(--pad); }
     .ix-model { align-self: start; margin: -14px -8px 0 0; }
     .ix-bg { position: absolute; inset: 0; margin: 0; -webkit-mask-image: none; mask-image: none; }
-    .ix-row.glow .ix-bg { grid-area: auto; background: radial-gradient(150px circle at calc(100% - 70px) 60px, #1b5f8f, transparent); }
+    .ix-row.glow .ix-bg { grid-column: auto; grid-row: auto; margin: 0;
+      background: radial-gradient(ellipse 95% 80% at calc(100% - 70px) 60px,
+        rgba(31, 108, 163, .9) 0%, rgba(24, 84, 128, .65) 20%, rgba(16, 58, 90, .4) 40%, rgba(9, 32, 50, .16) 62%, transparent 85%); }
     .ix-bg img { filter: brightness(.45) saturate(1.05); }
     .ix-bg::after { background: rgba(0, 0, 0, .3); }
     .ix-name span { font-size: min(12vw, 17.5cqi); }
@@ -422,13 +432,13 @@
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-bg" aria-hidden="true"><img src="img/projects/minecrawler.webp" alt="" loading="lazy"></span>
     </a>
-    <a class="ix-row glow" href="https://nyon.space" target="_blank" rel="noopener">
-      <span class="ix-bg" aria-hidden="true"></span>
+    <a class="ix-row" href="https://nyon.space" target="_blank" rel="noopener">
       <span class="ix-name"><span>nyon.space</span></span>
-      <span class="ix-desc">A game of mine.</span>
-      <span class="ix-type">Game</span>
-      <span class="ix-model" data-model="planet" aria-hidden="true"></span>
+      <span class="ix-desc">Neon Core, an arcade survival game: turn your shield around the core and hold off anomalies, swarms and bosses.</span>
+      <span class="ix-type">Browser game</span>
+      <span class="ix-model" data-model="core" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">↗</span>
+      <span class="ix-bg" aria-hidden="true"><img src="img/projects/nyon.webp" alt="" loading="lazy" style="object-position: 50% 42%"></span>
     </a>
   </section>
   <section id="elsewhere"><div class="sec-head"><span>Elsewhere</span></div>

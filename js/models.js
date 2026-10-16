@@ -298,30 +298,50 @@ function vinyl() {
   return { group: g, spin: 0, sway: true, tick };
 }
 
-// nyon.space: a ringed planet with a small moon in orbit.
-function planet() {
-  const R = 0.62;
-  const prof = [];
-  for (let i = 0; i <= 40; i++) { const a = -Math.PI / 2 + (Math.PI * i) / 40; prof.push([R * Math.cos(a), R * Math.sin(a)]); }
-  const { lines, occ } = lathe(prof, { rings: 11, meridians: 16 });
-  for (const r of [0.86, 0.94, 1.0, 1.12]) lines.ring(r, 0, 96);
-  const body = wire(lines, [occ]);
-  body.rotation.z = 0.42;
-  const moonProf = [];
-  for (let i = 0; i <= 16; i++) { const a = -Math.PI / 2 + (Math.PI * i) / 16; moonProf.push([0.09 * Math.cos(a), 0.09 * Math.sin(a)]); }
-  const m = lathe(moonProf, { rings: 4, meridians: 8 });
-  const moon = wire(m.lines, [m.occ]);
-  const g = new THREE.Group();
-  g.add(body, moon);
-  const tick = (t, h) => {
-    const a = t * (0.5 + 0.8 * h);
-    moon.position.set(Math.cos(a) * 1.3, Math.sin(a) * 0.35, Math.sin(a) * 1.3);
+// nyon.space: the Neon Core, a glowing core with its ring, the shield arc
+// circling it and anomalies flying in from outside.
+function core() {
+  const sphere = (R, rings, meridians) => {
+    const prof = [];
+    for (let i = 0; i <= 24; i++) { const a = -Math.PI / 2 + (Math.PI * i) / 24; prof.push([R * Math.cos(a), R * Math.sin(a)]); }
+    return lathe(prof, { rings, meridians });
   };
-  tick(0, 0);
-  return { group: g, spin: 0.3, tick, fit: 1.75 };
+  const c = sphere(0.3, 7, 12);
+  c.lines.ring(0.42, 0, 72); c.lines.ring(0.47, 0, 72);   // the ring around the core
+  const body = wire(c.lines, [c.occ]);
+  // shield: a curved band over 110 degrees of a circle around the core
+  const S = new Lines(), half = (55 * Math.PI) / 180;
+  const arc = (r, y) => S.line(Array.from({ length: 41 }, (_, i) => { const a = -half + (2 * half * i) / 40; return new THREE.Vector3(r * Math.cos(a), y, r * Math.sin(a)); }));
+  for (const r of [0.9, 1.0]) for (const y of [-0.07, 0.07]) arc(r, y);
+  for (const a of [-half, half]) {
+    const p = (r, y) => new THREE.Vector3(r * Math.cos(a), y, r * Math.sin(a));
+    S.line([p(0.9, -0.07), p(1.0, -0.07), p(1.0, 0.07), p(0.9, 0.07), p(0.9, -0.07)]);
+  }
+  const shield = wire(S, []);
+  // anomalies: small spheres that fly in towards the core and start over
+  const anomalies = Array.from({ length: 4 }, (_, k) => {
+    const a = sphere(0.055, 3, 6);
+    const o = wire(a.lines, [a.occ]);
+    o.userData = { dir: (k / 4) * TAU + 0.6, off: k * 0.37 };
+    return o;
+  });
+  const g = new THREE.Group();
+  g.add(body, shield, ...anomalies);
+  g.rotation.x = 0.55;
+  const tick = (t, h) => {
+    shield.rotation.y = -t * (0.8 + 1.2 * h);
+    for (const o of anomalies) {
+      const { dir, off } = o.userData;
+      const u = (t * 0.28 + off) % 1;                 // 0: far out, 1: at the core
+      const r = 1.7 - 1.25 * u, d = dir + Math.floor(t * 0.28 + off) * 2.1;
+      o.position.set(r * Math.cos(d), Math.sin(d * 3) * 0.1, r * Math.sin(d));
+      o.visible = u < 0.92;
+    }
+  };
+  return { group: g, spin: 0, sway: true, tick, fit: 1.8, size: 2.1 };
 }
 
-const MODELS = { cherries, stems, pawn, mine, vase, vinyl, planet };
+const MODELS = { cherries, stems, pawn, mine, vase, vinyl, core };
 
 // ---------- one small renderer per row ----------
 
@@ -343,9 +363,10 @@ function mount(el, still) {
   const dims = box.getSize(new THREE.Vector3());
   const inner = new THREE.Group(), fit = new THREE.Group(), pivot = new THREE.Group();
   inner.add(model.group);
-  inner.position.copy(box.getCenter(new THREE.Vector3())).multiplyScalar(-1);
+  // models whose parts move around (the core's shield) give their full size instead
+  if (!model.size) inner.position.copy(box.getCenter(new THREE.Vector3())).multiplyScalar(-1);
   fit.add(inner);
-  fit.scale.setScalar((model.fit || 1.95) / Math.max(dims.x, dims.y, dims.z));
+  fit.scale.setScalar((model.fit || 1.95) / (model.size || Math.max(dims.x, dims.y, dims.z)));
   pivot.add(fit);
   scene.add(pivot);
   const mats = [];
