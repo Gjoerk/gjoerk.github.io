@@ -223,30 +223,35 @@
     color: #6d6d6d; font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
   }
   /* ---------- projects and elsewhere: index rows ----------
-     Layers inside each row, back to front: the screenshot (.ix-bg), a black
-     cover that slides off to the right on hover with a soft, blurred leading
-     edge (::before), the grid lines (::after), then the text. */
+     Layers inside each row, back to front: the screenshot on the right half
+     (.ix-bg), a black cover that slides off to the left on hover with a soft,
+     blurred leading edge (::before), the grid lines (::after), then the text. */
   .ix-row {
     position: relative; z-index: 1; isolation: isolate; overflow: hidden;
-    display: grid; align-items: center; gap: 0 32px;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 28ch) 14ch 28px;
-    grid-template-areas: "name desc type arrow";
+    /* text on the black left half, the screenshot on the right half */
+    display: grid; align-items: start; gap: 12px 32px;
+    grid-template-columns: minmax(0, 44%) 1fr 28px;
+    grid-template-areas: "type . arrow" "name . arrow" "desc . arrow";
     padding: clamp(28px, 2.8vw, 56px) var(--pad); border-bottom: 1px solid var(--line);
     color: var(--ink); text-decoration: none;
   }
-  .ix-bg { position: absolute; inset: 0; z-index: -3; overflow: hidden; background: #0b2236; }
+  .ix-bg {
+    position: absolute; top: 0; bottom: 0; right: 0; left: 48%; z-index: -3; overflow: hidden; background: #0b2236;
+    /* fades into the black on its left edge */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%); mask-image: linear-gradient(90deg, transparent, #000 22%);
+  }
   .ix-bg img {
-    width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block;
-    filter: brightness(.5) saturate(1.1); transform: scale(1.08);
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block;
+    filter: brightness(.72) saturate(1.05); transform: scale(1.08);
     transition: transform 1.4s cubic-bezier(.2, .7, .1, 1);
   }
   /* darker towards the right, where the small text sits */
-  .ix-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .15), rgba(0, 0, 0, .55) 60%, rgba(0, 0, 0, .7)); }
-  .ix-row.out .ix-bg { background: radial-gradient(120% 140% at 0% 50%, #1b5f8f, #071a2b 70%); }
+  .ix-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .1)); }
+  .ix-row.out .ix-bg { background: radial-gradient(120% 160% at 100% 50%, #1b5f8f, #071a2b 70%); }
 
   .ix-row::before {
-    content: ""; position: absolute; top: 0; bottom: 0; left: -35%; width: 135%; z-index: -2;
-    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, .85) 14%, #000 26%);
+    content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 135%; z-index: -2;
+    background: linear-gradient(270deg, transparent, rgba(0, 0, 0, .85) 14%, #000 26%);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     transition: transform 1s cubic-bezier(.65, 0, .25, 1);
   }
@@ -261,31 +266,33 @@
   /* the name scales with its own column (cqi), so it never runs into the text beside it */
   .ix-name { grid-area: name; container-type: inline-size; font-weight: 900; font-stretch: 62%; text-transform: uppercase; line-height: .82; letter-spacing: -.01em; }
   .ix-name span { display: block; font-size: min(140px, 9vw, 17.5cqi); }
-  .ix-desc { grid-area: desc; font-size: 15px; line-height: 1.45; color: var(--dim); transition: color .6s; }
-  .ix-type { grid-area: type; font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #6d6d6d; text-align: right; transition: color .6s; }
-  .ix-arrow { grid-area: arrow; font-size: 28px; line-height: 1; text-align: right; transition: transform .5s cubic-bezier(.2, .7, .1, 1), color .4s; }
+  .ix-desc { grid-area: desc; max-width: 34em; font-size: 15px; line-height: 1.45; color: var(--dim); transition: color .6s; }
+  .ix-type { grid-area: type; font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #6d6d6d; transition: color .6s; }
+  .ix-arrow { grid-area: arrow; align-self: center; font-size: 28px; line-height: 1; text-align: right; text-shadow: 0 1px 12px rgba(0, 0, 0, .6); transition: transform .5s cubic-bezier(.2, .7, .1, 1), color .4s; }
   .ix-row.out .ix-name { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
 
-  .ix-row.on::before { transform: translateX(100%); }
+  .ix-row.on::before { transform: translateX(-100%); }
   .ix-row.on::after { opacity: .35; }
   .ix-row.on .ix-bg img { transform: none; }
   .ix-row.on .ix-desc { color: #d6d6d6; }
   .ix-row.on .ix-type { color: #f2f2f2; }
-  .ix-row.on .ix-arrow { transform: translateX(8px); color: var(--blue); }
+  .ix-row.on .ix-arrow { transform: translateX(8px); color: #fff; }
   @media (hover: hover) {
-    .ix-row:hover::before, .ix-row:focus-visible::before { transform: translateX(100%); }
+    .ix-row:hover::before, .ix-row:focus-visible::before { transform: translateX(-100%); }
     .ix-row:hover::after, .ix-row:focus-visible::after { opacity: .35; }
     .ix-row:hover .ix-bg img, .ix-row:focus-visible .ix-bg img { transform: none; }
     .ix-row:hover .ix-desc, .ix-row:focus-visible .ix-desc { color: #d6d6d6; }
     .ix-row:hover .ix-type, .ix-row:focus-visible .ix-type { color: #f2f2f2; }
-    .ix-row:hover .ix-arrow, .ix-row:focus-visible .ix-arrow { transform: translateX(8px); color: var(--blue); }
+    .ix-row:hover .ix-arrow, .ix-row:focus-visible .ix-arrow { transform: translateX(8px); color: #fff; }
   }
   .ix-row:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
 
   /* tablets and phones: one column; rows reveal as they scroll into view */
   @media (max-width: 1000px) {
     .ix-row { grid-template-columns: 1fr; grid-template-areas: "type" "name" "desc"; gap: 10px; padding: 28px var(--pad); }
-    .ix-type { text-align: left; }
+    .ix-bg { left: 0; -webkit-mask-image: none; mask-image: none; }
+    .ix-bg img { filter: brightness(.45) saturate(1.05); }
+    .ix-bg::after { background: rgba(0, 0, 0, .3); }
     .ix-name span { font-size: min(12vw, 17.5cqi); }
     .ix-desc { max-width: 34em; }
     .ix-arrow { display: none; }
