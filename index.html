@@ -84,7 +84,10 @@
     text-transform: uppercase; line-height: .8; letter-spacing: -.01em;
     padding: 0 var(--pad); font-size: 23.6vw; white-space: nowrap; width: max-content;
   }
-  .hero h1 .l { display: block; position: relative; }
+  /* each word is its own hover target, sized to the word; the letters ignore the
+     pointer because their glyph boxes reach well past the tight line height */
+  .hero h1 .l { display: block; position: relative; width: max-content; }
+  .hero h1 .l span { pointer-events: none; }
   .hero h1 .l2 { color: transparent; -webkit-text-stroke: 2px var(--h-ink); }
   .hero h1 .l span { display: inline-block; }
   .hero h1 .l > span > span { animation: hero-in .9s cubic-bezier(.2, .7, .1, 1) both; animation-delay: calc(var(--i) * 40ms); }
@@ -95,7 +98,8 @@
 
   /* GABRIEL: blue wipes in from left to right */
   .hero h1 .l1 .fx { color: var(--blue); clip-path: inset(0 100% 0 0); transition: clip-path .7s cubic-bezier(.7, 0, .2, 1); }
-  .hero h1:hover .l1 .fx, .hero h1.on .l1 .fx { clip-path: inset(0 0 0 0); }
+  .hero h1 .l1.on .fx { clip-path: inset(0 0 0 0); }
+  @media (hover: hover) { .hero h1 .l1:hover .fx { clip-path: inset(0 0 0 0); } }
 
   /* SCHWARZ: a band of light sweeps across from left to right */
   .hero h1 .l2 .fx {
@@ -107,7 +111,8 @@
     -webkit-mask-position: 100% 0; mask-position: 100% 0;
     filter: drop-shadow(0 0 24px rgba(45, 163, 234, .9));
   }
-  .hero h1:hover .l2 .fx, .hero h1.on .l2 .fx { animation: hero-shine 2.8s cubic-bezier(.45, 0, .25, 1) .1s infinite; }
+  .hero h1 .l2.on .fx { animation: hero-shine 2.8s cubic-bezier(.45, 0, .25, 1) .1s infinite; }
+  @media (hover: hover) { .hero h1 .l2:hover .fx { animation: hero-shine 2.8s cubic-bezier(.45, 0, .25, 1) .1s infinite; } }
   @keyframes hero-shine {
     0% { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
     55%, 100% { -webkit-mask-position: 0 0; mask-position: 0 0; }
@@ -395,7 +400,8 @@
   document.fonts.ready.then(fit); addEventListener('resize', fit); fit();
 
   // touch screens have no hover: a tap toggles the effect
-  h1.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') h1.classList.toggle('on'); });
+  for (const l of document.querySelectorAll('.hero h1 .l'))
+    l.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') l.classList.toggle('on'); });
 
   const clock = document.getElementById('clock');
   const tick = () => clock.textContent = new Date().toLocaleTimeString([], { hour12: false });
