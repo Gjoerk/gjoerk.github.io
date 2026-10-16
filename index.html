@@ -96,7 +96,7 @@
   .hero h1 .fx { position: absolute; left: 0; top: 0; pointer-events: none; }
 
   /* GABRIEL: blue wipes in from left to right */
-  .hero h1 .l1 .fx { color: var(--blue); clip-path: inset(0 100% 0 0); transition: clip-path .7s cubic-bezier(.7, 0, .2, 1); }
+  .hero h1 .l1 .fx { color: var(--blue); clip-path: inset(0 100% 0 0); transition: clip-path .75s cubic-bezier(.16, 1, .3, 1); }
   .hero h1 .l1.on .fx { clip-path: inset(0 0 0 0); }
   @media (hover: hover) { .hero h1 .l1:hover .fx { clip-path: inset(0 0 0 0); } }
 
@@ -110,8 +110,8 @@
     -webkit-mask-position: 100% 0; mask-position: 100% 0;
     filter: drop-shadow(0 0 24px rgba(45, 163, 234, .9));
   }
-  .hero h1 .l2.on .fx { animation: hero-shine 2.8s cubic-bezier(.45, 0, .25, 1) .1s infinite; }
-  @media (hover: hover) { .hero h1 .l2:hover .fx { animation: hero-shine 2.8s cubic-bezier(.45, 0, .25, 1) .1s infinite; } }
+  .hero h1 .l2.on .fx { animation: hero-shine 2.6s cubic-bezier(.33, 0, .2, 1) infinite; }
+  @media (hover: hover) { .hero h1 .l2:hover .fx { animation: hero-shine 2.6s cubic-bezier(.33, 0, .2, 1) infinite; } }
   @keyframes hero-shine {
     0% { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
     55%, 100% { -webkit-mask-position: 0 0; mask-position: 0 0; }
@@ -182,6 +182,11 @@
     color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline;
   }
 
+  /* scrolling: sections blur in as they arrive, the hero name blurs out as it leaves */
+  .rv { opacity: 0; filter: blur(14px); transform: translateY(26px); transition: opacity .9s cubic-bezier(.16, 1, .3, 1), filter .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1); transition-delay: var(--rv-d, 0ms); }
+  .rv.in { opacity: 1; filter: none; transform: none; }
+  .hero h1, .hero .bottom { filter: blur(calc(var(--sp, 0) * 18px)); opacity: calc(1 - var(--sp, 0) * .85); transform: translateY(calc(var(--sp, 0) * 70px)); }
+
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
   /* ---------- below the hero ---------- */
   body { background: #000; }
@@ -230,8 +235,8 @@
     position: relative; z-index: 1; isolation: isolate; overflow: hidden;
     /* text on the black left half, the screenshot on the right half */
     display: grid; align-items: start; gap: 12px 32px;
-    grid-template-columns: minmax(0, 44%) 1fr 28px;
-    grid-template-areas: "type . arrow" "name . arrow" "desc . arrow";
+    grid-template-columns: minmax(0, 44%) clamp(150px, 15vw, 270px) 1fr 28px;
+    grid-template-areas: "type model . arrow" "name model . arrow" "desc model . arrow";
     padding: clamp(28px, 2.8vw, 56px) var(--pad); border-bottom: 1px solid var(--line);
     color: var(--ink); text-decoration: none;
   }
@@ -253,7 +258,7 @@
     content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 135%; z-index: -2;
     background: linear-gradient(270deg, transparent, rgba(0, 0, 0, .85) 14%, #000 26%);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    transition: transform 1s cubic-bezier(.65, 0, .25, 1);
+    transition: transform .9s cubic-bezier(.16, 1, .3, 1); will-change: transform;
   }
   .ix-row::after {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -287,9 +292,14 @@
   }
   .ix-row:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
 
+  /* wireframe model beside the title (js/models.js) */
+  .ix-model { grid-area: model; align-self: center; width: 100%; aspect-ratio: 1; pointer-events: none; }
+  .ix-model canvas { display: block; width: 100%; height: 100%; }
+
   /* tablets and phones: one column; rows reveal as they scroll into view */
   @media (max-width: 1000px) {
-    .ix-row { grid-template-columns: 1fr; grid-template-areas: "type" "name" "desc"; gap: 10px; padding: 28px var(--pad); }
+    .ix-row { grid-template-columns: 1fr clamp(84px, 20vw, 150px); grid-template-areas: "type model" "name name" "desc desc"; gap: 10px; padding: 28px var(--pad); }
+    .ix-model { align-self: start; margin: -14px -8px 0 0; }
     .ix-bg { left: 0; -webkit-mask-image: none; mask-image: none; }
     .ix-bg img { filter: brightness(.45) saturate(1.05); }
     .ix-bg::after { background: rgba(0, 0, 0, .3); }
@@ -301,6 +311,8 @@
     .ix-name span { font-size: min(14vw, 17.5cqi); }
   }
 </style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" } }</script>
+<script type="module" src="js/models.js"></script>
 </head>
 <body>
 <header class="hero">
@@ -326,6 +338,7 @@
       <span class="ix-name"><span>tastecherry</span></span>
       <span class="ix-desc">Websites with taste, at fixed prices. AI builds it, I make it good.</span>
       <span class="ix-type">Web studio</span>
+      <span class="ix-model" data-model="cherries" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-bg" aria-hidden="true"><img src="img/projects/tastecherry.webp" alt="" loading="lazy"></span>
     </a>
@@ -333,6 +346,7 @@
       <span class="ix-name"><span>DeepStem</span></span>
       <span class="ix-desc">Splits any song into vocals, drums, bass and more, right inside your DAW.</span>
       <span class="ix-type">VST3 plug-in</span>
+      <span class="ix-model" data-model="stems" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-bg" aria-hidden="true"><img src="img/projects/deepstem.webp" alt="" loading="lazy"></span>
     </a>
@@ -340,6 +354,7 @@
       <span class="ix-name"><span>Chess Companion</span></span>
       <span class="ix-desc">Analyse your games, solve rated puzzles, train coordinates and learn openings.</span>
       <span class="ix-type">Web app</span>
+      <span class="ix-model" data-model="pawn" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-bg" aria-hidden="true"><img src="img/projects/chess.webp" alt="" loading="lazy"></span>
     </a>
@@ -347,6 +362,7 @@
       <span class="ix-name"><span>Minecrawler</span></span>
       <span class="ix-desc">A roguelike Minesweeper: ten floors of mines, items and relics in a Windows 95 window.</span>
       <span class="ix-type">Browser game</span>
+      <span class="ix-model" data-model="mine" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">→</span>
       <span class="ix-bg" aria-hidden="true"><img src="img/projects/minecrawler.webp" alt="" loading="lazy"></span>
     </a>
@@ -357,6 +373,7 @@
       <span class="ix-name"><span>MakerWorld</span></span>
       <span class="ix-desc">@gjoerk</span>
       <span class="ix-type">3D prints</span>
+      <span class="ix-model" data-model="vase" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">↗</span>
     </a>
     <a class="ix-row out" href="https://soundcloud.com/swrz" target="_blank" rel="noopener">
@@ -364,6 +381,7 @@
       <span class="ix-name"><span>SoundCloud</span></span>
       <span class="ix-desc">@swrz</span>
       <span class="ix-type">Music</span>
+      <span class="ix-model" data-model="vinyl" aria-hidden="true"></span>
       <span class="ix-arrow" aria-hidden="true">↗</span>
     </a>
   </section>
@@ -514,6 +532,30 @@
     if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
   }), { rootMargin: '0px 0px -35% 0px', threshold: .6 });
   document.querySelectorAll('.ix-row').forEach(r => io.observe(r));
+})();
+
+// Scrolling: blur things in as they arrive; blur the hero name out as it scrolls away
+(function () {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  const items = document.querySelectorAll('.sec-head, .ix-row, #secret .lock, .below footer');
+  const io = new IntersectionObserver(entries => {
+    entries.filter(e => e.isIntersecting).forEach((e, i) => {
+      e.target.style.setProperty('--rv-d', i * 70 + 'ms');
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: .12 });
+  items.forEach(el => { el.classList.add('rv'); io.observe(el); });
+
+  const hero = document.querySelector('.hero');
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const p = Math.min(Math.max(scrollY / (hero.offsetHeight * .9), 0), 1);
+    hero.style.setProperty('--sp', p.toFixed(3));
+  };
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
 })();
 </script>
 </body>
