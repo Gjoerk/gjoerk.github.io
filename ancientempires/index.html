@@ -6,7 +6,7 @@
   <title>Kingsfall</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=PT+Sans:wght@400;700&display=swap">
   <style>
     /* Dark green and gold. Everything below is styled through these variables. */
     body {
@@ -210,6 +210,8 @@
     .card .emblem { width: 56px; height: 56px; justify-self: center; margin-bottom: -6px; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .6)); }
     .card h1 { margin: 0; font-size: 34px; letter-spacing: .2em; text-align: center; color: transparent; background: var(--gold-grad);
       -webkit-background-clip: text; background-clip: text; text-shadow: none; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .6)); }
+    /* Written in mixed case; designs with capitals turn it into capitals. */
+    .card h1.title { text-transform: uppercase; }
     .card .tagline { text-align: center; color: var(--dim); font-size: 14px; margin-top: -6px; }
     .card .rule { height: 1px; background: linear-gradient(90deg, transparent, var(--trim), transparent); margin: 2px 0; }
     .card label.field { display: grid; gap: 4px; font-size: 13px; color: var(--dim); }
@@ -230,8 +232,53 @@
     #room-host { display: grid; gap: 10px; }
     #room-players { list-style: none; margin: 4px 0; padding: 8px; display: grid; gap: 6px; background: rgba(0, 0, 0, .22); border-radius: 6px;
       border: 1px solid rgba(201, 165, 74, .2); }
-    #room-players li { display: flex; align-items: center; gap: 6px; }
+    #room-players li { display: flex; align-items: center; gap: 5px; min-width: 0; }
+    #room-players select.team { font-size: 12px; padding-left: 6px; }
     #room-players .grow { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* ---------- Menu card: a heraldic banner hanging from a gold rod ---------- */
+    /* Narrow enough that the rod and its knobs stay on screen. */
+    .card-wrap { position: relative; width: min(440px, calc(100vw - 76px)); margin: 30px 0; }
+    .card-wrap > .card { width: 100%; margin: 0; position: relative; }
+    /* Fields shrink with the card instead of pushing the Join button out of it. */
+    .card input, .card select { min-width: 0; box-sizing: border-box; }
+    .card { grid-template-columns: minmax(0, 1fr); }
+    .card .row { grid-template-columns: minmax(0, 1fr) auto; }
+    .card label.field input { width: 100%; }
+    body[data-menu] .card select { appearance: none; -webkit-appearance: none; padding-right: 30px; cursor: pointer; }
+
+    body[data-menu="1"] .card-wrap { padding-top: 14px; filter: drop-shadow(2px 0 0 #c9a54a) drop-shadow(-2px 0 0 #c9a54a) drop-shadow(0 2px 0 #c9a54a)
+      drop-shadow(0 18px 26px rgba(0, 0, 0, .7)); }
+    body[data-menu="1"] .card-wrap::before { content: ""; position: absolute; z-index: 2; top: 2px; left: -20px; right: -20px; height: 12px; border-radius: 6px;
+      background: linear-gradient(#fbe9a6, #c99a2e 55%, #6e5212); }
+    body[data-menu="1"] .card-wrap::after { content: ""; position: absolute; z-index: 2; top: -3px; left: -34px; right: -34px; height: 22px;
+      background: radial-gradient(circle at 11px 11px, #fff3c4 0 2px, #e3b84e 3px 7px, #7a5a14 8px 10px, transparent 11px),
+        radial-gradient(circle at calc(100% - 11px) 11px, #fff3c4 0 2px, #e3b84e 3px 7px, #7a5a14 8px 10px, transparent 11px); }
+    body[data-menu="1"] .card { border: 0; border-radius: 0; box-shadow: none; padding: 30px 32px 72px;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 46px), 50% 100%, 0 calc(100% - 46px));
+      background: var(--pat-fleur) 0 0 / 48px 48px, linear-gradient(180deg, #11301f, #0b2016); }
+    body[data-menu="1"] .card::before { content: ""; position: absolute; inset: 9px 9px 56px; border: 1px dashed rgba(201, 165, 74, .5); pointer-events: none; }
+    body[data-menu="1"] .card h1 { font-family: "Pixelify Sans", sans-serif; font-weight: 700; font-size: 50px; letter-spacing: .08em; line-height: 1;
+      color: #f3d77e; background: none; -webkit-background-clip: border-box; background-clip: border-box; filter: none;
+      text-shadow: 0 4px 0 #6b1f17, 0 6px 8px rgba(0, 0, 0, .6); }
+    body[data-menu="1"] .card button { position: relative; border: 0; border-radius: 0; box-shadow: none; padding: 12px 34px;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 50%, 100% 100%, 0 100%, 16px 50%);
+      background: linear-gradient(180deg, #2f6649, #1a3e2c); color: var(--ink); text-transform: uppercase; letter-spacing: .12em; font-size: 13px; font-weight: 700; }
+    body[data-menu="1"] .card button::after { content: ""; position: absolute; inset: 4px 20px; border-top: 1px dashed rgba(255, 255, 255, .35);
+      border-bottom: 1px dashed rgba(0, 0, 0, .4); pointer-events: none; }
+    body[data-menu="1"] .card button.primary { background: linear-gradient(180deg, #f7df8c, #d2a43a 55%, #a2771b); color: #2a1c05; }
+    body[data-menu="1"] .card button:hover { filter: brightness(1.12); transform: translateY(-1px); }
+    body[data-menu="1"] .card li button { clip-path: none; padding: 3px 10px; font-size: 11px; letter-spacing: .04em; }
+    body[data-menu="1"] .card li button::after { display: none; }
+    body[data-menu="1"] .card input, body[data-menu="1"] .card select { background: rgba(0, 0, 0, .3); border: 0; border-bottom: 2px solid #c9a54a; border-radius: 0; }
+    body[data-menu="1"] .card select { background: var(--arrow-shield) right 6px center / 14px 16px no-repeat, rgba(0, 0, 0, .35); border: 1px solid #c9a54a;
+      border-radius: 0 0 12px 12px; padding-right: 28px; }
+    body[data-menu="1"] .card .emblem { width: 64px; height: 64px; }
+    /* Each player has a gem in their colour; a team dropdown shows the gem of the chosen team. */
+    .card .gem { display: inline-block; flex: none; width: 14px; height: 14px; background: var(--gem) center / 14px 14px no-repeat; }
+    body[data-menu="1"] .card select.team { background: var(--gem) right 8px center / 13px 13px no-repeat, rgba(0, 0, 0, .35); padding-right: 30px; }
+
+
+
     #lobby-msg { min-height: 1.4em; color: var(--accent); margin: 0; }
 
     /* Narrower PC windows: a smaller minimap leaves room for six buttons per row. */
@@ -282,9 +329,9 @@
       body[data-bar] #bottom { --map-w: 120px; }
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-D0U5PcLv.js"></script>
+  <script type="module" crossorigin src="./assets/index-CBaV6zdr.js"></script>
 </head>
-<body data-bar="a" data-skin="3">
+<body data-bar="a" data-skin="3" data-menu="1">
   <canvas id="game"></canvas>
   <div id="top" class="bar" hidden>
     <div id="resources"></div>
@@ -362,12 +409,16 @@
     <button id="help-close" type="button" style="margin-top:10px">Close</button>
   </div>
   <div id="waiting" class="screen" style="display:none">
-    <div class="card">
+    <div class="card-wrap"><div class="card">
       <img class="emblem" alt="">
       <h1 id="room-title"></h1>
       <div class="rule"></div>
-      <label class="dim" for="room-link">Invite link</label>
-      <input id="room-link" readonly>
+      <div class="row">
+        <label class="field">Invite link
+          <input id="room-link" readonly>
+        </label>
+        <button id="copy-link-btn" type="button" class="plain">Copy</button>
+      </div>
       <ul id="room-players"></ul>
       <label class="check">Map size
         <select id="size-select">
@@ -381,17 +432,15 @@
       <div id="room-host" hidden>
         <button id="start-btn" type="button" class="primary">Start game</button>
         <button id="add-ai-btn" type="button" class="plain">Add computer opponent</button>
-        <button id="add-test-btn" type="button" class="plain">Add test opponent (you play both sides)</button>
       </div>
       <p id="room-wait" class="dim" hidden>Waiting for the host to start the game…</p>
       <button id="leave-btn" type="button" class="plain">Leave</button>
-    </div>
+    </div></div>
   </div>
   <div id="lobby">
-    <form id="lobby-form" class="card" autocomplete="off">
+    <div class="card-wrap"><form id="lobby-form" class="card" autocomplete="off">
       <img class="emblem" alt="">
-      <h1>KINGSFALL</h1>
-      <p class="tagline">Build a realm. Protect your king.</p>
+      <h1 class="title">Kingsfall</h1>
       <div class="rule"></div>
       <label class="field">Your name
         <input id="name" placeholder="e.g. Gabriel" maxlength="16" required>
@@ -406,7 +455,7 @@
       </div>
       <p id="lobby-msg" role="status"></p>
       <p class="fine">The host's browser runs the game; it ends if the host closes the tab.</p>
-    </form>
+    </form></div>
   </div>
 </body>
 </html>
