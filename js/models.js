@@ -342,7 +342,50 @@ function core() {
   return { group: g, spin: 0, sway: true, tick, fit: 1.8, size: 2.1 };
 }
 
-const MODELS = { cherries, stems, pawn, mine, vase, vinyl, core };
+// Kingsfall: a king's crown, a band with eight points and a jewel on each.
+function crown() {
+  const R = 0.8, Y0 = -0.4, N = 128, P = 8;
+  const top = (a) => {                            // eight points around the rim
+    const f = ((a / TAU) * P) % 1, tri = 1 - Math.abs(2 * f - 1);
+    return 0.02 + 0.55 * Math.pow(tri, 1.4);
+  };
+  const at = (a, y, r = R) => new THREE.Vector3(r * Math.cos(a), y, r * Math.sin(a));
+  const L = new Lines();
+  for (const y of [Y0, Y0 + 0.1, -0.08]) L.ring(R, y, 96);
+  L.line(Array.from({ length: N + 1 }, (_, i) => { const a = (i / N) * TAU; return at(a, top(a)); }));
+  for (let k = 0; k < P * 2; k++) { const a = (k / (P * 2)) * TAU; L.line([at(a, Y0), at(a, top(a))]); }
+  // gems set into the band
+  for (let k = 0; k < P; k++) {
+    const a = ((k + 0.5) / P) * TAU, c = at(a, -0.24, R + 0.002);
+    const t = new THREE.Vector3(-Math.sin(a), 0, Math.cos(a));
+    L.line([0, 1, 2, 3, 0].map((j) => c.clone().addScaledVector(t, [0.06, 0, -0.06, 0][j]).add(new THREE.Vector3(0, [0, 0.06, 0, -0.06][j], 0))));
+  }
+  // the band itself hides the lines behind it
+  const pos = [];
+  for (let i = 0; i < N; i++) {
+    const a0 = (i / N) * TAU, a1 = ((i + 1) / N) * TAU;
+    const q = [at(a0, Y0), at(a1, Y0), at(a1, top(a1)), at(a0, top(a0))].map((v) => v.toArray());
+    pos.push(...q[0], ...q[1], ...q[2], ...q[0], ...q[2], ...q[3]);
+  }
+  const bandGeo = new THREE.BufferGeometry();
+  bandGeo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  const occluders = [new THREE.Mesh(bandGeo, occluderMaterial())];
+  // a jewel on every point
+  for (let k = 0; k < P; k++) {
+    const a = ((k + 0.5) / P) * TAU, c = at(a, top(a) + 0.06);
+    const prof = [];
+    for (let i = 0; i <= 12; i++) { const b = -Math.PI / 2 + (Math.PI * i) / 12; prof.push([0.06 * Math.cos(b), 0.06 * Math.sin(b)]); }
+    const j = lathe(prof, { rings: 3, meridians: 6 });
+    j.occ.position.copy(c); occluders.push(j.occ);
+    const segs = j.lines.segs;
+    for (let i = 0; i < segs.length; i += 3) L.segs.push(segs[i] + c.x, segs[i + 1] + c.y, segs[i + 2] + c.z);
+  }
+  const g = wire(L, occluders);
+  g.rotation.x = 0.28;
+  return { group: g, spin: 0.4 };
+}
+
+const MODELS = { cherries, stems, pawn, mine, vase, vinyl, core, crown };
 
 // ---------- one small renderer per row ----------
 
