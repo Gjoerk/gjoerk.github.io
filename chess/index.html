@@ -2084,7 +2084,7 @@ function renderHome() {
           <div class="segs">${segs}</div><span class="seg-label">${learned} of ${s.total} learned</span>
         </div>
       </div>
-      <div class="acts"><button class="btn sky card-btn" type="button" data-learn-op="${o.id}">${learned < s.total ? 'Learn' : 'Drill'}</button><button class="btn card-btn" type="button" data-explore-op="${o.id}">Explore</button></div>
+      <div class="acts"><button class="btn sky card-btn" type="button" data-learn-op="${o.id}">${learned < s.total ? 'Learn' : 'Drill'}</button><button class="btn card-btn" type="button" data-explore-op="${o.id}">Explore</button><button class="btn card-btn" type="button" data-vs-op="${o.id}" title="The bot plays the ${esc(o.name)}, you take the other side">Play against</button></div>
     </article></li>`;
   };
   $('#view').innerHTML = `
@@ -2107,7 +2107,7 @@ function renderHome() {
         <div class="actions">
           ${dueCards ? `<button class="btn sky" id="reviewBtn">Review ${dueCards} moves</button>` : ''}
           ${weak.length ? `<button class="btn" id="weakBtn">Weak spots ${Math.min(weak.length, 10)}</button>` : ''}
-          <button class="btn" id="botAllBtn" title="Pick an opening and play a random line against the bot">Play vs bot</button>
+          <button class="btn" id="botAllBtn" title="Pick an opening and play a random line against the bot">Practise vs bot</button>
           ${learnedAll ? `<button class="btn" id="speedAllBtn">Speed drill</button>` : ''}
           <button class="btn" id="statsBtn">Stats</button>
           <button class="btn" id="addOpBtn">New opening</button>
@@ -2145,6 +2145,7 @@ function renderHome() {
     else startDrill(op);
   });
   $$('[data-explore-op]').forEach(b => b.onclick = () => Explorer.start(OP[b.dataset.exploreOp], { back: { name: 'home' } }));
+  $$('[data-vs-op]').forEach(b => b.onclick = () => Sparring.start(OP[b.dataset.vsOp], { vs: true, back: { name: 'home' } }));
   $('#heroStart').onclick = () => go({ name: 'analysis' });
   $('#heroBrowse').onclick = () => go({ name: 'puzzles' });
   if (current.scrollTo) { const t = $('#' + current.scrollTo); current.scrollTo = null; if (t) setTimeout(() => t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 50); }
@@ -2203,7 +2204,8 @@ function renderOpening(op) {
         ${n ? `<button class="btn sky" id="learnBtn" title="Learn the next ${n} new lines">Learn ${n} new lines</button>` : ''}
         ${s.known ? `<button class="btn ${n ? '' : 'sky'}" id="drillBtn" title="Play your learned lines from memory, due moves first">Drill${s.dueCards ? ` · ${s.dueCards} due` : ''}</button>` : ''}
         ${s.known ? `<button class="btn" id="speedBtn" title="Every move against the clock">Speed</button>` : ''}
-        <button class="btn" id="botBtn" title="A random line against the bot, every move graded at once">Play vs bot</button>
+        <button class="btn" id="vsBtn" title="The bot plays the ${esc(op.name)}, you take the other side">Play against it</button>
+        <button class="btn" id="botBtn" title="You play the ${esc(op.name)}: a random line against the bot, every move graded at once">Practise vs bot</button>
         <button class="btn" id="exploreBtn" title="Play against the book, with engine help">Explore</button>
         <button class="btn" id="analyzeBtn" title="Check one of your own games against the book">Paste a game</button>
       </div>
@@ -2234,6 +2236,7 @@ function renderOpening(op) {
   $('#drillBtn') && ($('#drillBtn').onclick = () => startDrill(op));
   $('#exploreBtn').onclick = () => Explorer.start(op);
   $('#botBtn').onclick = () => Sparring.start(op);
+  $('#vsBtn').onclick = () => Sparring.start(op, { vs: true });
   $('#analyzeBtn').onclick = () => Explorer.start(op, { free: true, load: true });
   $('#learnTrapsBtn') && ($('#learnTrapsBtn').onclick = () => Trainer.start({ title: op.name + ' traps', back: { name: 'opening', id: op.id }, items: trapsNew.map(l => ({ lineId: l.id, mode: 'learn' })) }));
   $$('.line-card').forEach(c => c.onclick = e => { if (!e.target.closest('button')) Trainer.start({ title: op.name, back: { name: 'opening', id: op.id }, items: [{ lineId: c.dataset.line, mode: 'learn' }] }); });
@@ -3375,6 +3378,9 @@ const Sparring = {
     Trainer.stop(); Explorer.stop();
     this.active = true;
     this.op = op;
+    // vs: the bot plays the opening from its book and you take the other side
+    this.vs = !!opts.vs;
+    this.me = this.vs ? (op.side === 'w' ? 'b' : 'w') : op.side;
     this.back = opts.back || { name: 'opening', id: op.id };
     S.settings.botOp = op.id; save();
     trainerShell();
@@ -3382,7 +3388,7 @@ const Sparring = {
     $('#backBtn').onclick = () => go(this.back);
     this.board = new Board($('#board'), {
       ranks: $('#ranks'), files: $('#files'),
-      canPick: sq => { const p = this.game.get(sq); return this.waiting && !!p && p.color === this.op.side; },
+      canPick: sq => { const p = this.game.get(sq); return this.waiting && !!p && p.color === this.me; },
       onMove: (f, t, d) => this.userMove(f, t, d),
     });
     this.engineListener = () => { if (this.active) setEvalBar(this.game.fen(), this.board.orient); };
@@ -3422,8 +3428,10 @@ const Sparring = {
     this.hinted = false;
     this.after = null;
     this.tally = { asked: 0, right: 0, off: 0 };
-    this.msg = { t: 'Your move', s: `Play ${this.op.name} as ${this.op.side === 'w' ? 'White' : 'Black'}. The bot picked a random line; find the book move each turn.` };
-    this.board.setOrientation(this.op.side);
+    this.msg = this.vs
+      ? { t: this.me === 'w' ? 'Your move' : 'The bot starts', s: `The bot plays the ${this.op.name} from its book; you are ${(this.me === 'w' ? 'White' : 'Black')}. Every move of yours is graded by the engine.` }
+      : { t: 'Your move', s: `Play ${this.op.name} as ${(this.me === 'w' ? 'White' : 'Black')}. The bot picked a random line; find the book move each turn.` };
+    this.board.setOrientation(this.me);
     this.board.setArrows([]);
     this.board.setPosition(this.game, { instant: true });
     this.board.mark({ last: null, hint: null });
@@ -3433,8 +3441,8 @@ const Sparring = {
   next() {
     if (!this.active || this.paused) return;
     if (this.game.game_over()) return this.gameOver();
-    if (this.phase === 'book' && this.ply() >= this.line.moves.length) return this.finishLine();
-    if (this.game.turn() === this.op.side) {
+    if (!this.vs && this.phase === 'book' && this.ply() >= this.line.moves.length) return this.finishLine();
+    if (this.game.turn() === this.me) {
       this.waiting = true;
       Engine.analyze(this.game.fen(), true); // think while you think, so your move can be graded at once
       this.renderCtrl();
@@ -3447,8 +3455,20 @@ const Sparring = {
   },
   ply() { return this.ucis.length; },
   async botMove() {
-    if (this.phase === 'book') return this.apply(this.line.moves[this.ply()][1]);
     const fen = this.game.fen(), token = this.token;
+    if (this.vs && this.phase === 'book') {
+      // Any book move for this position, main lines more often than traps.
+      const node = this.op.pos.get(posKey(fen));
+      if (node && node.size) {
+        const entries = [...node.values()];
+        const weight = e => [...new Set(e.lines)].reduce((t, id) => t + (LINES[id].trap ? 0.3 : 1), 0);
+        let r = Math.random() * entries.reduce((t, e) => t + weight(e), 0);
+        return this.apply((entries.find(e => (r -= weight(e)) <= 0) || entries[0]).uci);
+      }
+      this.phase = 'free';
+      toast('Out of the book: the bot plays engine moves from here.');
+    }
+    if (this.phase === 'book') return this.apply(this.line.moves[this.ply()][1]);
     const L = this.after && this.after.fen === fen ? this.after.lines : await engineLines(fen, 900);
     if (!this.active || token !== this.token) return;
     // A little variety: any move within 0.3 of the best, never one that walks into mate.
@@ -3490,7 +3510,19 @@ const Sparring = {
     Sound.play(mv.captured ? 'capture' : 'move');
     const hinted = this.hinted || this.retry; // a hint or a second try doesn't count as a first-try book move
     this.hinted = this.retry = false;
-    if (this.phase === 'book') {
+    if (this.vs) {
+      entry.tallied = true; this.tally.asked++;
+      const node = this.phase === 'book' && this.op.pos.get(posKey(fen)), known = node && node.get(u);
+      if (known) {
+        entry.grade = 'book';
+        if (!hinted) { this.tally.right++; entry.right = true; }
+        this.msg = { ok: true, icon: 'book', t: 'Book move', s: known.c || `A main move against the ${this.op.name}.` };
+        this.renderSoon();
+        this.next();
+        return;
+      }
+    }
+    if (this.phase === 'book' && !this.vs) {
       const want = this.line.moves[ply];
       this.tally.asked++;
       const prevLine = this.line;
@@ -3540,6 +3572,7 @@ const Sparring = {
     this.grade(entry, fen, u, pre).then(g => {
       if (!g) return;
       const good = ['best', 'excellent', 'good'].includes(g);
+      if (this.vs && good && !hinted) { this.tally.right++; entry.right = true; }
       this.msg = { ok: good, bad: !good && g !== 'inaccuracy', icon: g, t: CLS[g].name, s: GRADE_TEXT[g] + (g !== 'best' && entry.bestSan ? ` Best was ${entry.bestSan}.` : '') };
       if (!good) this.board.setArrows([{ from: entry.best.slice(0, 2), to: entry.best.slice(2, 4), color: 'green' }]);
       this.render();
@@ -3571,21 +3604,27 @@ const Sparring = {
     return g;
   },
   takeBack() {
-    if (!this.paused && !(this.phase === 'free' && this.waiting && this.log.length >= 2)) return;
+    if (!this.paused && !((this.phase === 'free' || this.vs) && this.waiting && this.log.some(e => e.user))) return;
     this.token++;
     clearTimeout(this.timer);
     // Undo back to your last move, and that move too.
     while (this.log.length) {
       const e = this.log.pop(); this.game.undo(); this.ucis.pop();
-      if (e.user) { if (this.phase === 'book' && this.paused) { this.tally.asked--; this.retry = true; } break; }
+      if (e.user) {
+        if (this.phase === 'book' && this.paused) { this.tally.asked--; this.retry = true; }
+        if (e.tallied) { this.tally.asked--; if (e.right) this.tally.right--; }
+        break;
+      }
     }
+    // Back inside the book again: the bot follows it once more.
+    if (this.vs && this.op.pos.has(posKey(this.game.fen()))) this.phase = 'book';
     this.paused = false;
     this.after = null;
     this.board.setArrows([]);
     this.board.setPosition(this.game, {});
     const h = this.game.history({ verbose: true }), lm = h[h.length - 1];
     this.board.mark({ last: lm ? [lm.from, lm.to] : null, hint: null });
-    const want = this.phase === 'book' ? this.line.moves[this.ply()] : null;
+    const want = this.phase === 'book' && !this.vs ? this.line.moves[this.ply()] : null;
     this.msg = { t: 'Try again', s: want ? `Find ${want[0]}, or use a hint.` : 'Your move.' };
     this.render();
     this.next();
@@ -3596,14 +3635,14 @@ const Sparring = {
     this.lineOver = false;
     this.phase = 'free';
     this.board.setArrows([]);
-    if (this.game.turn() === this.op.side) this.msg = { t: 'Your move', s: 'Out of the book now. The engine grades every move.' };
+    if (this.game.turn() === this.me) this.msg = { t: 'Your move', s: 'Out of the book now. The engine grades every move.' };
     this.render();
     this.next();
   },
   hint() {
     if (!this.waiting) return;
     let u = null;
-    if (this.phase === 'book') u = this.line.moves[this.ply()][1];
+    if (this.phase === 'book' && !this.vs) u = this.line.moves[this.ply()][1];
     else if (Engine.cur === this.game.fen() && Engine.lines[0]) u = Engine.lines[0].pv[0];
     if (!u) return;
     this.hinted = true;
@@ -3621,8 +3660,8 @@ const Sparring = {
   gameOver() {
     this.waiting = false;
     const g = this.game;
-    const t = g.in_checkmate() ? (g.turn() === this.op.side ? 'Checkmate. The bot wins' : 'Checkmate. You win!') : 'Draw';
-    this.msg = { ok: g.in_checkmate() && g.turn() !== this.op.side, t, s: g.in_checkmate() ? '' : g.in_stalemate() ? 'Stalemate.' : 'No way to make progress.' };
+    const t = g.in_checkmate() ? (g.turn() === this.me ? 'Checkmate. The bot wins' : 'Checkmate. You win!') : 'Draw';
+    this.msg = { ok: g.in_checkmate() && g.turn() !== this.me, t, s: g.in_checkmate() ? '' : g.in_stalemate() ? 'Stalemate.' : 'No way to make progress.' };
     this.lineOver = true;
     this.render();
   },
@@ -3633,10 +3672,11 @@ const Sparring = {
   renderCtrl() {
     const box = $('#boardCtrl');
     if (!box) return;
-    const canTake = this.paused || (this.phase === 'free' && this.waiting && this.log.some(e => e.user));
+    const canTake = this.paused || ((this.phase === 'free' || this.vs) && this.waiting && this.log.some(e => e.user));
     box.innerHTML = `<button class="btn small" id="spBack" ${canTake ? '' : 'disabled'} title="Take back your last move">Take back</button>`
       + `<button class="btn small" id="spHint" ${this.waiting ? '' : 'disabled'}>Hint</button>`
-      + `<button class="btn small sky" id="spNew" title="Start another random line">New line <span class="arr">→</span></button>`;
+      + (this.vs ? `<button class="btn small sky" id="spNew" title="Start a new game">New game <span class="arr">→</span></button>`
+        : `<button class="btn small sky" id="spNew" title="Start another random line">New line <span class="arr">→</span></button>`);
     $('#spBack').onclick = () => this.takeBack();
     $('#spHint').onclick = () => this.hint();
     $('#spNew').onclick = () => this.newLine();
@@ -3652,18 +3692,18 @@ const Sparring = {
       rows.push(`<span class="spn">${i / 2 + 1}.</span>${cell(this.log[i])}${cell(this.log[i + 1])}`);
     }
     const opts = side => OPENINGS.filter(o => o.side === side && o.lines.some(l => l.userPlies.length)).map(o => `<option value="${o.id}" ${o === op ? 'selected' : ''}>${esc(o.name)}</option>`).join('');
-    const done = this.lineOver && this.phase === 'book';
+    const done = !this.vs && this.lineOver && this.phase === 'book';
     $('#panel').innerHTML = `
-      <header class="p-head"><span class="kicker">Play vs bot · ${op.side === 'w' ? 'You are White' : 'You are Black'}</span></header>
-      <label class="sp-pick"><select id="spOp" aria-label="Opening"><optgroup label="Playing White">${opts('w')}</optgroup><optgroup label="Playing Black">${opts('b')}</optgroup></select></label>
+      <header class="p-head"><span class="kicker">${this.vs ? 'The bot plays' : 'Practise vs bot'} · ${this.me === 'w' ? 'You are White' : 'You are Black'}</span></header>
+      <label class="sp-pick"><select id="spOp" aria-label="Opening"><optgroup label="${this.vs ? 'Bot plays White' : 'Playing White'}">${opts('w')}</optgroup><optgroup label="${this.vs ? 'Bot plays Black' : 'Playing Black'}">${opts('b')}</optgroup></select></label>
       <div class="pcard sp-msg ${m.ok ? 'state-ok' : m.bad ? 'state-bad' : ''}" aria-live="polite"><h3>${icon}<span>${esc(m.t)}</span></h3>${m.s ? `<p>${esc(m.s)}</p>` : ''}
         ${this.paused ? `<div class="row-btns"><button class="btn sky" id="spTake">Take back</button><button class="btn" id="spOn">Play on vs bot</button></div>` : ''}</div>
       ${done ? `<div class="pcard sp-done"><span class="kicker">Line complete</span><h3>${esc(this.line.name)}</h3>
         <p>${T.right} of ${T.asked} book moves on the first try${T.off ? `, ${T.off} off the book` : ''}.</p>
         <div class="row-btns"><button class="btn sky" id="spNext">Next line</button><button class="btn" id="spAgain">Same line again</button><button class="btn" id="spFree">Keep playing</button></div></div>` : ''}
-      <dl class="bigstat"><div><dt>Book moves</dt><dd>${T.right}<small>/ ${T.asked}</small></dd></div><div><dt>Accuracy</dt><dd>${pct == null ? '–' : pct + '%'}</dd></div><div><dt>Phase</dt><dd class="sp-phase">${this.phase === 'book' ? 'Book' : 'Engine'}</dd></div></dl>
+      <dl class="bigstat"><div><dt>${this.vs ? 'Good moves' : 'Book moves'}</dt><dd>${T.right}<small>/ ${T.asked}</small></dd></div><div><dt>Accuracy</dt><dd>${pct == null ? '–' : pct + '%'}</dd></div><div><dt>Phase</dt><dd class="sp-phase">${this.phase === 'book' ? 'Book' : 'Engine'}</dd></div></dl>
       ${rows.length ? `<div class="sp-moves">${rows.join('')}</div>` : ''}`;
-    $('#spOp').onchange = e => { const o = OP[e.target.value]; if (o) Sparring.start(o, { back: this.back.name === 'home' ? this.back : { name: 'opening', id: o.id } }); };
+    $('#spOp').onchange = e => { const o = OP[e.target.value]; if (o) Sparring.start(o, { vs: this.vs, back: this.back.name === 'home' ? this.back : { name: 'opening', id: o.id } }); };
     $('#spTake') && ($('#spTake').onclick = () => this.takeBack());
     $('#spOn') && ($('#spOn').onclick = () => this.playOn());
     $('#spNext') && ($('#spNext').onclick = () => this.newLine());
