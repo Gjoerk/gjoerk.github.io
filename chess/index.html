@@ -4608,7 +4608,8 @@ function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
     const later = toCp(R2.lines[0]);
     if (later > -cpAfterOpp + 150) cpAfterOpp = -later;
   }
-  const isBest = !!best && best.pv[0] === uci;
+  // the engine's top move, or one it scores exactly as high (a dead tie)
+  const isBest = !!best && (best.pv[0] === uci || (!!own && toCp(own) >= toCp(best)));
   const newer = (rating || 1500) < GRADE.newer;
   const epBefore = expPts(cpBefore, rating), epAfter = expPts(-cpAfterOpp, rating);
   const loss = Math.max(0, epBefore - epAfter);
@@ -4629,7 +4630,8 @@ function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
   else if (ply < 8 && loss < 0.12) cls = 'book';
   else if (g2.in_checkmate()) cls = 'best';
   else {
-    if (isBest || loss <= 0.0015) cls = 'best';
+    // Like chess.com: only the engine's own top move is Best; an equally good alternative is Excellent.
+    if (isBest) cls = 'best';
     else if (loss <= 0.02) cls = 'excellent';
     else if (loss <= 0.05) cls = 'good';
     else if (loss <= 0.10) cls = 'inaccuracy';
