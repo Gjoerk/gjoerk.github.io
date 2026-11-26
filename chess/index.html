@@ -4309,37 +4309,74 @@ const clsIcon = k => `<span class="cls c-${k}" title="${CLS[k].name}">${CLS[k].g
 const winPct = cp => 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * cp)) - 1);
 const toCp = s => s.mate != null ? (s.mate > 0 ? 10000 - s.mate * 10 : -10000 - s.mate * 10) : s.cp;
 
-/** A second Stockfish worker that walks through every position of a game. */
+/**
+ * Analyses every position of a game. Several Stockfish 17.1 workers share the positions, so a whole game takes seconds;
+ * the old Stockfish 10 from the CDN is only used if the new engine can't start.
+ */
 const Analyzer = {
-  w: null,
+  workers: [],
   run(fens, depth, onStep, onDone) {
     this.stop();
-    const src = "importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');";
-    try { this.w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))); } catch (e) { onDone(null); return; }
-    const out = []; let i = -1, lines = [], ready = false;
-    const post = c => this.w.postMessage(c);
-    const nextPos = () => {
-      i++;
-      while (i < fens.length && fens[i].terminal) { out[i] = fens[i].terminal; onStep(i, out); i++; }
-      if (i >= fens.length) { this.stop(); onDone(out); return; }
-      lines = [];
-      post('position fen ' + fens[i].fen);
-      post(`go depth ${depth} movetime ${depth > 14 ? 4000 : 1600}`);
+    const token = this.token = (this.token || 0) + 1;
+    const out = new Array(fens.length);
+    const queue = [];
+    let done = 0;
+    fens.forEach((f, i) => { if (f.terminal) { out[i] = f.terminal; done++; } else queue.push(i); });
+    if (!queue.length) { onDone(out); return; }
+    const phone = matchMedia('(pointer: coarse)').matches;
+    const cores = navigator.hardwareConcurrency || 2;
+    const n = Math.max(1, Math.min(queue.length, phone ? 2 : 4, cores - 1 || 1));
+    let alive = 0, finished = false, legacy = false;
+    const finish = res => { if (finished || token !== this.token) return; finished = true; this.stop(); onDone(res); };
+    const step = () => { done++; onStep(done, fens.length); if (done >= fens.length) finish(out); };
+    const spawn = old => {
+      let w;
+      try {
+        w = old ? new Worker(URL.createObjectURL(new Blob(["importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');"], { type: 'text/javascript' })))
+                : new Worker('engine/stockfish.js');
+      } catch (e) { return fail(null, old); }
+      alive++;
+      const job = { w, i: -1, lines: [], ready: false };
+      this.workers.push(w);
+      const post = c => w.postMessage(c);
+      const take = () => {
+        if (finished) return;
+        if (!queue.length) { job.i = -1; return; }
+        job.i = queue.shift(); job.lines = [];
+        post('position fen ' + fens[job.i].fen);
+        // Stockfish 17 sees far more per ply than Stockfish 10, so it gets a deeper, time-capped search.
+        post(old ? `go depth ${depth} movetime ${depth > 14 ? 4000 : 1600}` : `go depth ${depth > 14 ? 20 : 16} movetime ${depth > 14 ? 2500 : 900}`);
+      };
+      job.watch = setTimeout(() => { if (!job.ready) fail(job, old); }, 15000);
+      w.onerror = () => fail(job, old);
+      w.onmessage = e => {
+        const s = String(e.data);
+        if (s === 'readyok' && !job.ready) { job.ready = true; clearTimeout(job.watch); take(); return; }
+        if (s.startsWith('bestmove')) {
+          if (job.i < 0) return;
+          out[job.i] = { lines: job.lines.filter(Boolean) };
+          job.i = -1; step(); take();
+          return;
+        }
+        if (!s.startsWith('info') || !s.includes(' pv ') || s.includes('bound')) return;
+        const num = k => { const m = s.match(new RegExp(' ' + k + ' (-?\\d+)')); return m ? +m[1] : null; };
+        const k = num('multipv') || 1;
+        job.lines[k - 1] = { cp: num('cp'), mate: num('mate'), pv: s.split(' pv ')[1].trim().split(/\s+/) };
+      };
+      post('uci'); post('setoption name MultiPV value 3'); post('setoption name Hash value 16'); post('isready');
     };
-    this.watch = setTimeout(() => { if (!ready) { this.stop(); onDone(null); } }, 25000);
-    this.w.onerror = () => { this.stop(); onDone(null); };
-    this.w.onmessage = e => {
-      const s = String(e.data);
-      if (s === 'readyok' && !ready) { ready = true; clearTimeout(this.watch); nextPos(); return; }
-      if (s.startsWith('bestmove')) { out[i] = { lines: lines.filter(Boolean) }; onStep(i, out); nextPos(); return; }
-      if (!s.startsWith('info') || !s.includes(' pv ') || s.includes('bound')) return;
-      const num = k => { const m = s.match(new RegExp(' ' + k + ' (-?\\d+)')); return m ? +m[1] : null; };
-      const k = num('multipv') || 1;
-      lines[k - 1] = { cp: num('cp'), mate: num('mate'), pv: s.split(' pv ')[1].trim().split(/\s+/) };
+    // A worker that dies hands its position back; if the new engine can't run at all, fall back to the old one.
+    const fail = (job, old) => {
+      if (finished) return;
+      if (job && job.dead) return;
+      if (job) { job.dead = true; alive--; clearTimeout(job.watch); try { job.w.terminate(); } catch (e) { /* ignore */ } if (job.i >= 0) queue.unshift(job.i); job.i = -1; }
+      if (alive > 0) return;
+      if (!old && !legacy) { legacy = true; spawn(true); return; }
+      finish(null);
     };
-    post('uci'); post('setoption name MultiPV value 3'); post('isready');
+    for (let k = 0; k < n; k++) spawn(false);
   },
-  stop() { clearTimeout(this.watch); if (this.w) { try { this.w.terminate(); } catch (e) { /* ignore */ } this.w = null; } },
+  stop() { for (const w of this.workers) { try { w.terminate(); } catch (e) { /* ignore */ } } this.workers = []; this.token = (this.token || 0) + 1; },
 };
 
 /** Grade every move from the engine results, the way a coach would mark a scoresheet. */
@@ -4353,28 +4390,181 @@ const inBookMove = (fen, uci) => {
   const g = new Chess(fen); return !!g.move(uciObj(uci)) && ecoKnown(g.fen());
 };
 /*
- * Move grades follow chess.com's published "Classification V2" rules:
+ * Piece safety, for spotting real sacrifices. A piece is "unsafe" when the opponent can win material by taking it:
+ * it is attacked by something cheaper, or by more pieces than defend it (batteries and x-rays included).
+ * The approach follows the open-source WintrChess reimplementation of chess.com's Brilliant rules.
+ */
+const SAC_V = { p: 1, n: 3, b: 3, r: 5, q: 9, k: Infinity };
+const flipC = c => (c === 'w' ? 'b' : 'w');
+const fenTurn = (fen, c) => { const p = fen.split(' '); if (p[1] !== c) p[3] = '-'; p[1] = c; return p.join(' '); };
+const captureSq = m => (m.flags.includes('e') ? m.to[0] + m.from[1] : m.to);
+const KING_STEPS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+const mvKey = m => m.from + m.to + m.piece;
+/** Pieces of the other colour that can capture `piece` right now (one entry per attacker). */
+function directAttackers(fen, piece) {
+  const g = new Chess(fenTurn(fen, flipC(piece.color)));
+  const seen = new Set(), out = [];
+  for (const m of g.moves({ verbose: true })) {
+    if (captureSq(m) !== piece.square || seen.has(m.from)) continue;
+    seen.add(m.from);
+    out.push({ piece: m.piece, color: m.color, from: m.from, to: m.to, promotion: m.promotion });
+  }
+  // A king next to the piece attacks it even where taking would be illegal.
+  if (!out.some(a => a.piece === 'k')) {
+    const f = FILES.indexOf(piece.square[0]), r = +piece.square[1];
+    for (const [df, dr] of KING_STEPS) {
+      const sq = FILES[f + df] && r + dr >= 1 && r + dr <= 8 ? FILES[f + df] + (r + dr) : null;
+      const p = sq && g.get(sq);
+      if (p && p.type === 'k' && p.color === flipC(piece.color)) { out.push({ piece: 'k', color: p.color, from: sq, to: piece.square }); break; }
+    }
+  }
+  return out;
+}
+/** Direct attackers plus those lined up behind them (a rook behind a rook, a queen behind a bishop...). */
+function allAttackers(fen, piece) {
+  const found = directAttackers(fen, piece);
+  const frontier = found.map(a => ({ fen, a }));
+  while (frontier.length) {
+    const { fen: f, a } = frontier.pop();
+    if (a.piece === 'k') continue;
+    const before = new Set(directAttackers(f, piece).filter(x => x.from !== a.from).map(mvKey));
+    const g = new Chess(f);
+    g.remove(a.from);
+    const f2 = g.fen();
+    for (const x of directAttackers(f2, piece)) {
+      if (before.has(mvKey(x)) || found.some(y => y.from === x.from)) continue;
+      found.push(x); frontier.push({ fen: f2, a: x });
+    }
+  }
+  return found;
+}
+/** The smallest set of pieces that would take back on the piece's square. */
+function defendersOf(fen, piece) {
+  let best = null;
+  for (const a of directAttackers(fen, piece)) {
+    const g = new Chess(fenTurn(fen, a.color));
+    if (!g.move({ from: a.from, to: a.to, promotion: a.promotion })) continue;
+    const re = allAttackers(g.fen(), { type: a.piece, color: a.color, square: a.to });
+    if (!best || re.length < best.length) best = re;
+  }
+  if (best) return best;
+  // Nothing attacks it: count the pieces that guard its square instead.
+  const g = new Chess(fen);
+  g.put({ type: piece.type, color: flipC(piece.color) }, piece.square);
+  return allAttackers(g.fen(), { ...piece, color: flipC(piece.color) });
+}
+function pieceSafe(fen, piece, played) {
+  const direct = directAttackers(fen, piece);
+  const attackers = allAttackers(fen, piece), defenders = defendersOf(fen, piece);
+  const v = SAC_V[piece.type];
+  // A rook that took a minor piece and can be taken back by one minor is a fair trade.
+  if (played && played.captured && piece.type === 'r' && SAC_V[played.captured] === 3 && attackers.length === 1 && defenders.length > 0 && SAC_V[attackers[0].piece] === 3) return true;
+  if (direct.some(a => SAC_V[a.piece] < v)) return false;
+  if (attackers.length <= defenders.length) return true;
+  if (!direct.length) return true;
+  const low = Math.min(...direct.map(a => SAC_V[a.piece]));
+  if (v < low && defenders.some(d => SAC_V[d.piece] < low)) return true;
+  if (defenders.some(d => d.piece === 'p')) return true;
+  return false;
+}
+/** Your knights, bishops, rooks and queens that can be won (worth more than anything you just took). */
+function unsafePieces(fen, color, played) {
+  const g = new Chess(fen), took = played && played.captured ? SAC_V[played.captured] : 0, out = [];
+  g.board().forEach((row, r) => row.forEach((p, f) => {
+    if (!p || p.color !== color || p.type === 'p' || p.type === 'k' || SAC_V[p.type] <= took) return;
+    const piece = { type: p.type, color, square: FILES[f] + (8 - r) };
+    if (!pieceSafe(fen, piece, played)) out.push(piece);
+  }));
+  return out;
+}
+/** Attacks on `color`'s unsafe pieces worth at least the threatened piece (other than it). */
+function biggerThreats(fen, threatened, color, played) {
+  return unsafePieces(fen, color, played)
+    .filter(p => p.square !== threatened.square && SAC_V[p.type] >= SAC_V[threatened.type])
+    .flatMap(p => directAttackers(fen, p).map(mvKey));
+}
+const hasMateInOne = fen => new Chess(fen).moves().some(s => s.endsWith('#'));
+/** Taking the piece with `act` leaves the taker with a bigger problem (or walks into mate for a minor piece). */
+function takingBackfires(fen, threatened, act) {
+  const g = new Chess(fen);
+  if (!g.move({ from: act.from, to: act.to, promotion: act.promotion })) return false;
+  if (biggerThreats(g.fen(), threatened, act.color).length) return true;
+  return SAC_V[threatened.type] < 9 && hasMateInOne(g.fen());
+}
+/** Moving the piece away with `act` creates a new, bigger threat against its own side. */
+function escapeBackfires(fen, threatened, act) {
+  const before = new Set(biggerThreats(fen, threatened, act.color));
+  const g = new Chess(fen);
+  const mv = g.move({ from: act.from, to: act.to, promotion: act.promotion });
+  if (!mv) return false;
+  if (biggerThreats(g.fen(), threatened, act.color, mv).some(k => !before.has(k))) return true;
+  return SAC_V[threatened.type] < 9 && hasMateInOne(g.fen());
+}
+/** Unsafe where it stands and on every square it can go to: lost anyway, so giving it up is no sacrifice. */
+function pieceTrapped(fen, piece) {
+  const f = fenTurn(fen, piece.color);
+  if (pieceSafe(f, piece)) return false;
+  const g = new Chess(f);
+  return g.moves({ square: piece.square, verbose: true }).every(m => {
+    if (m.captured === 'k') return false;
+    if (escapeBackfires(f, piece, m)) return true;
+    const t = new Chess(f), mv = t.move(m);
+    return !pieceSafe(t.fen(), { ...piece, square: mv.to }, mv);
+  });
+}
+/** A real sacrifice: after the move you leave material en prise that the opponent can take without it backfiring. */
+function isSacrifice(fenBefore, fenAfter, m) {
+  if (m.promotion) return false;
+  const prevUnsafe = unsafePieces(fenBefore, m.color);
+  const unsafe = unsafePieces(fenAfter, m.color, m);
+  if (!unsafe.length) return false;
+  // Rescuing a piece that was hanging isn't a sacrifice.
+  if (!new Chess(fenAfter).in_check() && unsafe.length < prevUnsafe.length) return false;
+  // Every capture of every hanging piece backfires: it only looks like a sacrifice.
+  if (unsafe.every(p => directAttackers(fenAfter, p).every(a => takingBackfires(fenAfter, p, a)))) return false;
+  const prevTrapped = prevUnsafe.filter(p => pieceTrapped(fenBefore, p));
+  const trapped = unsafe.filter(p => pieceTrapped(fenAfter, p));
+  if (trapped.length === unsafe.length || prevTrapped.some(p => p.square === m.from) || trapped.length < prevTrapped.length) return false;
+  return true;
+}
+
+/*
+ * Move grades follow chess.com's "Classification V2":
  * - Every move is scored by the expected points it loses (1 = sure win, 0.5 = even, 0 = sure loss).
- *   Best 0, Excellent up to 0.02, Good up to 0.05, Inaccuracy up to 0.10, Mistake up to 0.20, Blunder above 0.20.
+ *   Best is the engine's top move; Excellent up to 0.02, Good up to 0.05, Inaccuracy up to 0.10, Mistake up to 0.20, Blunder above.
  * - Expected points depend on rating: the same engine score is less decisive between lower-rated players.
- * - Brilliant: a good piece sacrifice, not bad for you afterwards, and you were not already completely winning without it.
- * - Great: a move critical to the result, such as the only good move, or one that turns losing into equal or equal into winning.
+ * - A Blunder has to lose material or allow a forced mate; a big drop that does neither is a Mistake, or a Miss.
  * - Miss: failing to capitalise on your opponent's mistake, when you could have reached a winning position.
- * - Brilliant and Great are judged more generously for newer players.
+ * - Brilliant: the best (or nearly best) move, and a genuine piece sacrifice; not in a losing position afterwards,
+ *   not when you'd be completely winning anyway (second-best move +7 or more), not when escaping check, not a promotion.
+ * - Great: the top move when it was the only good one: the second-best move would have lost 0.10 expected points or more.
+ *   Same exclusions as Brilliant, plus no forced mates and no taking of free material.
  */
 const epK = rating => 0.00368208 * Math.max(0.75, Math.min(1.25, 1 + ((rating || 1500) - 1500) / 3500));
 const expPts = (cp, rating) => 1 / (1 + Math.exp(-epK(rating) * cp));
 const epBand = ep => ep >= 0.7 ? 2 : ep > 0.3 ? 1 : 0;   // 2 winning, 1 roughly equal, 0 losing
+const MAT_V = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const materialFor = (g, c) => g.board().flat().reduce((t, p) => t + (p ? (p.color === c ? 1 : -1) * MAT_V[p.type] : 0), 0);
+/** Does the move drop material? Follow the engine's best reply line for a few moves and compare the balance. */
+function losesMaterial(fenBefore, m, pv) {
+  const g = new Chess(fenBefore), base = materialFor(g, m.color);
+  g.move(m);
+  let worst = materialFor(g, m.color);
+  for (const u of (pv || []).slice(0, 6)) { if (!g.move(uciObj(u))) break; worst = materialFor(g, m.color); }
+  return base - worst >= 2;
+}
 /** Grade one move from engine results before (R0, mover to move) and after (R1, opponent to move). */
 function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
   const prevCls = prev && typeof prev === 'object' ? prev.cls : prev;
   const g = new Chess(fenBefore);
   const legal = g.moves().length;
+  const inCheckBefore = g.in_check();
   const uci = m.from + m.to + (m.promotion || '');
   const lines = (R0.lines || []).filter(Boolean);
   const best = lines[0];
   const cpBefore = toCp(R0.lines ? best : R0);
-  let cpAfterOpp = toCp(R1.lines ? R1.lines[0] : R1);
+  const top1 = R1.lines ? R1.lines[0] : R1;
+  let cpAfterOpp = toCp(top1);
   // Scores from two separate searches drift a little; when the played move is one of the engine's own candidates, use that search.
   const own = lines.find(l => l.pv[0] === uci);
   if (own) cpAfterOpp = -toCp(own);
@@ -4390,33 +4580,39 @@ function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
   // the best alternative to the move played: "what if you had not found it?"
   const alt = lines.find(l => l.pv[0] !== uci);
   const epAlt = alt ? expPts(toCp(alt), rating) : null;
-  const newer = (rating || 1500) < 1200;
-  g.move(m);
-  // piece sacrifice: the moved piece (not a pawn or king) can be taken at a profit right after the move
-  let sac = false;
-  // newer players: a pawn-for-piece trade counts as a sacrifice too
-  if (PVAL[m.piece] >= 3 && m.piece !== 'k' && !(m.captured && PVAL[m.captured] >= PVAL[m.piece])) {
-    for (const r of g.moves({ verbose: true })) {
-      if (r.to !== m.to || !r.captured) continue;
-      if (PVAL[r.piece] < PVAL[m.piece] - (newer ? 0 : 1)) { sac = true; break; }
-      const t = new Chess(g.fen()); t.move(r);
-      if (!t.moves({ verbose: true }).some(x => x.to === m.to && x.captured)) { sac = true; break; }
-    }
-  }
+  const mateAfter = own ? (own.mate != null ? -own.mate : null) : top1 && top1.mate != null ? top1.mate : null; // from the opponent's side
+  const g2 = new Chess(fenBefore); g2.move(m);
+  const fenAfter = g2.fen();
+  // Brilliant / Great gate: a move that matters, in a position that isn't already decided.
+  const second = lines[1];
+  const moverAfter = -cpAfterOpp;
+  const gate = !inCheckBefore && moverAfter >= 0 && m.promotion !== 'q'
+    && (second ? !(second.mate == null && toCp(second) >= 700) : !(mateAfter == null && moverAfter >= 700));
   let cls;
   if (legal === 1) cls = 'forced';
   else if (ply < 30 && loss < (ply < 24 ? 0.30 : 0.12) && inBookMove(fenBefore, uci)) cls = 'book';
   else if (ply < 8 && loss < 0.12) cls = 'book';
-  else if (sac && loss <= 0.02 && epAfter >= 0.45 && (epAlt == null || epAlt < 0.97)) cls = 'brilliant';
-  else if (isBest && !g.in_checkmate() && !(prevMove && prevMove.captured && prevMove.to === m.to) && epAlt != null && epAlt < 0.97 &&
-           (epBand(epAfter) > epBand(epAlt) || epAfter - epAlt >= (newer ? 0.12 : 0.20))) cls = 'great';
-  else if ((prevCls === 'mistake' || prevCls === 'blunder') && epBand(epBefore) === 2 && epBand(epAfter) < 2 && loss > 0.05) cls = 'miss';
-  else if (isBest || loss <= 0.0015) cls = 'best';
-  else if (loss <= 0.02) cls = 'excellent';
-  else if (loss <= 0.05) cls = 'good';
-  else if (loss <= 0.10) cls = 'inaccuracy';
-  else if (loss <= 0.20) cls = 'mistake';
-  else cls = 'blunder';
+  else if (g2.in_checkmate()) cls = 'best';
+  else {
+    if (isBest || loss <= 0.0015) cls = 'best';
+    else if (loss <= 0.02) cls = 'excellent';
+    else if (loss <= 0.05) cls = 'good';
+    else if (loss <= 0.10) cls = 'inaccuracy';
+    else if (loss <= 0.20) cls = 'mistake';
+    else cls = 'blunder';
+    const wasWinning = epBand(epBefore) === 2, stillWinning = epBand(epAfter) === 2;
+    // Miss: the opponent just erred and you let the win slip.
+    if (loss > 0.05 && (prevCls === 'mistake' || prevCls === 'blunder' || prevCls === 'miss') && wasWinning && !stillWinning) cls = 'miss';
+    // A blunder loses material or allows mate; otherwise it's a mistake (or a miss, if you were winning).
+    else if (cls === 'blunder' && !(mateAfter != null && mateAfter > 0) && !losesMaterial(fenBefore, m, top1 && top1.pv)) cls = wasWinning && !stillWinning ? 'miss' : 'mistake';
+    // Great: the top move, when the next best would have cost at least 0.10.
+    if (isBest && gate && !(mateAfter != null && mateAfter < 0) && second) {
+      const freeTake = m.captured && !pieceSafe(fenBefore, { type: m.captured, color: flipC(m.color), square: captureSq(m) });
+      if (!freeTake && expPts(toCp(best), rating) - expPts(toCp(second), rating) >= 0.10) cls = 'great';
+    }
+    // Brilliant: best or nearly best, and a real sacrifice.
+    if ((cls === 'best' || cls === 'great') && (isBest || loss < 0.01) && gate && isSacrifice(fenBefore, fenAfter, m)) cls = 'brilliant';
+  }
   // accuracy per move, from the same win-percentage loss chess analysis sites use
   const wl = Math.max(0, winPct(cpBefore) - winPct(-cpAfterOpp));
   const acc = Math.max(0, Math.min(100, 103.1668 * Math.exp(-0.04354 * wl) - 3.1669));
@@ -4438,12 +4634,17 @@ function classifyGame(game, res) {
 /** A long-lived engine for grading your own moves in the review, one position at a time. */
 const LiveEngine = {
   w: null, ready: false, queue: [], cur: null, cache: new Map(),
-  start() {
+  // Stockfish 17.1 next to the page; the old Stockfish 10 from the CDN if it can't start.
+  start(old = this.legacy) {
     if (this.w) return;
     const src = "importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');";
-    try { this.w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))); } catch (e) { this.w = null; return; }
+    try { this.w = old ? new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))) : new Worker('engine/stockfish.js'); } catch (e) { this.w = null; if (!old) { this.legacy = true; this.start(true); } return; }
     this.w.onmessage = e => this.line(String(e.data));
-    this.w.onerror = () => this.stop();
+    this.w.onerror = () => {
+      if (old || this.ready) { this.stop(); return; }
+      const q = this.queue.concat(this.cur ? [this.cur] : []);
+      this.stop(); this.legacy = true; this.queue = q; this.start(true);
+    };
     ['uci', 'setoption name MultiPV value 3', 'isready'].forEach(c => this.w.postMessage(c));
   },
   stop() { if (this.w) { try { this.w.terminate(); } catch (e) { /* ignore */ } } this.w = null; this.ready = false; this.queue = []; this.cur = null; },
@@ -4461,7 +4662,7 @@ const LiveEngine = {
     if (!this.ready || this.cur || !this.queue.length) return;
     this.cur = this.queue.shift(); this.lines = [];
     this.w.postMessage('position fen ' + this.cur.fen);
-    this.w.postMessage('go depth 13 movetime 1500');
+    this.w.postMessage(this.legacy ? 'go depth 13 movetime 1500' : 'go depth 16 movetime 900');
   },
   line(s) {
     if (s === 'readyok') { this.ready = true; this.pump(); return; }
@@ -4504,7 +4705,7 @@ const Analysis = {
           <div class="pcard"><h3>From chess.com</h3><ol><li>Open your profile and go to <b>Games</b> (the game archive).</li><li>Tick the games you want, or select all.</li><li>Press <b>Download</b> to get a .pgn file.</li><li>Drop that file here.</li></ol></div>
           <div class="pcard"><h3>From Lichess</h3><ol><li>Open your profile.</li><li>Choose <b>Export games</b>.</li><li>Download the .pgn file.</li><li>Drop that file here.</li></ol></div></div>`}
         ${games.length ? '' : paste}
-        <div class="row-btns" style="justify-content:center;align-items:center">${pillsHTML('anDepth', [['12', 'Fast'], ['16', 'Deep']], String(depth))}<span class="muted">${depth > 12 ? 'Deep: slower, sharper grades' : 'Fast: about a second per move'}</span></div>
+        <div class="row-btns" style="justify-content:center;align-items:center">${pillsHTML('anDepth', [['12', 'Fast'], ['16', 'Deep']], String(depth))}<span class="muted">${depth > 12 ? 'Deep: slower, sharper grades' : 'Fast: a few seconds per game'}</span></div>
       </div>`;
     $('#backBtn').onclick = () => go({ name: 'home' });
     bindPills('anDepth', k => { S.settings.anDepth = +k; save(); this.lastText = $('#anText').value; this.renderInput(); });
@@ -4619,11 +4820,12 @@ const Analysis = {
         <div class="coord-timer"><i id="anBar" style="width:0%"></i></div><p class="muted" id="anMsg">Starting the engine</p></div>`;
     Pawn.progress = 0; Pawn.mount($('#loadStage'));
     $('#backBtn').onclick = () => { Analyzer.stop(); Pawn.progress = null; this.renderInput(); };
-    Analyzer.run(fens, S.settings.anDepth || 12, (i) => {
-      const b = $('#anBar'); if (b) b.style.width = Math.round((i + 1) / fens.length * 100) + '%';
-      const m = $('#anMsg'); if (m) m.textContent = `Position ${i + 1} of ${fens.length}`;
-      const pc = $('#anPct'); if (pc) pc.textContent = Math.round((i + 1) / fens.length * 100) + '%';
-      Pawn.progress = (i + 1) / fens.length;
+    this.t0 = performance.now();
+    Analyzer.run(fens, S.settings.anDepth || 12, (n, total) => {
+      const b = $('#anBar'); if (b) b.style.width = Math.round(n / total * 100) + '%';
+      const m = $('#anMsg'); if (m) m.textContent = `Position ${n} of ${total}`;
+      const pc = $('#anPct'); if (pc) pc.textContent = Math.round(n / total * 100) + '%';
+      Pawn.progress = n / total;
     }, res => {
       Pawn.progress = null;
       if (!this.active) return;
