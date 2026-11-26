@@ -4315,7 +4315,26 @@ const toCp = s => s.mate != null ? (s.mate > 0 ? 10000 - s.mate * 10 : -10000 - 
  */
 const Analyzer = {
   workers: [],
-  run(fens, depth, onStep, onDone) {
+  // One setting for everyone: the cheapest search that still grades like a deep one.
+  cfg: { depth: 12, ms: 400, multipv: 2, maxWorkers: 6, phoneWorkers: 3 },
+  spare: [],
+  count(n) { const phone = matchMedia('(pointer: coarse)').matches, cores = navigator.hardwareConcurrency || 2; return Math.max(1, Math.min(n, phone ? this.cfg.phoneWorkers : this.cfg.maxWorkers, cores - 1 || 1)); },
+  /** Start the engines while you pick a game, so the analysis begins at once. */
+  warm() {
+    if (this.spare.length || this.workers.length) return;
+    for (let k = 0; k < this.count(99); k++) {
+      let w;
+      try { w = new Worker('engine/stockfish.js'); } catch (e) { return; }
+      const sp = { w, ready: false };
+      w.onmessage = e => { if (String(e.data) === 'readyok') sp.ready = true; };
+      w.onerror = () => { sp.dead = true; };
+      ['uci', `setoption name MultiPV value ${this.cfg.multipv}`, 'setoption name Hash value 16', 'isready'].forEach(c => w.postMessage(c));
+      this.spare.push(sp);
+    }
+  },
+  dropSpare() { for (const sp of this.spare) { try { sp.w.terminate(); } catch (e) { /* ignore */ } } this.spare = []; },
+  run(fens, onStep, onDone) {
+    const C = this.cfg;
     this.stop();
     const token = this.token = (this.token || 0) + 1;
     const out = new Array(fens.length);
@@ -4323,16 +4342,15 @@ const Analyzer = {
     let done = 0;
     fens.forEach((f, i) => { if (f.terminal) { out[i] = f.terminal; done++; } else queue.push(i); });
     if (!queue.length) { onDone(out); return; }
-    const phone = matchMedia('(pointer: coarse)').matches;
-    const cores = navigator.hardwareConcurrency || 2;
-    const n = Math.max(1, Math.min(queue.length, phone ? 2 : 4, cores - 1 || 1));
+    const n = this.count(queue.length);
+    const warmed = this.spare.filter(sp => !sp.dead); this.spare = [];
     let alive = 0, finished = false, legacy = false;
     const finish = res => { if (finished || token !== this.token) return; finished = true; this.stop(); onDone(res); };
     const step = () => { done++; onStep(done, fens.length); if (done >= fens.length) finish(out); };
     const spawn = old => {
-      let w;
+      let w, sp = !old && warmed.shift();
       try {
-        w = old ? new Worker(URL.createObjectURL(new Blob(["importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');"], { type: 'text/javascript' })))
+        w = sp ? sp.w : old ? new Worker(URL.createObjectURL(new Blob(["importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');"], { type: 'text/javascript' })))
                 : new Worker('engine/stockfish.js');
       } catch (e) { return fail(null, old); }
       alive++;
@@ -4345,7 +4363,7 @@ const Analyzer = {
         job.i = queue.shift(); job.lines = [];
         post('position fen ' + fens[job.i].fen);
         // Stockfish 17 sees far more per ply than Stockfish 10, so it gets a deeper, time-capped search.
-        post(old ? `go depth ${depth} movetime ${depth > 14 ? 4000 : 1600}` : `go depth ${depth > 14 ? 20 : 16} movetime ${depth > 14 ? 2500 : 900}`);
+        post(old ? 'go depth 12 movetime 1600' : `go depth ${C.depth} movetime ${C.ms}`);
       };
       job.watch = setTimeout(() => { if (!job.ready) fail(job, old); }, 15000);
       w.onerror = () => fail(job, old);
@@ -4363,7 +4381,9 @@ const Analyzer = {
         const k = num('multipv') || 1;
         job.lines[k - 1] = { cp: num('cp'), mate: num('mate'), pv: s.split(' pv ')[1].trim().split(/\s+/) };
       };
-      post('uci'); post('setoption name MultiPV value 3'); post('setoption name Hash value 16'); post('isready');
+      if (sp && sp.ready) { job.ready = true; clearTimeout(job.watch); take(); return; }
+      if (sp) return; // already told to start: its readyok arrives here
+      post('uci'); post(`setoption name MultiPV value ${old ? 3 : C.multipv}`); post('setoption name Hash value 16'); post('isready');
     };
     // A worker that dies hands its position back; if the new engine can't run at all, fall back to the old one.
     const fail = (job, old) => {
@@ -4375,6 +4395,7 @@ const Analyzer = {
       finish(null);
     };
     for (let k = 0; k < n; k++) spawn(false);
+    for (const sp of warmed) { try { sp.w.terminate(); } catch (e) { /* ignore */ } }
   },
   stop() { for (const w of this.workers) { try { w.terminate(); } catch (e) { /* ignore */ } } this.workers = []; this.token = (this.token || 0) + 1; },
 };
@@ -4680,12 +4701,12 @@ const Analysis = {
     this.active = true;
     this.renderInput();
   },
-  stop() { if (!this.active) return; this.active = false; Analyzer.stop(); LiveEngine.stop(); Pawn.progress = null; removeEventListener('keydown', this.keyHandler); },
+  stop() { if (!this.active) return; this.active = false; Analyzer.stop(); Analyzer.dropSpare(); LiveEngine.stop(); Pawn.progress = null; removeEventListener('keydown', this.keyHandler); },
   renderInput(msg = '') {
     document.body.classList.remove('training');
     Analyzer.stop();
+    Analyzer.warm();
     const games = GameLib.load();
-    const depth = S.settings.anDepth || 12;
     const upIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4m0 0-4 4m4-4 4 4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg>';
     // with a game list, the paste box sits above it so it is reachable without scrolling past every game
     const paste = `<details class="paste" ${this.lastText ? 'open' : ''}><summary>${games.length ? 'Paste a single game' : 'Or paste a single game'}</summary>
@@ -4705,10 +4726,8 @@ const Analysis = {
           <div class="pcard"><h3>From chess.com</h3><ol><li>Open your profile and go to <b>Games</b> (the game archive).</li><li>Tick the games you want, or select all.</li><li>Press <b>Download</b> to get a .pgn file.</li><li>Drop that file here.</li></ol></div>
           <div class="pcard"><h3>From Lichess</h3><ol><li>Open your profile.</li><li>Choose <b>Export games</b>.</li><li>Download the .pgn file.</li><li>Drop that file here.</li></ol></div></div>`}
         ${games.length ? '' : paste}
-        <div class="row-btns" style="justify-content:center;align-items:center">${pillsHTML('anDepth', [['12', 'Fast'], ['16', 'Deep']], String(depth))}<span class="muted">${depth > 12 ? 'Deep: slower, sharper grades' : 'Fast: a few seconds per game'}</span></div>
       </div>`;
     $('#backBtn').onclick = () => go({ name: 'home' });
-    bindPills('anDepth', k => { S.settings.anDepth = +k; save(); this.lastText = $('#anText').value; this.renderInput(); });
     $('#anGo').onclick = () => this.begin($('#anText').value);
     $('#anSample').onclick = () => { $('#anText').value = SAMPLE_PGN; this.begin(SAMPLE_PGN); };
     const drop = $('#drop'), file = $('#pgnFile');
@@ -4821,7 +4840,7 @@ const Analysis = {
     Pawn.progress = 0; Pawn.mount($('#loadStage'));
     $('#backBtn').onclick = () => { Analyzer.stop(); Pawn.progress = null; this.renderInput(); };
     this.t0 = performance.now();
-    Analyzer.run(fens, S.settings.anDepth || 12, (n, total) => {
+    Analyzer.run(fens, (n, total) => {
       const b = $('#anBar'); if (b) b.style.width = Math.round(n / total * 100) + '%';
       const m = $('#anMsg'); if (m) m.textContent = `Position ${n} of ${total}`;
       const pc = $('#anPct'); if (pc) pc.textContent = Math.round(n / total * 100) + '%';
