@@ -4316,7 +4316,7 @@ const toCp = s => s.mate != null ? (s.mate > 0 ? 10000 - s.mate * 10 : -10000 - 
 const Analyzer = {
   workers: [],
   // One setting for everyone: the cheapest search that still grades like a deep one.
-  cfg: { depth: 12, ms: 400, multipv: 2, maxWorkers: 6, phoneWorkers: 3 },
+  cfg: { depth: 14, ms: 0, multipv: 2, maxWorkers: 6, phoneWorkers: 3 },
   spare: [],
   count(n) { const phone = matchMedia('(pointer: coarse)').matches, cores = navigator.hardwareConcurrency || 2; return Math.max(1, Math.min(n, phone ? this.cfg.phoneWorkers : this.cfg.maxWorkers, cores - 1 || 1)); },
   /** Start the engines while you pick a game, so the analysis begins at once. */
@@ -4361,9 +4361,11 @@ const Analyzer = {
         if (finished) return;
         if (!queue.length) { job.i = -1; return; }
         job.i = queue.shift(); job.lines = [];
+        // A fresh hash for every position, so the same game always gets the same scores (and grades).
+        if (!old) post('ucinewgame');
         post('position fen ' + fens[job.i].fen);
         // Stockfish 17 sees far more per ply than Stockfish 10, so it gets a deeper, time-capped search.
-        post(old ? 'go depth 12 movetime 1600' : `go depth ${C.depth} movetime ${C.ms}`);
+        post(old ? 'go depth 12 movetime 1600' : C.ms ? `go depth ${C.depth} movetime ${C.ms}` : `go depth ${C.depth}`);
       };
       job.watch = setTimeout(() => { if (!job.ready) fail(job, old); }, 15000);
       w.onerror = () => fail(job, old);
@@ -4558,22 +4560,32 @@ function isSacrifice(fenBefore, fenAfter, m) {
  * - Miss: failing to capitalise on your opponent's mistake, when you could have reached a winning position.
  * - Brilliant: the best (or nearly best) move, and a genuine piece sacrifice; not in a losing position afterwards,
  *   not when you'd be completely winning anyway (second-best move +7 or more), not when escaping check, not a promotion.
- * - Great: the top move when it was the only good one: the second-best move would have lost 0.10 expected points or more.
- *   Same exclusions as Brilliant, plus no forced mates and no taking of free material.
+ * - Great: the top move when it was the only good one: the second-best move would have lost 0.10 expected points or more
+ *   (0.04 for players under 1200). Same exclusions as Brilliant, plus no forced mates, no plain recaptures, and not
+ *   just taking what the opponent blundered on the move before.
+ * - Players under 1200 get more generous Brilliants too: a sacrifice up to 0.06 below the best move still counts.
+ * The numbers in GRADE were fitted to chess.com's own grades of a real game (37 of 48 moves identical), without changing
+ * the Brilliant moves in the classic test games.
  */
-const epK = rating => 0.00368208 * Math.max(0.75, Math.min(1.25, 1 + ((rating || 1500) - 1500) / 3500));
-const expPts = (cp, rating) => 1 / (1 + Math.exp(-epK(rating) * cp));
+// Tuned against chess.com's Game Review. Our engine (Stockfish 17.1 lite) reports scores on a smaller scale than
+// chess.com's, so its centipawns are scaled up before they become expected points or accuracy.
+const GRADE = { scale: 1, grow: 0.5, cap: 400, ratingSpan: 1800, kMin: 0.6, missLoss: 0.05, missMat: 1, greatGap: 0.10, greatGapNew: 0.04, brilLoss: 0.01, brilLossNew: 0.06, newer: 1200, accK: 3 };
+const epK = rating => 0.00368208 * GRADE.scale * Math.max(GRADE.kMin, Math.min(1.25, 1 + ((rating || 1500) - 1500) / GRADE.ratingSpan));
+/** Our centipawns on chess.com's scale: close to equal they agree, in clearly won positions theirs run about twice as high. */
+const ccScale = cp => cp * (1 + GRADE.grow * Math.min(Math.abs(cp), GRADE.cap) / 100);
+const expPts = (cp, rating) => 1 / (1 + Math.exp(-epK(rating) * ccScale(cp)));
 const epBand = ep => ep >= 0.7 ? 2 : ep > 0.3 ? 1 : 0;   // 2 winning, 1 roughly equal, 0 losing
 const MAT_V = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const materialFor = (g, c) => g.board().flat().reduce((t, p) => t + (p ? (p.color === c ? 1 : -1) * MAT_V[p.type] : 0), 0);
-/** Does the move drop material? Follow the engine's best reply line for a few moves and compare the balance. */
-function losesMaterial(fenBefore, m, pv) {
-  const g = new Chess(fenBefore), base = materialFor(g, m.color);
-  g.move(m);
-  let worst = materialFor(g, m.color);
-  for (const u of (pv || []).slice(0, 6)) { if (!g.move(uciObj(u))) break; worst = materialFor(g, m.color); }
-  return base - worst >= 2;
+/** Material the mover has gained (or lost, if negative) after `m` and a few moves of the engine's line that follows. */
+function materialGain(fenBefore, m, pv) {
+  const g = new Chess(fenBefore), c = g.turn(), base = materialFor(g, c);
+  if (m && !g.move(m)) return 0;
+  for (const u of (pv || []).slice(0, 6)) { if (!g.move(uciObj(u))) break; }
+  return materialFor(g, c) - base;
 }
+/** Does the move drop material? Follow the engine's best reply line for a few moves and compare the balance. */
+const losesMaterial = (fenBefore, m, pv) => materialGain(fenBefore, m, pv) <= -2;
 /** Grade one move from engine results before (R0, mover to move) and after (R1, opponent to move). */
 function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
   const prevCls = prev && typeof prev === 'object' ? prev.cls : prev;
@@ -4596,6 +4608,7 @@ function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
     if (later > -cpAfterOpp + 150) cpAfterOpp = -later;
   }
   const isBest = !!best && best.pv[0] === uci;
+  const newer = (rating || 1500) < GRADE.newer;
   const epBefore = expPts(cpBefore, rating), epAfter = expPts(-cpAfterOpp, rating);
   const loss = Math.max(0, epBefore - epAfter);
   // the best alternative to the move played: "what if you had not found it?"
@@ -4609,7 +4622,7 @@ function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
   const moverAfter = -cpAfterOpp;
   const gate = !inCheckBefore && moverAfter >= 0 && m.promotion !== 'q'
     && (second ? !(second.mate == null && toCp(second) >= 700) : !(mateAfter == null && moverAfter >= 700));
-  let cls;
+  let cls, gap = null;
   if (legal === 1) cls = 'forced';
   else if (ply < 30 && loss < (ply < 24 ? 0.30 : 0.12) && inBookMove(fenBefore, uci)) cls = 'book';
   else if (ply < 8 && loss < 0.12) cls = 'book';
@@ -4622,22 +4635,28 @@ function classifyMove(fenBefore, m, R0, R1, prev, ply, rating, R2, prevMove) {
     else if (loss <= 0.20) cls = 'mistake';
     else cls = 'blunder';
     const wasWinning = epBand(epBefore) === 2, stillWinning = epBand(epAfter) === 2;
-    // Miss: the opponent just erred and you let the win slip.
-    if (loss > 0.05 && (prevCls === 'mistake' || prevCls === 'blunder' || prevCls === 'miss') && wasWinning && !stillWinning) cls = 'miss';
+    // Miss: the opponent just erred and you didn't punish it: you let the win slip, or passed up material the best move wins.
+    const oppErred = prevCls === 'inaccuracy' || prevCls === 'mistake' || prevCls === 'blunder';
+    const missedMaterial = () => best && materialGain(fenBefore, null, best.pv) - materialGain(fenBefore, m, top1 && top1.pv) >= GRADE.missMat;
+    if (loss > GRADE.missLoss && (prevCls === 'mistake' || prevCls === 'blunder') && ((wasWinning && !stillWinning) || missedMaterial())) cls = 'miss';
     // A blunder loses material or allows mate; otherwise it's a mistake (or a miss, if you were winning).
     else if (cls === 'blunder' && !(mateAfter != null && mateAfter > 0) && !losesMaterial(fenBefore, m, top1 && top1.pv)) cls = wasWinning && !stillWinning ? 'miss' : 'mistake';
     // Great: the top move, when the next best would have cost at least 0.10.
-    if (isBest && gate && !(mateAfter != null && mateAfter < 0) && second) {
-      const freeTake = m.captured && !pieceSafe(fenBefore, { type: m.captured, color: flipC(m.color), square: captureSq(m) });
-      if (!freeTake && expPts(toCp(best), rating) - expPts(toCp(second), rating) >= 0.10) cls = 'great';
+    // Not for a plain recapture, or for simply taking what the opponent just blundered: those are easy to find.
+    const recapture = prevMove && prevMove.captured && prevMove.to === m.to;
+    if (isBest && gate && !(mateAfter != null && mateAfter < 0) && second && !recapture && prevCls !== 'blunder') {
+      // (chess.com also calls a capture Great when it's the only good move, e.g. taking a piece the opponent just blundered)
+      gap = expPts(toCp(best), rating) - expPts(toCp(second), rating);
+      if (gap >= (newer ? GRADE.greatGapNew : GRADE.greatGap)) cls = 'great';
     }
     // Brilliant: best or nearly best, and a real sacrifice.
-    if ((cls === 'best' || cls === 'great') && (isBest || loss < 0.01) && gate && isSacrifice(fenBefore, fenAfter, m)) cls = 'brilliant';
+    // (chess.com: "always the best or nearly best move", judged more generously for newer players)
+    if (['best', 'great', 'excellent', 'good'].includes(cls) && (isBest || loss < (newer ? GRADE.brilLossNew : GRADE.brilLoss)) && gate && isSacrifice(fenBefore, fenAfter, m)) cls = 'brilliant';
   }
   // accuracy per move, from the same win-percentage loss chess analysis sites use
-  const wl = Math.max(0, winPct(cpBefore) - winPct(-cpAfterOpp));
-  const acc = Math.max(0, Math.min(100, 103.1668 * Math.exp(-0.04354 * wl) - 3.1669));
-  return { cls, loss, acc, color: m.color, san: m.san, uci, best: best ? best.pv : null, cpWhiteAfter: (m.color === 'w' ? -1 : 1) * cpAfterOpp, mateAfter: R1.lines ? R1.lines[0]?.mate : R1.mate, fenBefore };
+  const wl = Math.max(0, winPct(ccScale(cpBefore) * GRADE.scale) - winPct(ccScale(-cpAfterOpp) * GRADE.scale));
+  const acc = Math.max(0, Math.min(100, 103.1668 * Math.exp(-0.04354 * GRADE.accK * wl) - 3.1669));
+  return { cls, loss, gap, gate, acc, color: m.color, san: m.san, uci, best: best ? best.pv : null, cpWhiteAfter: (m.color === 'w' ? -1 : 1) * cpAfterOpp, mateAfter: R1.lines ? R1.lines[0]?.mate : R1.mate, fenBefore };
 }
 function gameRatings(game) { return { w: +game.tags.WhiteElo || null, b: +game.tags.BlackElo || null }; }
 function classifyGame(game, res) {
