@@ -856,6 +856,7 @@ body { min-height: 100vh; min-height: 100dvh; }
 .load-pct { margin: -12px 0 0; font: 600 44px/1 var(--font-hero); letter-spacing: -.04em; background: linear-gradient(180deg, #fff 30%, var(--sky)); -webkit-background-clip: text; background-clip: text; color: transparent; font-variant-numeric: tabular-nums; }
 .an-load h3 { margin: 0; font: 600 20px/1.2 var(--font-display); }
 .an-load .coord-timer { width: 100%; }
+.an-load .coord-timer i { transition: width .06s linear; } /* the analysis takes seconds now: keep up with it */
 
 .varline { display: flex; flex-wrap: wrap; gap: 4px; }
 .varline button { white-space: nowrap; }
@@ -4865,9 +4866,17 @@ const Analysis = {
       const pc = $('#anPct'); if (pc) pc.textContent = Math.round(n / total * 100) + '%';
       Pawn.progress = n / total;
     }, res => {
+      if (!this.active) { Pawn.progress = null; return; }
+      if (!res) { Pawn.progress = null; return this.renderInput('The engine could not start here. Check your connection and try again.'); }
+      // Show the full bar and what comes next, then grade (a moment's work) once that has been painted.
+      const m = $('#anMsg'); if (m) m.textContent = 'Grading moves…';
+      requestAnimationFrame(() => setTimeout(() => this.finish(game, res), 0));
+    });
+  },
+  finish(game, res) {
+    {
       Pawn.progress = null;
       if (!this.active) return;
-      if (!res) return this.renderInput('The engine could not start here. Check your connection and try again.');
       this.res = res;
       this.marks = classifyGame(game, res);
       S.analysed = (S.analysed || 0) + 1; save();
@@ -4877,7 +4886,7 @@ const Analysis = {
       }
       Sound.play('done');
       this.review();
-    });
+    }
   },
   review() {
     toolShell(this.meta ? 'Your games' : 'New analysis', { evalbar: true });
@@ -4966,15 +4975,14 @@ const Analysis = {
       this.board.setBadge(last.to, 'c-' + m.cls, CLS[m.cls].glyph);
       const arrows = [];
       const bestU = m.best && m.best[0];
-      const good = ['brilliant', 'great', 'best', 'excellent', 'good', 'book', 'forced'].includes(m.cls);
-      if (bestU && bestU !== m.uci && !good) arrows.push({ from: bestU.slice(0, 2), to: bestU.slice(2, 4), color: 'rgba(129,182,76,.85)' });
+      if (bestU && bestU !== m.uci && m.cls !== 'forced') arrows.push({ from: bestU.slice(0, 2), to: bestU.slice(2, 4), color: 'rgba(129,182,76,.85)' });
       this.board.setArrows(arrows);
       evalBarTo(m.cpWhiteAfter, m.mateAfter != null ? (m.color === 'w' ? -1 : 1) * m.mateAfter : null, this.orient);
       const bestSan = bestU && bestU !== m.uci ? pvSan(m.fenBefore, m.best, 4) : [];
       const verdict = { brilliant: 'is brilliant', great: 'is a great move', best: 'is the best move', excellent: 'is excellent', good: 'is good', book: 'is a book move', inaccuracy: 'is an inaccuracy', mistake: 'is a mistake', miss: 'is a miss', blunder: 'is a blunder', forced: 'was the only legal move' }[m.cls];
       const ev = m.mateAfter != null && m.mateAfter !== 0 ? 'Mate in ' + Math.abs(m.mateAfter) : (m.cpWhiteAfter >= 9000 ? 'Checkmate' : (m.cpWhiteAfter > 0 ? '+' : '') + (m.cpWhiteAfter / 100).toFixed(2));
       card.innerHTML = `<div class="head">${clsIcon(m.cls)}<b class="t-${m.cls}">${esc(sanAt(n - 1, m.san))} ${verdict}</b><span class="muted" style="margin-left:auto">${ev}</span></div>
-        ${bestSan.length && !good ? `<p class="muted">Best was <b style="color:var(--fg)">${esc(bestSan[0])}</b>${bestSan.length > 1 ? `, continuing ${esc(bestSan.slice(1).join(' '))}` : ''}.</p>` : ''}
+        ${bestSan.length && m.cls !== 'forced' ? `<p class="muted">Best was <b style="color:var(--fg)">${esc(bestSan[0])}</b>${bestSan.length > 1 ? `, continuing ${esc(bestSan.slice(1).join(' '))}` : ''}.</p>` : ''}
         ${m.cls === 'brilliant' ? '<p class="muted">A sound piece sacrifice that the engine agrees with.</p>' : m.cls === 'great' ? '<p class="muted">The only move that keeps the advantage.</p>' : m.cls === 'miss' ? '<p class="muted">Your opponent had just slipped, and this let the chance go.</p>' : ''}`;
     }
     const gc = $('#gCur'); if (gc) { const x = n / this.marks.length * 400; gc.setAttribute('x1', x); gc.setAttribute('x2', x); }
@@ -5039,13 +5047,12 @@ const Analysis = {
     } else {
       this.board.setBadge(mv.to, 'c-' + m.cls, CLS[m.cls].glyph);
       const bestU = m.best && m.best[0];
-      const good = ['brilliant', 'great', 'best', 'excellent', 'good', 'book', 'forced'].includes(m.cls);
-      this.board.setArrows(bestU && bestU !== m.uci && !good ? [{ from: bestU.slice(0, 2), to: bestU.slice(2, 4), color: 'rgba(129,182,76,.85)' }] : []);
+      this.board.setArrows(bestU && bestU !== m.uci && m.cls !== 'forced' ? [{ from: bestU.slice(0, 2), to: bestU.slice(2, 4), color: 'rgba(129,182,76,.85)' }] : []);
       evalBarTo(m.cpWhiteAfter, m.mateAfter != null ? (m.color === 'w' ? -1 : 1) * m.mateAfter : null, this.orient);
       const bestSan = bestU && bestU !== m.uci ? pvSan(m.fenBefore, m.best, 4) : [];
       const ev = m.mateAfter != null && m.mateAfter !== 0 ? 'Mate in ' + Math.abs(m.mateAfter) : (m.cpWhiteAfter >= 9000 ? 'Checkmate' : (m.cpWhiteAfter > 0 ? '+' : '') + (m.cpWhiteAfter / 100).toFixed(2));
       head = `<div class="head">${clsIcon(m.cls)}<b class="t-${m.cls}">Your move ${esc(sanAt(V.base + k - 1, mv.san))}: ${CLS[m.cls].name}</b><span class="muted" style="margin-left:auto">${ev}</span></div>
-        ${bestSan.length && !good ? `<p class="muted">Best was <b style="color:var(--fg)">${esc(bestSan[0])}</b>${bestSan.length > 1 ? `, continuing ${esc(bestSan.slice(1).join(' '))}` : ''}.</p>` : ''}`;
+        ${bestSan.length && m.cls !== 'forced' ? `<p class="muted">Best was <b style="color:var(--fg)">${esc(bestSan[0])}</b>${bestSan.length > 1 ? `, continuing ${esc(bestSan.slice(1).join(' '))}` : ''}.</p>` : ''}`;
     }
     card.innerHTML = `${head}<p class="kicker" style="margin-top:4px">Your line from move ${Math.floor(V.base / 2) + 1}</p><div class="amoves varline">${line}</div>
       <div class="row-btns"><button class="btn sm" id="varBack">Back to the game</button></div>`;
