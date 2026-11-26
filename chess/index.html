@@ -4266,13 +4266,13 @@ const GameLib = {
     return out;
   },
   /** Add games, newest first, without duplicates. Returns how many were new. */
-  add(games) {
+  add(games, { guess = true } = {}) {
     const list = this.load(), have = new Set(list.map(g => g.id));
     let n = 0;
     for (const g of games) if (!have.has(g.id)) { list.push(g); have.add(g.id); n++; }
     list.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
     const ok = this.saveAll(list);
-    if (!this.me()) { const who = this.guessMe(list); if (who) this.setMe(who); }
+    if (guess && !this.me()) { const who = this.guessMe(list); if (who) this.setMe(who); }
     return { n, ok, total: Math.min(list.length, 400) };
   },
   /** The player who appears in the most games is almost certainly the person importing them. */
@@ -4834,7 +4834,23 @@ $('#hdrPuzzles').onclick = () => jumpTo('sec-puzzles');
 $('#hdrCoords').onclick = () => jumpTo('sec-coords');
 $('#hdrStats').onclick = () => go({ name: 'stats' });
 addEventListener('pointerdown', () => Sound.ensure(), { once: true });
-rerender();
+/** Open a game handed over in the link (#pgn=…&me=…), e.g. by the chess.com browser extension:
+ *  it is saved to Your games and analysed straight away. */
+function openFromHash() {
+  if (!location.hash.startsWith('#pgn=')) return false;
+  const q = new URLSearchParams(location.hash.slice(1)), pgn = (q.get('pgn') || '').trim(), me = (q.get('me') || '').trim();
+  history.replaceState(null, '', location.pathname + location.search);
+  if (!pgn) return false;
+  if (me && !GameLib.me()) GameLib.setMe(me);
+  go({ name: 'analysis' });
+  const g = GameLib.parse(pgn)[0];
+  // a single game says nothing about who you are, so it never sets your name by itself
+  if (g && GameLib.add([g], { guess: false }).ok) Analysis.begin(g.pgn, { id: g.id, side: GameLib.side(g, GameLib.me()) });
+  else Analysis.begin(pgn);
+  return true;
+}
+addEventListener('hashchange', openFromHash);
+if (!openFromHash()) rerender();
 cloud.init();
 
 
