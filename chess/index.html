@@ -791,9 +791,9 @@ body.training .side-col .board-ctrl { justify-content: flex-start; }
 .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .how .pcard { gap: 8px; }
 .how ol { margin: 0; padding-left: 18px; color: var(--fg-2); font-size: 14px; display: grid; gap: 4px; }
-details.paste summary { cursor: pointer; color: var(--sky); font-weight: 500; list-style: none; text-align: center; }
-details.paste summary::-webkit-details-marker { display: none; }
-details.paste[open] summary { margin-bottom: 12px; }
+/* paste a single game: always open */
+.paste h3 { font-size: 18px; }
+.paste textarea { min-height: 110px; }
 .lib-wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 18px; }
 .profile { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; }
 .avatar { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font: 700 22px/1 var(--font-display); color: var(--sky-ink); background: linear-gradient(135deg, #E4F0FF, var(--sky) 55%, #5E8FE0); }
@@ -4298,7 +4298,7 @@ const fmtDate = d => { const m = d.match(/(\d{4})\.(\d{2})\.(\d{2})/); if (!m ||
 // ======================= game analysis =======================
 const CLS = {
   brilliant: { name: 'Brilliant', glyph: '!!' }, great: { name: 'Great move', glyph: '!' }, best: { name: 'Best move', glyph: '<svg viewBox="0 0 16 16"><path fill="#fff" d="m8 1.6 1.9 4 4.4.5-3.3 3 .9 4.3L8 11.2l-3.9 2.2.9-4.3-3.3-3 4.4-.5z"/></svg>' },
-  excellent: { name: 'Excellent', glyph: '<svg viewBox="0 0 16 16"><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m3.5 8.4 3 3 6-6.6"/></svg>' },
+  excellent: { name: 'Excellent', glyph: '<svg viewBox="0 0 16 16"><path fill="#fff" d="M1.8 7.2h2.6v6.9H1.8zM5.6 13.4V7.6c0-.3.1-.5.3-.7l3.4-4.6c.5-.6 1.5-.3 1.6.5.1.4 0 .8-.1 1.2l-.6 2.5h3.1c1 0 1.7.9 1.5 1.8l-1 4.4c-.2.8-.9 1.3-1.6 1.3H6.4c-.4 0-.8-.3-.8-.6z"/></svg>' },
   good: { name: 'Good', glyph: '<svg viewBox="0 0 16 16"><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="m4 8.4 2.6 2.6 5.4-6"/></svg>' },
   book: { name: 'Book', glyph: '<svg viewBox="0 0 16 16"><path fill="#fff" d="M3 3.2c1.6-.6 3.3-.5 4.6.4v9c-1.3-.8-3-.9-4.6-.3zm10 0c-1.6-.6-3.3-.5-4.6.4v9c1.3-.8 3-.9 4.6-.3z"/></svg>' },
   inaccuracy: { name: 'Inaccuracy', glyph: '?!' }, mistake: { name: 'Mistake', glyph: '?' }, miss: { name: 'Miss', glyph: '✕' }, blunder: { name: 'Blunder', glyph: '??' },
@@ -4709,9 +4709,9 @@ const Analysis = {
     const games = GameLib.load();
     const upIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4m0 0-4 4m4-4 4 4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg>';
     // with a game list, the paste box sits above it so it is reachable without scrolling past every game
-    const paste = `<details class="paste" ${this.lastText ? 'open' : ''}><summary>${games.length ? 'Paste a single game' : 'Or paste a single game'}</summary>
-          <div class="pcard an-input"><textarea id="anText" placeholder="1. e4 e5 2. Nf3 Nc6 3. Bc4 … or a full PGN">${esc(this.lastText || '')}</textarea>
-            <div class="row-btns"><button class="btn sky" id="anGo">Analyse this game</button><button class="btn" id="anSample">Try a famous game</button></div></div></details>`;
+    const paste = `<section class="pcard an-input paste" aria-labelledby="pasteH"><h3 id="pasteH">${games.length ? 'Paste a single game' : 'Or paste a single game'}</h3>
+          <textarea id="anText" placeholder="1. e4 e5 2. Nf3 Nc6 3. Bc4 … or a full PGN" aria-labelledby="pasteH">${esc(this.lastText || '')}</textarea>
+          <div class="row-btns"><button class="btn sky" id="anGo">Analyse this game</button><button class="btn" id="anSample">Try a famous game</button></div></section>`;
     $('#view').innerHTML = `
       <div class="tool-head"><button class="back" id="backBtn">← Home</button></div>
       <div class="lib-wrap">
