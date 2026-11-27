@@ -845,6 +845,16 @@ body { min-height: 100vh; min-height: 100dvh; }
 .acc div { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; gap: 10px; }
 .acc span { font-size: 13px; opacity: .75; }
 .acc b { font-size: 22px; }
+/* captured pieces, under the accuracy boxes */
+.caps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: -4px; }
+/* room for two rows, always, so a long list never pushes the panel down */
+.cap-side { display: flex; align-items: center; align-content: flex-start; flex-wrap: wrap; gap: 2px 4px; height: 42px; overflow: hidden; padding: 0 4px; }
+.cap-grp { display: inline-flex; }
+.cap-pc { width: 20px; height: 20px; background-size: 100% 100%; display: inline-block; }
+.cap-grp .cap-pc + .cap-pc { margin-left: -12px; }
+.cap-side.w .cap-pc { filter: drop-shadow(0 0 1px rgba(255, 255, 255, .75)) drop-shadow(0 0 .5px rgba(255, 255, 255, .9)); }
+.cap-lead { font: 600 13px/1 var(--font-body); color: var(--fg-2); margin-left: 2px; }
+.cap-none { font-size: 12px; color: var(--fg-4); }
 /* graph with round dots */
 .graph-wrap { position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; }
 .graph-wrap .graph { border-radius: 0; }
@@ -4935,6 +4945,7 @@ const Analysis = {
     $('#panel').innerHTML = `
       <header class="p-head"><span class="kicker">Game review${tags.Result ? ' · ' + esc(tags.Result) : ''}</span><h2 class="players">${player('w')}<span class="vs">vs</span>${player('b')}</h2></header>
       <div class="acc"><div class="w"><span>Accuracy</span><b>${acc('w')}</b></div><div class="b"><span>Accuracy</span><b>${acc('b')}</b></div></div>
+      <div class="caps" id="caps" aria-label="Captured pieces"></div>
       <div class="graph-wrap" id="graphWrap"><svg class="graph" id="graph" viewBox="0 0 400 96" preserveAspectRatio="none" aria-label="Evaluation over the game"></svg><div class="gdots" id="gdots"></div></div>
       <div class="pcard mv-card" id="mvCard"></div>
       <section class="sect"><div class="amoves" id="amoves"></div></section>
@@ -4992,6 +5003,7 @@ const Analysis = {
     for (let i = 0; i < n; i++) last = g.move(this.game.moves[i]);
     this.cur = n;
     this.board.setPosition(g, forward && last ? { move: last } : { instant: true });
+    this.renderCaps(g);
     if (forward && last) Sound.play(last.captured ? 'capture' : 'move');
     const m = this.marks[n - 1];
     const card = $('#mvCard');
@@ -5059,8 +5071,24 @@ const Analysis = {
     V.marks[V.moves.length - 1] = classifyMove(fenBefore, mv, R0, R1, prev, V.base + V.moves.length - 1, gameRatings(this.game)[mv.color], null, V.moves.length > 1 ? V.moves[V.moves.length - 2] : this.game.moves[V.base - 1]);
     if (V.cur === V.moves.length) this.showVar();
   },
+  /** Pieces each side has taken so far (from what is missing on the board), and who is ahead in material. */
+  renderCaps(g) {
+    const el = $('#caps'); if (!el) return;
+    const full = { p: 8, n: 2, b: 2, r: 2, q: 1 }, left = { w: {}, b: {} };
+    for (const row of g.board()) for (const pc of row) if (pc && pc.type !== 'k') left[pc.color][pc.type] = (left[pc.color][pc.type] || 0) + 1;
+    const mat = c => Object.entries(left[c]).reduce((t, [k, n]) => t + PVAL[k] * n, 0);
+    const diff = mat('w') - mat('b');
+    const side = (c, label) => {
+      const them = c === 'w' ? 'b' : 'w';
+      const icons = ['p', 'n', 'b', 'r', 'q'].map(k => { const n = Math.max(0, full[k] - (left[them][k] || 0)); return n ? `<span class="cap-grp">${`<i class="cap-pc ${them}${k.toUpperCase()}"></i>`.repeat(n)}</span>` : ''; }).join('');
+      const lead = c === 'w' ? diff : -diff;
+      return `<div class="cap-side ${c}" title="${label}">${icons || '<span class="cap-none">No captures yet</span>'}${lead > 0 ? `<b class="cap-lead">+${lead}</b>` : ''}</div>`;
+    };
+    el.innerHTML = side('w', 'Taken by White') + side('b', 'Taken by Black');
+  },
   showVar(animate, pending) {
     const V = this.vari, k = V.cur, g = this.varGame(k), mv = V.moves[k - 1], m = V.marks[k - 1];
+    this.renderCaps(g);
     if (!pending) this.board.setPosition(g, animate && mv ? { move: mv } : { instant: true });
     if (animate && mv) Sound.play(mv.captured ? 'capture' : 'move');
     this.board.mark({ last: mv ? [mv.from, mv.to] : null });
